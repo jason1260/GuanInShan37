@@ -1,0 +1,64 @@
+{
+  "ver": "1.0.25",
+  "importer": "image",
+  "imported": true,
+  "uuid": "b64ce8a8-630d-4e0b-aba5-1a130ccab1a2",
+  "files": [
+    ".json",
+    ".png"
+  ],
+  "subMetas": {
+    "tileset": {
+      "ver": "1.0.6",
+      "uuid": "400fd24a-8d7c-4477-9600-33175e7314c3",
+      "importer": "sprite-frame",
+      "rawTextureUuid": "b64ce8a8-630d-4e0b-aba5-1a130ccab1a2",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 25,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 688,
+      "height": 400,
+      "rawWidth": 688,
+      "rawHeight": 450,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    },
+    "6c48a": {
+      "importer": "texture",
+      "uuid": "b64ce8a8-630d-4e0b-aba5-1a130ccab1a2@6c48a",
+      "displayName": "tileset",
+      "id": "6c48a",
+      "name": "texture",
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "anisotropy": 0,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "b64ce8a8-630d-4e0b-aba5-1a130ccab1a2",
+        "visible": true
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "fixAlphaTransparencyArtifacts": true,
+    "hasAlpha": true,
+    "type": "texture",
+    "redirect": "b64ce8a8-630d-4e0b-aba5-1a130ccab1a2@6c48a"
+  }
+}
