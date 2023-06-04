@@ -66,10 +66,12 @@ export default class Enemy extends cc.Component {
             this.life -= 10;
         } else if (other.node.group == 'gun' && weapon == 'gun') {
             this.life -= 10;
+            console.log("gun hits");
         }
     }
 
     onCollisionStay(other, self) {
+        console.log("ouside collision stay");
         if (this.being_attacked = true) return;
         console.log("inside collision stay");
         if (other.node.group == 'knife' && weapon == 'knife' && knife_valid) {
