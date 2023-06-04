@@ -15,6 +15,8 @@ export default class NewClass extends cc.Component {
 
     @property(cc.Node)
     rightHand: cc.Node = null;
+    @property(cc.Node)
+    cursor: cc.Node = null;
     
 
     
@@ -31,6 +33,7 @@ export default class NewClass extends cc.Component {
 
     onLoad () {
         cc.Canvas.instance.node.on('mousedown', this.attack, this);
+        cc.Canvas.instance.node.on('mousedown', this.onMouseMove, this);
         cc.Canvas.instance.node.on('mousemove', this.onMouseMove, this);
         this.playerTs = this.node.getComponent('player');
     }
@@ -151,6 +154,9 @@ export default class NewClass extends cc.Component {
         // 然後將極座標轉成xy座標的Point
         let point = this.polarToXY(length, angle);
         // 然後再把點平移到以center為圓心
+        // 将鼠标坐标转换为玩家节点的本地坐标系
+
+
         point.x += this.mousePt.x;
         point.y += this.mousePt.y;
         // 最後把這個point傳出去就行了

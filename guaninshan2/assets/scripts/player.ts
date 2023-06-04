@@ -48,6 +48,7 @@ export default class Player extends cc.Component {
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
         cc.Canvas.instance.node.on('mousemove', this.onMouseMove, this);
+        cc.Canvas.instance.node.on('mousedown', this.onMouseMove, this);
     }
     
    
@@ -73,7 +74,6 @@ export default class Player extends cc.Component {
 
         //move
         if(Input[cc.macro.KEY.a]){
-            console.log('dfd')
             this.sp.x = -1;
         }else if(Input[cc.macro.KEY.d]){
             this.sp.x = 1;
@@ -102,7 +102,6 @@ export default class Player extends cc.Component {
         }else{
             this.lv.y = 0;
         }
-        console.log(this.lv.x)
         this.node.getComponent(cc.RigidBody).linearVelocity = this.lv;
         
         //anime
@@ -145,7 +144,7 @@ export default class Player extends cc.Component {
         this.tmpWeapon = this.nextWeapon;
         this.nextWeapon = this.Handstate;
         this.Handstate = 'changing'
-        this.scheduleOnce(()=>{this.Handstate = this.tmpWeapon; console.log('change over')},1)
+        this.scheduleOnce(()=>{this.Handstate = this.tmpWeapon;},1)
     }
 
 }
