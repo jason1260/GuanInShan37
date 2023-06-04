@@ -16,15 +16,27 @@ export default class NewClass extends cc.Component {
     @property
     text: string = 'hello';
 
-    // LIFE-CYCLE CALLBACKS:
+    private life: number;
+    private isdead: boolean;
 
     onLoad() {
-        cc.director.getPhysicsManager().enabled = true;
-        cc.director.getCollisionManager().enabled = true;
+        this.life = 100;
+        this.isdead = false;
     }
 
-    start() {
+
+    update(dt) {
+        if (this.life <= 0) {
+            this.isdead = true;
+            this.life = 100;
+        }
     }
 
-    // update (dt) {}
+    onCollisionEnter(other, self) {
+        console.log("hello knife touch");
+        if (other.node.group == 'knife') {
+            console.log("hurts");
+            this.life -= 10;
+        }
+    }
 }
