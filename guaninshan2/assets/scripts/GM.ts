@@ -27,8 +27,10 @@ export default class NewClass extends cc.Component {
 
     drawColliderboxes() {
         let tiledSize = this.tiledMap.getTileSize();
-        let layers = ['blocks'];
+        let layers = ['blocks', 'lowBlks'];
         let tag = 15;
+        let groups = ['wall', 'shortwall'];
+        let groups_id = 0;
         for (var layerName of layers) {
             let layer = this.tiledMap.getLayer(layerName);
             cc.log(layerName, layer);
@@ -38,7 +40,7 @@ export default class NewClass extends cc.Component {
                 for (let j = 0; j < layerSize.height; j++) {
                     let tiled = layer.getTiledTileAt(i, j, true);
                     if (tiled.gid != 0) {
-                        tiled.node.group = 'wall';
+                        tiled.node.group = groups[groups_id];
 
                         let body = tiled.node.addComponent(cc.RigidBody);
                         body.type = cc.RigidBodyType.Static;
@@ -55,6 +57,7 @@ export default class NewClass extends cc.Component {
                 }
             }
             tag++;
+            groups_id++;
         }
     }
 
