@@ -160,7 +160,6 @@ export default class Player extends cc.Component {
         this.mousePt = playerLocalPos
         const distance: number = cc.Vec2.distance(this.node.getPosition(), playerLocalPos);
         this.shootRadius = this.rescaleValue(distance, 1, 1000, 10, 50)
-        console.log(this.shootRadius);
     }
     changeWeapon() {
         this.tmpWeapon = this.nextWeapon;
