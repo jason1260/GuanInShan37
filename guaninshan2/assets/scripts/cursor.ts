@@ -29,7 +29,12 @@ export default class NewClass extends cc.Component {
 
     update(){
         const cursorNode = this.node.getChildByName("Cursor");
-
+        const graphics = cursorNode.getComponent(cc.Graphics);
+        graphics.clear()
+        graphics.circle(0, 0, this.playerTs.shootRadius);
+        graphics.lineWidth = 3;
+        graphics.strokeColor = cc.Color.WHITE;
+        graphics.stroke();
     }
         /** 比較好的極座標隨機取點函式 */
     createCursor() {
