@@ -17,7 +17,8 @@ export default class NewClass extends cc.Component {
     rightHand: cc.Node = null;
     @property(cc.Node)
     cursor: cc.Node = null;
-    
+    @property(cc.Prefab)
+    bulletPrefab: cc.Prefab
 
     
     public rightAngle:number =-45;
@@ -26,6 +27,7 @@ export default class NewClass extends cc.Component {
     public leftRadius:number =25;
     public playerTs = null;
     public mousePt:cc.Vec2 = cc.v2(0,0);
+    public bulletVelocity:number = 1000;
 
     public timer:number = 0;
     public attacking:boolean = false;
@@ -120,33 +122,20 @@ export default class NewClass extends cc.Component {
 
         // 创建射线的起始点和终点
         
-        const startPos = cc.v2(0, 0);
+        const startPos = this.node.getPosition();
         // cc.log(startPos);
         const direction = dest.sub(startPos).normalize();
         const endPos = startPos.add(direction.mul(2000));
 
         // 创建射线的绘制节点
-        const rayNode = new cc.Node();
-        const graphics = rayNode.addComponent(cc.Graphics);
-        this.node.addChild(rayNode);
-
-        // 设置射线的样式
-        const lineWidth = 5;
-        const color = cc.Color.WHITE;
-
-        // 绘制射线
-        graphics.lineWidth = lineWidth;
-        graphics.strokeColor = color;
-        graphics.moveTo(startPos.x, startPos.y);
-        graphics.lineTo(endPos.x, endPos.y);
-        graphics.stroke();
-
-        // 延时一定时间后移除射线
-        const delayTime = 0.1;
-        rayNode.runAction(cc.sequence(
-            cc.delayTime(delayTime),
-            cc.removeSelf()
-        ));
+        const bullet = cc.instantiate(this.bulletPrefab);  
+        const parentNode = this.node.parent;
+        const nodeIndex = parentNode.children.indexOf(this.node);        
+        parentNode.insertChild(bullet, nodeIndex-1);
+        bullet.setPosition(new cc.Vec2(this.node.position.x,this.node.position.y));
+        bullet.getComponent(cc.Collider).enabled = false;
+        bullet.getComponent(cc.RigidBody).linearVelocity = direction.mul(this.bulletVelocity);
+        console.log(direction)
     }
     getRandomInCircle_polar_better(radius){
         let length = Math.sqrt(Math.random()) * radius;
@@ -174,7 +163,7 @@ export default class NewClass extends cc.Component {
         const mousePos = event.getLocation();
 
     // 将鼠标坐标转换为玩家节点的本地坐标系
-        const playerLocalPos = this.node.convertToNodeSpaceAR(mousePos);
+        const playerLocalPos = this.node.parent.convertToNodeSpaceAR(mousePos);
 
         // 在玩家节点的本地坐标系中操作
  
