@@ -21,11 +21,11 @@ export default class NewClass extends cc.Component {
         // cc.director.getPhysicsManager().debugDrawFlags = 1;
     }
 
-    start () {
+    start() {
         this.drawColliderboxes();
     }
 
-    drawColliderboxes (){
+    drawColliderboxes() {
         let tiledSize = this.tiledMap.getTileSize();
         let layers = ['blocks'];
         let tag = 15;
@@ -43,11 +43,14 @@ export default class NewClass extends cc.Component {
                         let body = tiled.node.addComponent(cc.RigidBody);
                         body.type = cc.RigidBodyType.Static;
                         let collider = tiled.node.addComponent(cc.PhysicsBoxCollider);
-                        collider.offset = cc.v2(tiledSize.width/2 - 320, tiledSize.height/2 -200);
+                        collider.offset = cc.v2(tiledSize.width / 2 - 320, tiledSize.height / 2 - 200);
                         collider.size = tiledSize;
                         collider.tag = tag;
                         collider.friction = 0.2;
                         collider.apply();
+                        let another = tiled.node.addComponent(cc.BoxCollider);
+                        another.offset = cc.v2(tiledSize.width / 2, tiledSize.height / 2).add(cc.v2(-320, -200));
+                        another.size = tiledSize;
                     }
                 }
             }

@@ -50,8 +50,8 @@ export default class Enemy extends cc.Component {
         const maxX = this.mapSize.width * this.tileSize.width / 2;
         const maxY = this.mapSize.height * this.tileSize.height / 2;
 
-        const x = Math.random() * (maxX - minX) + minX;
-        const y = Math.random() * (maxY - minY) + minY;
+        const x = Math.random() * (maxX - minX);
+        const y = Math.random() * (maxY - minY);
         return new cc.Vec2(x, y);
     }
 
