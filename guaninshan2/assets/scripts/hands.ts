@@ -7,6 +7,8 @@
 
 const { ccclass, property } = cc._decorator;
 
+export var knife_valid;
+
 @ccclass
 export default class NewClass extends cc.Component {
 
@@ -38,6 +40,7 @@ export default class NewClass extends cc.Component {
         cc.find("Canvas/scene1/bg").on(cc.Node.EventType.MOUSE_DOWN, this.onMouseMove, this)
         cc.find("Canvas/scene1/bg").on(cc.Node.EventType.MOUSE_DOWN, this.attack, this)
         this.playerTs = this.node.getComponent('player');
+        knife_valid = false;
     }
 
     start() {
@@ -64,9 +67,11 @@ export default class NewClass extends cc.Component {
                 break;
             case 'knife':
                 this.leftAngle = 15;
+                knife_valid = true;
                 this.scheduleOnce(() => {
                     this.leftAngle = 45;
                     this.attacking = false
+                    knife_valid = false;
                 }, 0.2)
                 break;
             default:
@@ -159,7 +164,7 @@ export default class NewClass extends cc.Component {
         // 更新空心圆圈的位置与鼠标位置一致
         const mousePos = event.getLocation();
         const camera = cc.find("Canvas/Main Camera")
-    // 将鼠标坐标转换为玩家节点的本地坐标系
+        // 将鼠标坐标转换为玩家节点的本地坐标系
         const playerLocalPos = this.node.parent.convertToNodeSpaceAR(mousePos).add(camera.getPosition());
 
         // 在玩家节点的本地坐标系中操作

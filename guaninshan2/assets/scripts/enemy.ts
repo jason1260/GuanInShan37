@@ -6,6 +6,8 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 const { ccclass, property } = cc._decorator;
+import { weapon } from "./player";
+import { knife_valid } from "./hands";
 
 @ccclass
 export default class Enemy extends cc.Component {
@@ -21,6 +23,7 @@ export default class Enemy extends cc.Component {
     private mapSize: cc.Size;
     private tileSize: cc.Size;
     private tilemap: cc.TiledMap;
+    private being_attacked: boolean;
 
     onLoad() {
         this.life = 100;
@@ -28,6 +31,7 @@ export default class Enemy extends cc.Component {
         this.tilemap = this.map.getComponent(cc.TiledMap);
         this.mapSize = this.tilemap.getMapSize();
         this.tileSize = this.tilemap.getTileSize();
+        this.being_attacked = false;
     }
 
     update(dt) {
@@ -57,9 +61,24 @@ export default class Enemy extends cc.Component {
 
     onCollisionEnter(other, self) {
         console.log("hello knife touch");
-        if (other.node.group == 'knife') {
+        if (other.node.group == 'knife' && weapon == "knife" && knife_valid) {
             console.log("hurts ", this.life);
             this.life -= 10;
+        } else if (other.node.group == 'gun' && weapon == 'gun') {
+            this.life -= 10;
+        }
+    }
+
+    onCollisionStay(other, self) {
+        if (this.being_attacked = true) return;
+        console.log("inside collision stay");
+        if (other.node.group == 'knife' && weapon == 'knife' && knife_valid) {
+            this.being_attacked = true;
+            this.scheduleOnce(() => {
+                this.life -= 10;
+                this.being_attacked = false;
+                console.log("knife attacked");
+            }, 0.2)
         }
     }
 }
