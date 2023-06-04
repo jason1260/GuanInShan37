@@ -7,6 +7,8 @@
 
 const {ccclass, property} = cc._decorator;
 
+
+
 @ccclass
 export default class NewClass extends cc.Component {
 
@@ -14,6 +16,7 @@ export default class NewClass extends cc.Component {
     player: cc.Node = null;
 
     public playerTs = null;
+    public prev_mousePos = cc.v2(0, 0);
 
     onLoad() {
         /* cc.game.canvas.style.cursor = 'none'; */
@@ -28,8 +31,15 @@ export default class NewClass extends cc.Component {
     }
 
     update(){
+        // 更新空心圆圈的位置与鼠标位置一致
         const cursorNode = this.node.getChildByName("Cursor");
+        const camera = cc.find("Canvas/Main Camera")
+    // 将鼠标坐标转换为玩家节点的本地坐标系
+        const playerLocalPos = this.node.parent.convertToNodeSpaceAR(this.prev_mousePos).add(camera.getPosition());
 
+        // 在玩家节点的本地坐标系中操作
+
+        cursorNode.setPosition(playerLocalPos);
     }
         /** 比較好的極座標隨機取點函式 */
     createCursor() {
@@ -81,5 +91,6 @@ export default class NewClass extends cc.Component {
         // 在玩家节点的本地坐标系中操作
  
         cursorNode.setPosition(playerLocalPos);
+        this.prev_mousePos = mousePos;
     }
 }
