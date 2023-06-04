@@ -21,10 +21,8 @@ export default class NewClass extends cc.Component {
     // onLoad () {}
 
     start () {
-        console.log("bullet start");
     }
     onCollisionEnter(other, self) {
-        console.log("bullet hit sth");
         this.node.destroy()
     }
     // update (dt) {}

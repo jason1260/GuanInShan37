@@ -47,8 +47,9 @@ export default class Player extends cc.Component {
         this.isMouseUp = true;
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
-        cc.Canvas.instance.node.on('mousemove', this.onMouseMove, this);
-        cc.Canvas.instance.node.on('mousedown', this.onMouseMove, this);
+
+        cc.find("Canvas/scene1/bg").on(cc.Node.EventType.MOUSE_MOVE, this.onMouseMove, this)
+        cc.find("Canvas/scene1/bg").on(cc.Node.EventType.MOUSE_DOWN, this.onMouseMove, this)
     }
     
    
@@ -130,7 +131,8 @@ export default class Player extends cc.Component {
         
     }
     onMouseMove(event: cc.Event.EventMouse) {
-        let mousePos = event.getLocation();
+        const camera = cc.find("Canvas/Main Camera")
+        let mousePos = event.getLocation().add(camera.getPosition());
         let playerPos = this.node.convertToWorldSpaceAR(cc.Vec2.ZERO);
         let direction = mousePos.sub(playerPos);
         let angle = cc.v2(1, 0).signAngle(direction);

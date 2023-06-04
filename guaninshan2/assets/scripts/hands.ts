@@ -34,9 +34,9 @@ export default class NewClass extends cc.Component {
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
-        cc.Canvas.instance.node.on('mousedown', this.attack, this);
-        cc.Canvas.instance.node.on('mousedown', this.onMouseMove, this);
-        cc.Canvas.instance.node.on('mousemove', this.onMouseMove, this);
+        cc.find("Canvas/scene1/bg").on(cc.Node.EventType.MOUSE_MOVE, this.onMouseMove, this)
+        cc.find("Canvas/scene1/bg").on(cc.Node.EventType.MOUSE_DOWN, this.onMouseMove, this)
+        cc.find("Canvas/scene1/bg").on(cc.Node.EventType.MOUSE_DOWN, this.attack, this)
         this.playerTs = this.node.getComponent('player');
     }
 
@@ -135,7 +135,6 @@ export default class NewClass extends cc.Component {
         bullet.setPosition(new cc.Vec2(this.node.position.x, this.node.position.y));
         bullet.getComponent(cc.Collider).enabled = false;
         bullet.getComponent(cc.RigidBody).linearVelocity = direction.mul(this.bulletVelocity);
-        console.log(direction)
     }
     getRandomInCircle_polar_better(radius) {
         let length = Math.sqrt(Math.random()) * radius;
@@ -158,12 +157,10 @@ export default class NewClass extends cc.Component {
     }
     onMouseMove(event: cc.Event.EventMouse) {
         // 更新空心圆圈的位置与鼠标位置一致
-
-
         const mousePos = event.getLocation();
-
-        // 将鼠标坐标转换为玩家节点的本地坐标系
-        const playerLocalPos = this.node.parent.convertToNodeSpaceAR(mousePos);
+        const camera = cc.find("Canvas/Main Camera")
+    // 将鼠标坐标转换为玩家节点的本地坐标系
+        const playerLocalPos = this.node.parent.convertToNodeSpaceAR(mousePos).add(camera.getPosition());
 
         // 在玩家节点的本地坐标系中操作
 

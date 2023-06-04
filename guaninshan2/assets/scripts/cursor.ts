@@ -16,13 +16,14 @@ export default class NewClass extends cc.Component {
     public playerTs = null;
 
     onLoad() {
-        cc.game.canvas.style.cursor = 'none';
+        /* cc.game.canvas.style.cursor = 'none'; */
         this.playerTs = this.player.getComponent('player');
         
     }
  
     start () {
-        cc.Canvas.instance.node.on('mousemove', this.onMouseMove, this);
+        cc.find("Canvas/scene1/bg").on(cc.Node.EventType.MOUSE_MOVE, this.onMouseMove, this)
+        /* cc.Canvas.instance.node.on('mousemove', this.onMouseMove, this); */
         this.createCursor();
     }
 
@@ -71,12 +72,11 @@ export default class NewClass extends cc.Component {
     
     onMouseMove(event: cc.Event.EventMouse) {
         // 更新空心圆圈的位置与鼠标位置一致
-        
         const cursorNode = this.node.getChildByName("Cursor");
         const mousePos = event.getLocation();
-
+        const camera = cc.find("Canvas/Main Camera")
     // 将鼠标坐标转换为玩家节点的本地坐标系
-        const playerLocalPos = this.node.convertToNodeSpaceAR(mousePos);
+        const playerLocalPos = this.node.parent.convertToNodeSpaceAR(mousePos).add(camera.getPosition());
 
         // 在玩家节点的本地坐标系中操作
  
