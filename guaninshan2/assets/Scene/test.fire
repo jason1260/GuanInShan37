@@ -182,8 +182,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 639.9995055317285,
-      "height": 399.999711560175
+      "width": 639.9997802363238,
+      "height": 399.9998718045222
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -194,8 +194,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -1.1368683772161603e-13,
-        -39.99999999999977,
+        0,
+        -39.999999999999886,
         0,
         0,
         0,
@@ -551,10 +551,10 @@
     "alignMode": 1,
     "_target": null,
     "_alignFlags": 45,
-    "_left": -479.9992582975928,
-    "_right": -479.9992582975927,
-    "_top": -239.9995673402626,
-    "_bottom": -319.9995673402623,
+    "_left": -479.9996703544857,
+    "_right": -479.9996703544856,
+    "_top": -239.99980770678343,
+    "_bottom": -319.99980770678314,
     "_verticalCenter": 0,
     "_horizontalCenter": 0,
     "_isAbsLeft": true,
@@ -1716,7 +1716,7 @@
     "_id": "42D4GHlGJAfass1T/JVd6+"
   },
   {
-    "__type__": "cc.PhysicsBoxCollider",
+    "__type__": "cc.PhysicsCircleCollider",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -1734,12 +1734,8 @@
       "x": 0,
       "y": 0
     },
-    "_size": {
-      "__type__": "cc.Size",
-      "width": 40,
-      "height": 40
-    },
-    "_id": "d0NcmfiZ1GNIOh3e9Ep7pc"
+    "_radius": 18.9,
+    "_id": "2aTVIUaARD+ZfD60P+UjGh"
   },
   {
     "__type__": "cc.Camera",

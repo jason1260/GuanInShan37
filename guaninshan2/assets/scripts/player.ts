@@ -39,7 +39,7 @@ export default class Player extends cc.Component {
     public Handstate: string = 'knife';
     public tmpWeapon: string = '';
     public nextWeapon: string = 'gun'
-    public mousePt:cc.Vec2 = cc.v2(0,0)
+    public mousePt: cc.Vec2 = cc.v2(0, 0)
 
     onLoad() {
         for (var member in Input) delete Input[member];
@@ -75,8 +75,6 @@ export default class Player extends cc.Component {
         if (Input[cc.macro.KEY.q]) {
             if (this.Handstate !== 'changing')
                 this.changeWeapon();
-            if (weapon == "knife") weapon = "gun";
-            else weapon = "knife";
         }
 
         //move
@@ -151,17 +149,17 @@ export default class Player extends cc.Component {
         let degree = cc.misc.radiansToDegrees(angle);
         this.dirAngle = degree;
         this.node.angle = degree;
-        
+
         mousePos = event.getLocation();
 
-    // 将鼠标坐标转换为玩家节点的本地坐标系
+        // 将鼠标坐标转换为玩家节点的本地坐标系
         const playerLocalPos = this.node.parent.convertToNodeSpaceAR(mousePos).add(camera.getPosition());
 
         // 在玩家节点的本地坐标系中操作
 
         this.mousePt = playerLocalPos
-        const distance:number = cc.Vec2.distance(this.node.getPosition(), playerLocalPos);
-        this.shootRadius = this.rescaleValue(distance,1,1000,10,50 )
+        const distance: number = cc.Vec2.distance(this.node.getPosition(), playerLocalPos);
+        this.shootRadius = this.rescaleValue(distance, 1, 1000, 10, 50)
         console.log(this.shootRadius);
     }
     changeWeapon() {
@@ -169,6 +167,8 @@ export default class Player extends cc.Component {
         this.nextWeapon = this.Handstate;
         this.Handstate = 'changing'
         this.scheduleOnce(() => { this.Handstate = this.tmpWeapon; }, 1)
+        if (weapon == "knife") weapon = "gun";
+        else weapon = "knife";
     }
 
 }

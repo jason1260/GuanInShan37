@@ -72,7 +72,7 @@ export default class Enemy extends cc.Component {
 
     onCollisionStay(other, self) {
         console.log("ouside collision stay");
-        if (this.being_attacked = true) return;
+        if (this.being_attacked == true) return;
         console.log("inside collision stay");
         if (other.node.group == 'knife' && weapon == 'knife' && knife_valid) {
             this.being_attacked = true;
