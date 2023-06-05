@@ -22,7 +22,6 @@ export default class Player extends cc.Component {
     rotateSpeed: number = 300;
 
 
-
     public lv: cc.Vec2 = null;
     public sp: cc.Vec2 = new cc.Vec2(0, 0);
     public isJumping: boolean = false;
@@ -57,11 +56,11 @@ export default class Player extends cc.Component {
     }
 
 
-
     onDestroy() {
         cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
     }
+
     start() {
 
     }
@@ -161,6 +160,7 @@ export default class Player extends cc.Component {
         const distance: number = cc.Vec2.distance(this.node.getPosition(), playerLocalPos);
         this.shootRadius = this.rescaleValue(distance, 1, 1000, 10, 50)
     }
+    
     changeWeapon() {
         this.tmpWeapon = this.nextWeapon;
         this.nextWeapon = this.Handstate;
