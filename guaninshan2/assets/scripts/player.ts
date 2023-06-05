@@ -96,6 +96,11 @@ export default class Player extends cc.Component {
 
 
         //move
+        if(this.sp.x != 0 && this.sp.y != 0){
+            this.sp.x *= 0.7;
+            this.sp.y *= 0.7;
+        }
+
         if (this.sp.x) {
             this.lv.x = this.sp.x * this.speed;
         } else {
