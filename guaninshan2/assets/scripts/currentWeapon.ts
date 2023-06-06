@@ -62,12 +62,11 @@ export default class NewClass extends cc.Component {
                 const temp = this.currentWeapon;
                 this.currentWeapon = this.nextWeapon;
                 this.nextWeapon = temp;
-                cc.log(this.currentWeapon.getComponent(cc.Sprite).spriteFrame);
             });
 
-            // 创建顺序动作序列
-            const currentSequence = cc.sequence(cc.spawn(currentBezierTo,nextScaleTo, nextFadeTo), updateWeaponStatus);
-            const nextSequence = cc.sequence(cc.spawn(nextBezierTo, currentScaleTo , currentFadeTo), cc.callFunc(() => {
+            const delayAction = cc.delayTime(1); // 添加1秒的延迟
+            const currentSequence = cc.sequence(delayAction, cc.spawn(currentBezierTo, nextScaleTo, nextFadeTo), updateWeaponStatus);
+            const nextSequence = cc.sequence(delayAction, cc.spawn(nextBezierTo, currentScaleTo, currentFadeTo), cc.callFunc(() => {
                 this.canSwitchWeapon = true;
             }));
 
