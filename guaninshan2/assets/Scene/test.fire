@@ -185,8 +185,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 639.999999999996,
-      "height": 399.9999999999977
+      "width": 640,
+      "height": 400
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -198,7 +198,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        -40,
+        -39.999999999999886,
         0,
         0,
         0,
@@ -554,10 +554,10 @@
     "alignMode": 1,
     "_target": null,
     "_alignFlags": 45,
-    "_left": -479.99999999999415,
-    "_right": -479.99999999999403,
-    "_top": -239.9999999999966,
-    "_bottom": -319.9999999999966,
+    "_left": -480,
+    "_right": -479.9999999999999,
+    "_top": -239.99999999999994,
+    "_bottom": -319.9999999999999,
     "_verticalCenter": 0,
     "_horizontalCenter": 0,
     "_isAbsLeft": true,
@@ -1126,7 +1126,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "主角 (2)",
+    "_name": "player",
     "_objFlags": 0,
     "_parent": {
       "__id__": 30
