@@ -21,6 +21,13 @@ export default class Player extends cc.Component {
     @property()
     rotateSpeed: number = 300;
 
+    @property(cc.Node)
+    leftHand: cc.Node = null;
+    @property(cc.Prefab)
+    gunPrefab: cc.Prefab = null;
+    @property(cc.Prefab)
+    knifePrefab: cc.Prefab = null;
+
 
     public lv: cc.Vec2 = null;
     public sp: cc.Vec2 = new cc.Vec2(0, 0);
@@ -167,12 +174,35 @@ export default class Player extends cc.Component {
     }
     
     changeWeapon() {
+        this.deleteWeapon()
         this.tmpWeapon = this.nextWeapon;
         this.nextWeapon = this.Handstate;
         this.Handstate = 'changing'
-        this.scheduleOnce(() => { this.Handstate = this.tmpWeapon; }, 1)
+        this.scheduleOnce(() => {
+            this.Handstate = this.tmpWeapon; 
+            this.addWeapon();
+        }, 1)
         if (weapon == "knife") weapon = "gun";
         else weapon = "knife";
+    }
+    deleteWeapon(){
+        this.leftHand.destroyAllChildren();
+    }
+    addWeapon(){
+        switch (this.Handstate) {
+            case "gun":
+                const gun = cc.instantiate(this.gunPrefab);
+                /* const parentNode = this.node.parent; */
+                this.leftHand.addChild(gun)
+                break;
+            case "knife":
+                const knife = cc.instantiate(this.knifePrefab);
+                /* const parentNode = this.node.parent; */
+                this.leftHand.addChild(knife)
+                break;
+            default:
+                break;
+        }
     }
 
 }

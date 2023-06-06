@@ -19,8 +19,11 @@ export default class NewClass extends cc.Component {
     rightHand: cc.Node = null;
     @property(cc.Node)
     cursor: cc.Node = null;
+
     @property(cc.Prefab)
     bulletPrefab: cc.Prefab
+
+    
 
 
     public rightAngle: number = -45;
@@ -84,7 +87,7 @@ export default class NewClass extends cc.Component {
 
         switch (this.playerTs.Handstate) {
             case 'gun':
-                this.leftAngle = 15
+                this.leftAngle = 5
                 this.rightAngle = -this.leftAngle;
                 break;
             case 'knife':
@@ -134,10 +137,10 @@ export default class NewClass extends cc.Component {
 
         // 创建射线的绘制节点
         const bullet = cc.instantiate(this.bulletPrefab);
-        const parentNode = this.node.parent;
-        const nodeIndex = parentNode.children.indexOf(this.node);
-        parentNode.insertChild(bullet, nodeIndex - 1);
-        bullet.setPosition(new cc.Vec2(this.node.position.x, this.node.position.y));
+        /* const parentNode = this.node.parent; */
+        const nodeIndex = this.node.children.indexOf(this.leftHand);
+        this.node.insertChild(bullet, nodeIndex - 1);
+        bullet.setPosition(new cc.Vec2(this.leftHand.position.x, this.leftHand.position.y));
         bullet.getComponent(cc.Collider).enabled = false;
         bullet.getComponent(cc.RigidBody).linearVelocity = direction.mul(this.bulletVelocity);
     }
