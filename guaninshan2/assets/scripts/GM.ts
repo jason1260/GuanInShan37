@@ -7,6 +7,8 @@
 
 const { ccclass, property } = cc._decorator;
 
+export var pathing_Map; //[長][寬] //
+
 @ccclass
 export default class NewClass extends cc.Component {
 
@@ -31,6 +33,17 @@ export default class NewClass extends cc.Component {
         let tag = 15;
         let groups = ['wall', 'shortwall'];
         let groups_id = 0;
+
+        // 创建二维数组Map，并初始化为0
+        let layerSize = this.tiledMap.getMapSize();
+        let Map = [];
+        for (let i = 0; i < layerSize.width; i++) {
+            Map[i] = [];
+            for (let j = 0; j < layerSize.height; j++) {
+                Map[i][j] = 0;
+            }
+        }
+
         for (var layerName of layers) {
             let layer = this.tiledMap.getLayer(layerName);
             cc.log(layerName, layer);
@@ -53,12 +66,18 @@ export default class NewClass extends cc.Component {
                         let another = tiled.node.addComponent(cc.BoxCollider);
                         another.offset = cc.v2(tiledSize.width / 2, tiledSize.height / 2).add(cc.v2(-320, -200));
                         another.size = tiledSize;
+
+                        // 设置Map对应位置为1
+                        Map[i][j] = 1;
                     }
                 }
             }
             tag++;
             groups_id++;
         }
+
+        pathing_Map = Map; // 将Map赋值给类成员变量
+        cc.log(pathing_Map);
     }
 
 }
