@@ -7,11 +7,15 @@ export default class Login extends cc.Component {
     @property(cc.Button)
     loginBtn: cc.Button = null;
 
+    @property(cc.Button)
+    toRegister: cc.Button = null;
+
     private playerTs = null;
     
     start () {
         // init logic
         this.loginBtn.node.on(cc.Node.EventType.TOUCH_END, this.login, this);
+        this.toRegister.node.on(cc.Node.EventType.TOUCH_END, () => {cc.director.loadScene("register");}, this);
     }
 
     login = async () => {
