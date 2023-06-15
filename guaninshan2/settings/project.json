@@ -5,7 +5,8 @@
     "wall",
     "player",
     "knife",
-    "shortwall"
+    "shortwall",
+    "drops"
   ],
   "collision-matrix": [
     [
@@ -32,6 +33,7 @@
       true,
       false,
       true,
+      true,
       true
     ],
     [
@@ -46,6 +48,15 @@
       false,
       false,
       true,
+      false,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      true,
+      false,
       false,
       false
     ]

@@ -30,6 +30,26 @@ export default class NewClass extends cc.Component {
     update(){
         const cursorNode = this.node.getChildByName("Cursor");
         const graphics = cursorNode.getComponent(cc.Graphics);
+        if(this.playerTs.bulletNum <= 0){
+            graphics.clear()
+            const lineWidth = 3;
+            const color = cc.Color.RED;
+
+            // 绘制叉叉
+            const size = this.playerTs.shootRadius;
+            const halfSize = size * 0.5;
+            graphics.moveTo(-halfSize, -halfSize);
+            graphics.lineTo(halfSize, halfSize);
+            graphics.strokeColor = color;
+            graphics.lineWidth = lineWidth;
+            graphics.moveTo(-halfSize, halfSize);
+            graphics.lineTo(halfSize, -halfSize);
+            graphics.circle(0, 0, this.playerTs.shootRadius);
+            graphics.lineWidth = 3;
+            graphics.strokeColor = cc.Color.RED;
+            graphics.stroke();
+            return;
+        }
         if(gameInfo.rangedWeapon.includes(this.playerTs.Handstate)){
             graphics.clear()
             graphics.circle(0, 0, this.playerTs.shootRadius);

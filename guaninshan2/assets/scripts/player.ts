@@ -20,6 +20,8 @@ export default class Player extends cc.Component {
     gunPrefab: cc.Prefab = null;
     @property(cc.Prefab)
     knifePrefab: cc.Prefab = null;
+    @property(cc.Prefab)
+    riflePrefab: cc.Prefab = null;
 
     public speed: number = 200;
     public rotateSpeed: number = 30;
@@ -60,10 +62,10 @@ export default class Player extends cc.Component {
     }
 
     update(dt) {
-        
+      
         //die
         if(this.HP < 0)
-            cc.director.loadScene(cc.director.getScene().name);
+            this.playerDie();
         //update speed
         if (this.Handstate !== 'changing' && this.Handstate !== 'reloading')
             this.speed = this.baseSpeed - gameInfo.weaponWeight[this.Handstate];
@@ -125,9 +127,17 @@ export default class Player extends cc.Component {
 
 
     }
-    onBeginContact(contact: cc.PhysicsContact, selfCollider: cc.PhysicsCollider, otherCollider: cc.PhysicsCollider) {
-
-
+    //pick up drops
+    onCollisionStay(otherCollider, selfCollider) {
+        if(otherCollider.node.group != 'drops') return
+       
+        if(Input[cc.macro.KEY.space]){
+            this.Handstate = gameInfo.dropsTag2weapon[otherCollider.getComponent(cc.BoxCollider).tag]
+            this.deleteWeapon();
+            this.addWeapon();
+            otherCollider.node.destroy();
+            this.bulletNum = gameInfo.weaponbulletNum[this.Handstate]
+        }
 
     }
 
@@ -169,7 +179,7 @@ export default class Player extends cc.Component {
 
         this.mousePt = playerLocalPos
         const distance: number = cc.Vec2.distance(this.node.getPosition(), playerLocalPos);
-        this.shootRadius = this.rescaleValue(distance, 1, 1000, 10, 50)
+        this.shootRadius = this.rescaleValue(distance, 1, 1000, 10, 50) * gameInfo.weaponRadius[this.Handstate]
     }
     
     changeWeapon() {
@@ -180,6 +190,7 @@ export default class Player extends cc.Component {
         this.scheduleOnce(() => {
             this.Handstate = this.tmpWeapon; 
             this.addWeapon();
+            this.bulletNum = gameInfo.weaponbulletNum[this.Handstate]
         }, 1)
 
     }
@@ -187,11 +198,17 @@ export default class Player extends cc.Component {
         this.leftHand.destroyAllChildren();
     }
     addWeapon(){
+        console.log(this.Handstate)
         switch (this.Handstate) {
             case "gun":
                 const gun = cc.instantiate(this.gunPrefab);
                 /* const parentNode = this.node.parent; */
                 this.leftHand.addChild(gun)
+                break;
+            case "rifle":
+                const rifle = cc.instantiate(this.riflePrefab);
+                /* const parentNode = this.node.parent; */
+                this.leftHand.addChild(rifle)
                 break;
             case "knife":
                 const knife = cc.instantiate(this.knifePrefab);
@@ -213,6 +230,9 @@ export default class Player extends cc.Component {
     }
     hurt(hurtNum:number){
         this.HP -= hurtNum;
+    }
+    playerDie(){
+        cc.director.loadScene(cc.director.getScene().name);
     }
 
 }

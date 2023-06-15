@@ -6,7 +6,7 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 const { ccclass, property } = cc._decorator;
-
+import gameInfo = require("./gameInfo");
 export var knife_valid;
 
 @ccclass
@@ -63,14 +63,20 @@ export default class NewClass extends cc.Component {
         this.attacking = true;
         
         switch (this.playerTs.Handstate) {
-          case 'gun':
+        case 'rifle':
             this.shoot();
             this.scheduleOnce(() => {
               this.attacking = false;
-            }, 0.2);
+            }, gameInfo.weaponAttackTime[this.playerTs.Handstate]);
             break;
-      
-          case 'knife':
+        case 'gun':
+            this.shoot();
+            this.scheduleOnce(() => {
+              this.attacking = false;
+            }, gameInfo.weaponAttackTime[this.playerTs.Handstate]);
+            break;
+            
+        case 'knife':
             this.leftAngle = 0;
             knife_valid = true;
       
@@ -78,7 +84,7 @@ export default class NewClass extends cc.Component {
             const rotateAngle = (targetAngle: number, duration: number) => {
               const startAngle = this.leftAngle;
               let elapsedTime = 0;
-              const interval = 0.02; // 每帧间隔时间，可根据需要调整
+              const interval = gameInfo.weaponAttackTime[this.playerTs.Handstate]; // 每帧间隔时间，可根据需要调整
       
               const update = () => {
                 elapsedTime += interval;
@@ -115,8 +121,14 @@ export default class NewClass extends cc.Component {
       
       
     idleAni() {
-
+        this.rightRadius = 25;
+        this.leftRadius = 25;
         switch (this.playerTs.Handstate) {
+            case 'rifle':
+                this.leftAngle = 5
+                this.rightRadius = 45
+                this.rightAngle = -this.leftAngle;
+                break;
             case 'gun':
                 this.leftAngle = 5
                 this.rightAngle = -this.leftAngle;
@@ -130,6 +142,8 @@ export default class NewClass extends cc.Component {
         }
     }
     changingAni() {
+        this.rightRadius = 25;
+        this.leftRadius = 25;
         this.timer += 1;
         if (this.timer % 10 == 0) {
             if (this.leftAngle != 10)
@@ -155,9 +169,7 @@ export default class NewClass extends cc.Component {
     }
     shoot() {
         if(this.playerTs.bulletNum <= 0) return
-        console.log(this.playerTs.bulletNum)
         this.playerTs.bulletNum -= 1;
-        cc.log("shoot!!!!!!!!!!!!!!!!!!!!!");
 
         //這裡的radius和cursor的差兩倍
         const dest = this.getRandomInCircle_polar_better(this.playerTs.shootRadius);
