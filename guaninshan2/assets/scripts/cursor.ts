@@ -22,7 +22,7 @@ export default class NewClass extends cc.Component {
     }
  
     start () {
-        cc.find("Canvas/scene1/bg").on(cc.Node.EventType.MOUSE_MOVE, this.onMouseMove, this)
+        cc.find("Canvas/scene2/bg").on(cc.Node.EventType.MOUSE_MOVE, this.onMouseMove, this)
         /* cc.Canvas.instance.node.on('mousemove', this.onMouseMove, this); */
         this.createCursor();
     }

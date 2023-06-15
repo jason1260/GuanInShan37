@@ -51,8 +51,8 @@ export default class Player extends cc.Component {
 
         this.GM = cc.find("Canvas/GM").getComponent('GM');
 
-        cc.find("Canvas/scene1/bg").on(cc.Node.EventType.MOUSE_MOVE, this.onMouseMove, this)
-        cc.find("Canvas/scene1/bg").on(cc.Node.EventType.MOUSE_DOWN, this.onMouseMove, this)
+        cc.find("Canvas/scene2/bg").on(cc.Node.EventType.MOUSE_MOVE, this.onMouseMove, this)
+        cc.find("Canvas/scene2/bg").on(cc.Node.EventType.MOUSE_DOWN, this.onMouseMove, this)
     }
 
 
