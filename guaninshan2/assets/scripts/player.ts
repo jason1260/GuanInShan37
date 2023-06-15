@@ -134,7 +134,8 @@ export default class Player extends cc.Component {
     //pick up drops
     onCollisionStay(otherCollider, selfCollider) {
         if(otherCollider.node.group != 'drops') return
-       
+        if(this.Handstate == 'changing' || this.Handstate == 'reloading')
+            return;
         if(Input[cc.macro.KEY.space]){
             this.Handstate = gameInfo.dropsTag2weapon[otherCollider.getComponent(cc.BoxCollider).tag]
             this.deleteWeapon();
