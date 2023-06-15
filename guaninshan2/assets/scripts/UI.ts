@@ -32,7 +32,9 @@ export default class UI extends cc.Component {
     }
 
     update (dt) {
-
+        this.hpUpdate();
+        this.scoreUpdate();
+        this.bulletUpdate();
     }
 
     onKeyDown (event) {
