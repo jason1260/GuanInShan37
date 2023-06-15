@@ -44,7 +44,7 @@ export default class GM extends cc.Component {
         let tiledSize = this.tiledMap.getTileSize();
         let layers = ['blocks', 'lowBlks', 'secWall'];
         let tag = 15;
-        let groups = ['wall', 'shortwall', 'wall'];
+        let groups = ['wall', 'shortwall', 'secWall'];
         let groups_id = 0;
 
         // 创建二维数组Map，并初始化为0
