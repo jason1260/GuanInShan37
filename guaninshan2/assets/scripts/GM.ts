@@ -42,9 +42,9 @@ export default class GM extends cc.Component {
 
     drawColliderboxes() {
         let tiledSize = this.tiledMap.getTileSize();
-        let layers = ['blocks', 'lowBlks', 'secWall'];
+        let layers = ['blocks', 'lowBlks', 'secWall', 'secFloor'];
         let tag = 15;
-        let groups = ['wall', 'shortwall', 'secWall'];
+        let groups = ['wall', 'shortwall', 'secWall', 'secFloor'];
         let groups_id = 0;
 
         // 创建二维数组Map，并初始化为0
@@ -75,6 +75,7 @@ export default class GM extends cc.Component {
                         collider.size = tiledSize;
                         collider.tag = tag;
                         collider.friction = 0.2;
+                        if (layerName === "secFloor") collider.sensor = true;
                         collider.apply();
                         let another = tiled.node.addComponent(cc.BoxCollider);
                         another.offset = cc.v2(tiledSize.width / 2, tiledSize.height / 2).add(cc.v2(-320, -200));

@@ -17,6 +17,16 @@ export default class AIhands extends hands {
 
     public knifeAttackRadius = 70;
 
+    public onFloor: number = 1;
+
+    onCollisionStay (other, self) {
+        if (other.node.group === 'secFloor') this.onFloor = 2;
+    }
+
+    onCollisionExit (other, self) {
+        if (other.node.group === 'secFloor') this.onFloor = 1;
+    }
+
     onLoad () {
         this.AIplayerTs = this.node.getComponent('AIPlayer');
         AIknife_valid = false;
@@ -126,7 +136,7 @@ export default class AIhands extends hands {
 
         // 创建射线的绘制节点
         const bullet = cc.instantiate(this.bulletPrefab);
-        bullet.getComponent('bullet').setProperty(10,1)
+        bullet.getComponent('bullet').setProperty(10, this.onFloor);
         /* const parentNode = this.node.parent; */
         const nodeIndex = this.node.children.indexOf(this.leftHand);
 

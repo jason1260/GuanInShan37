@@ -7,7 +7,8 @@
     "knife",
     "shortwall",
     "drops",
-    "secWall"
+    "secWall",
+    "secFloor"
   ],
   "collision-matrix": [
     [
@@ -40,6 +41,7 @@
       true,
       true,
       true,
+      true,
       true
     ],
     [
@@ -71,6 +73,17 @@
       true,
       false,
       true,
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      true,
+      false,
       false,
       false,
       false,

@@ -36,6 +36,7 @@ export default class NewClass extends cc.Component {
 
     public timer: number = 0;
     public attacking: boolean = false;
+    public onFloor: number = 1;
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
@@ -59,6 +60,15 @@ export default class NewClass extends cc.Component {
         this.HandPos();
         /* console.log(this.playerTs.Handstate) */
     }
+
+    onCollisionStay (other, self) {
+        if (other.node.group === 'secFloor') this.onFloor = 2;
+    }
+
+    onCollisionExit (other, self) {
+        if (other.node.group === 'secFloor') this.onFloor = 1;
+    }
+
     attack() {
         if (this.playerTs.Handstate === 'changing' || this.attacking || this.playerTs.Handstate == 'reloading') return;
         this.attacking = true;
@@ -190,7 +200,8 @@ export default class NewClass extends cc.Component {
 
         // 创建射线的绘制节点
         const bullet = cc.instantiate(this.bulletPrefab);
-        bullet.getComponent('bullet').setProperty(10,1)
+        bullet.getComponent('bullet').setProperty(10,this.onFloor)
+        console.log("floor: ", this.onFloor)
         console.log(bullet.getComponent('bullet').attackNum)
         /* const parentNode = this.node.parent; */
         const nodeIndex = this.node.children.indexOf(this.leftHand);

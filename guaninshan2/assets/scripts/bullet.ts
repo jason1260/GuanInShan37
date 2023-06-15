@@ -26,7 +26,7 @@ export default class NewClass extends cc.Component {
     start () {
     }
     onCollisionEnter(other, self) {
-        
+        if (other.node.group === 'secWall' && this.floor === 2) return;
         if(other.node.group == 'player'){
             this.ts = other.node.getComponent('player') || other.node.getComponent('AIplayer')
             console.log(this.attackNum)
