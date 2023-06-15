@@ -21,6 +21,7 @@ const gameInfo = {
         rifle:0.2,
     },
     rangedWeapon : ['gun','rifle'],
+    nearWeapon : ['knife'],
     weaponRadius : {
         reload:1,
         changing:1,
