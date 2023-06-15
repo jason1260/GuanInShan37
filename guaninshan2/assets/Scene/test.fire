@@ -855,6 +855,9 @@
     "gunSE": {
       "__uuid__": "3b553464-7f4c-4cfd-b016-187c1a780e9b"
     },
+    "rifleSE": {
+      "__uuid__": "26c81f19-eb33-4812-80c0-2ae888e7a8d0"
+    },
     "reloadSE": {
       "__uuid__": "fd91e0aa-0523-4945-ba0a-2083e3a7c821"
     },
