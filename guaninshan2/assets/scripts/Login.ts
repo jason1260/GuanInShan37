@@ -4,32 +4,33 @@ declare const firebase: any;
 @ccclass
 export default class Login extends cc.Component {
 
+    @property(cc.Button)
+    loginBtn: cc.Button = null;
 
+    private playerTs = null;
     
     start () {
         // init logic
-        this.InitLogin();
+        this.loginBtn.node.on(cc.Node.EventType.TOUCH_END, this.login, this);
     }
 
-    InitLogin(){
-        let clickEventHandler = new cc.Component.EventHandler();
-        clickEventHandler.target = this.node;
-        clickEventHandler.component = "Login";
-        clickEventHandler.handler = "login";
-        cc.find("Canvas/menu_bg/Login").getComponent(cc.Button).clickEvents.push(clickEventHandler);
-    }
-
-    login(){
-        // let email = cc.find("Canvas/menu_bg/block/Email").getComponent(cc.EditBox).string;
-        // let password = cc.find("Canvas/menu_bg/block/Password").getComponent(cc.EditBox).string;
-        // firebase.auth().signInWithEmailAndPassword(email, password).then(function(user){
-        //     alert("Login Success");
-        //     cc.director.loadScene("GameStart");
-        // }).catch(function(error) {
-        //     // Handle Errors here.
-        //     alert(error.message);
-        //     // console.log(error);
-        // });
-        cc.director.loadScene("test");
+    login = async () => {
+        let email = cc.find("Canvas/menu_bg/Email").getComponent(cc.EditBox).string;
+        let password = cc.find("Canvas/menu_bg/Password").getComponent(cc.EditBox).string;
+        console.log(email, password);
+        try {
+            const reg = await firebase.auth().signInWithEmailAndPassword(email, password);
+            const db = firebase.database();
+            const path = db.ref('users/' + reg.user.uid);
+            await path.once("value").then((snapshot) => {
+                const data = snapshot.val();
+                alert("Welcome " + data.username);
+                this.scheduleOnce(() => {cc.director.loadScene("test");}, 1);
+            }).catch((error) => {
+                console.error("Error fetching data: ", error.message);
+            });
+        } catch (err) {
+            alert(err.message);
+        }
     }
 }
