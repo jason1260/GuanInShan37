@@ -849,6 +849,21 @@
     "tiledMap": {
       "__id__": 12
     },
+    "knifeSE": {
+      "__uuid__": "1cbe2e0d-be5c-4c1a-b61b-52b22328d229"
+    },
+    "gunSE": {
+      "__uuid__": "3b553464-7f4c-4cfd-b016-187c1a780e9b"
+    },
+    "reloadSE": {
+      "__uuid__": "fd91e0aa-0523-4945-ba0a-2083e3a7c821"
+    },
+    "changeSE": {
+      "__uuid__": "9223a853-24b9-4969-9398-b6af86c6b71d"
+    },
+    "emptySE": {
+      "__uuid__": "e979dc5f-49a3-4052-b321-18c41c798cca"
+    },
     "_id": "1aMzWKJbhC0af1f8GfoA6d"
   },
   {

@@ -10,10 +10,23 @@ const { ccclass, property } = cc._decorator;
 export var pathing_Map; //[長][寬] //
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class GM extends cc.Component {
 
     @property(cc.TiledMap)
     tiledMap: cc.TiledMap = null;
+
+    @property(cc.AudioClip)
+    knifeSE: cc.AudioClip = null;
+    @property(cc.AudioClip)
+    gunSE: cc.AudioClip = null;
+    @property(cc.AudioClip)
+    rifleSE: cc.AudioClip = null;
+    @property(cc.AudioClip)
+    reloadSE: cc.AudioClip = null;
+    @property(cc.AudioClip)
+    changeSE: cc.AudioClip = null;
+    @property(cc.AudioClip)
+    emptySE: cc.AudioClip = null;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -78,6 +91,35 @@ export default class NewClass extends cc.Component {
 
         pathing_Map = Map; // 将Map赋值给类成员变量
         cc.log(pathing_Map);
+    }
+
+    playeffect(handstate) {
+        if(handstate === "knife"){
+            cc.audioEngine.playEffect(this.knifeSE, false);
+        }
+        else if(handstate === "gun"){
+            cc.audioEngine.playEffect(this.gunSE, false);
+        }
+        else if(handstate === "rifle"){
+            cc.audioEngine.playEffect(this.rifleSE, false);
+        }
+        else if(handstate === "reload"){
+            cc.audioEngine.playEffect(this.reloadSE, false);
+        }
+        else if (handstate === "changing"){
+            cc.audioEngine.playEffect(this.changeSE, false);
+        }
+        else if (handstate === "empty"){
+            cc.audioEngine.playEffect(this.emptySE, false);
+        }
+
+    }
+
+    playbgm(bgm) {
+        cc.audioEngine.playMusic(bgm, true);
+    }
+    stopbgm() {
+        cc.audioEngine.stopMusic();
     }
 
 }

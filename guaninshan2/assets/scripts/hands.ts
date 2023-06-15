@@ -23,7 +23,7 @@ export default class NewClass extends cc.Component {
     @property(cc.Prefab)
     bulletPrefab: cc.Prefab
 
-    
+    public GM = null;
 
 
     public rightAngle: number = -45;
@@ -43,6 +43,7 @@ export default class NewClass extends cc.Component {
         cc.find("Canvas/scene1/bg").on(cc.Node.EventType.MOUSE_DOWN, this.onMouseMove, this)
         cc.find("Canvas/scene1/bg").on(cc.Node.EventType.MOUSE_DOWN, this.attack, this)
         this.playerTs = this.node.getComponent('player');
+        this.GM = cc.find("Canvas/GM").getComponent('GM');
         knife_valid = false;
     }
 
@@ -79,6 +80,8 @@ export default class NewClass extends cc.Component {
         case 'knife':
             this.leftAngle = 0;
             knife_valid = true;
+
+            this.GM.playeffect(this.playerTs.Handstate);
       
             // 逐渐改变角度的函数
             const rotateAngle = (targetAngle: number, duration: number) => {
@@ -168,8 +171,12 @@ export default class NewClass extends cc.Component {
         this.rightHand.setPosition(handPosition)
     }
     shoot() {
-        if(this.playerTs.bulletNum <= 0) return
+        if(this.playerTs.bulletNum <= 0) {
+            this.GM.playeffect('empty');
+            return;
+        }
         this.playerTs.bulletNum -= 1;
+        this.GM.playeffect(this.playerTs.Handstate);
 
         //這裡的radius和cursor的差兩倍
         const dest = this.getRandomInCircle_polar_better(this.playerTs.shootRadius);

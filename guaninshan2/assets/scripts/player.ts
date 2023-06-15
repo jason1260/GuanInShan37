@@ -23,6 +23,8 @@ export default class Player extends cc.Component {
     @property(cc.Prefab)
     riflePrefab: cc.Prefab = null;
 
+    public GM = null;
+
     public speed: number = 200;
     public rotateSpeed: number = 30;
     public HP:number = 100;
@@ -46,6 +48,8 @@ export default class Player extends cc.Component {
         this.score = 0;
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+
+        this.GM = cc.find("Canvas/GM").getComponent('GM');
 
         cc.find("Canvas/scene1/bg").on(cc.Node.EventType.MOUSE_MOVE, this.onMouseMove, this)
         cc.find("Canvas/scene1/bg").on(cc.Node.EventType.MOUSE_DOWN, this.onMouseMove, this)
@@ -183,7 +187,8 @@ export default class Player extends cc.Component {
     }
     
     changeWeapon() {
-        this.deleteWeapon()
+        this.deleteWeapon();
+        this.GM.playeffect('changing');
         this.tmpWeapon = this.nextWeapon;
         this.nextWeapon = this.Handstate;
         this.Handstate = 'changing'
@@ -221,7 +226,8 @@ export default class Player extends cc.Component {
     }
     reload(){
         this.tmpWeapon = this.Handstate;
-        this.Handstate = 'reloading'
+        this.Handstate = 'reloading';
+        this.GM.playeffect('reload');
         this.scheduleOnce(() => {
             this.Handstate = this.tmpWeapon; 
             this.bulletNum = gameInfo.weaponbulletNum[this.Handstate]
