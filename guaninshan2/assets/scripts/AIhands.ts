@@ -1,3 +1,4 @@
+import gameInfo = require("./gameInfo");
 import hands from "./hands";
 
 const {ccclass, property} = cc._decorator;
@@ -53,13 +54,19 @@ export default class AIhands extends hands {
     attack() {
         if (this.AIplayerTs.Handstate === 'changing' || this.attacking) return;
         this.attacking = true;
-
+        console.log('fefe')
         switch (this.AIplayerTs.Handstate) {
+            case 'rifle':
+            this.shoot();
+            this.scheduleOnce(() => {
+              this.attacking = false;
+            }, gameInfo.weaponAttackTime[this.AIplayerTs.Handstate]);
+            break;
           case 'gun':
             this.shoot();
             this.scheduleOnce(() => {
               this.attacking = false;
-            }, 0.2);
+            }, gameInfo.weaponAttackTime[this.AIplayerTs.Handstate]);
             break;
       
           case 'knife':
@@ -71,7 +78,7 @@ export default class AIhands extends hands {
                 const rotateAngle = (targetAngle: number, duration: number) => {
                 const startAngle = this.leftAngle;
                 let elapsedTime = 0;
-                const interval = 0.02; // 每帧间隔时间，可根据需要调整
+                const interval = gameInfo.weaponAttackTime[this.AIplayerTs.Handstate]; // 每帧间隔时间，可根据需要调整
         
                 const update = () => {
                     elapsedTime += interval;
