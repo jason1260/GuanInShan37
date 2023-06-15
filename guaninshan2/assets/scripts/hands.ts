@@ -51,17 +51,17 @@ export default class NewClass extends cc.Component {
     }
 
     update(dt) {
-        if (this.playerTs.Handstate == 'changing')
+        if (this.playerTs.Handstate == 'changing' || this.playerTs.Handstate == 'reloading')
             this.changingAni()
-        if (this.playerTs.Handstate != 'changing' && !this.attacking)
+        if (this.playerTs.Handstate != 'reloading' && this.playerTs.Handstate != 'changing' && !this.attacking)
             this.idleAni()
         this.HandPos();
         /* console.log(this.playerTs.Handstate) */
     }
     attack() {
-        if (this.playerTs.Handstate === 'changing' || this.attacking) return;
+        if (this.playerTs.Handstate === 'changing' || this.attacking || this.playerTs.Handstate == 'reloading') return;
         this.attacking = true;
-      
+        
         switch (this.playerTs.Handstate) {
           case 'gun':
             this.shoot();
@@ -154,6 +154,9 @@ export default class NewClass extends cc.Component {
         this.rightHand.setPosition(handPosition)
     }
     shoot() {
+        if(this.playerTs.bulletNum <= 0) return
+        console.log(this.playerTs.bulletNum)
+        this.playerTs.bulletNum -= 1;
         cc.log("shoot!!!!!!!!!!!!!!!!!!!!!");
 
         //這裡的radius和cursor的差兩倍

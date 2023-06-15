@@ -4,22 +4,15 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
-
+import gameInfo = require("./gameInfo");
 const { ccclass, property } = cc._decorator;
 const Input = {}
-
-export var weapon;
 
 @ccclass
 export default class Player extends cc.Component {
 
-    @property()
-    speed: number = 100;
-    @property()
-    jumpSpeed: number = 100;
 
-    @property()
-    rotateSpeed: number = 300;
+    
 
     @property(cc.Node)
     leftHand: cc.Node = null;
@@ -28,20 +21,19 @@ export default class Player extends cc.Component {
     @property(cc.Prefab)
     knifePrefab: cc.Prefab = null;
 
-
+    public speed: number = 200;
+    public rotateSpeed: number = 30;
+    public HP:number = 100;
+    public role: string = '少林';
+    public bulletNum:number = 20;
+    public score:number = 0;
+    
+    public baseSpeed: number = 200;
     public lv: cc.Vec2 = null;
     public sp: cc.Vec2 = new cc.Vec2(0, 0);
-    public isJumping: boolean = false;
     public dirAngle: number = 0;
-    public life: number = 1;
     public shootRadius = 20;
-    public isMouseUp: boolean = true;
-    public transform_state: cc.AnimationState = null
-    public prev_lv: cc.Vec2 = null;
     // LIFE-CYCLE CALLBACKS:
-    public LIFE: number = 0;
-    public score: number = 0;
-    public state: string = 'ing';
     public Handstate: string = 'knife';
     public tmpWeapon: string = '';
     public nextWeapon: string = 'gun'
@@ -50,11 +42,6 @@ export default class Player extends cc.Component {
     onLoad() {
         for (var member in Input) delete Input[member];
         this.score = 0;
-        this.state = 'ing';
-        this.life = 1;
-        this.isJumping = false;
-        this.isMouseUp = true;
-        weapon = "knife";
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
 
@@ -73,16 +60,28 @@ export default class Player extends cc.Component {
     }
 
     update(dt) {
-
+        
+        //die
+        if(this.HP < 0)
+            cc.director.loadScene(cc.director.getScene().name);
+        //update speed
+        if (this.Handstate !== 'changing' && this.Handstate !== 'reloading')
+            this.speed = this.baseSpeed - gameInfo.weaponWeight[this.Handstate];
 
         let scaleX = Math.abs(this.node.scaleX);
         this.lv = this.node.getComponent(cc.RigidBody).linearVelocity;
         //change weapon
         if (Input[cc.macro.KEY.q]) {
-            if (this.Handstate !== 'changing')
+            if (this.Handstate !== 'changing' && this.Handstate !== 'reloading'){
                 this.changeWeapon();
+            }
         }
-
+        //reload
+        if (Input[cc.macro.KEY.r]) {     
+            if(gameInfo.rangedWeapon.includes(this.Handstate))
+                this.reload();
+            
+        }
         //move
         if (Input[cc.macro.KEY.a]) {
             this.sp.x = -1;
@@ -114,7 +113,7 @@ export default class Player extends cc.Component {
             this.lv.x = 0;
         }
         if (this.sp.y) {
-            this.lv.y = this.sp.y * this.jumpSpeed;
+            this.lv.y = this.sp.y * this.speed;
         } else {
             this.lv.y = 0;
         }
@@ -182,8 +181,7 @@ export default class Player extends cc.Component {
             this.Handstate = this.tmpWeapon; 
             this.addWeapon();
         }, 1)
-        if (weapon == "knife") weapon = "gun";
-        else weapon = "knife";
+
     }
     deleteWeapon(){
         this.leftHand.destroyAllChildren();
@@ -203,6 +201,18 @@ export default class Player extends cc.Component {
             default:
                 break;
         }
+    }
+    reload(){
+        this.tmpWeapon = this.Handstate;
+        this.Handstate = 'reloading'
+        this.scheduleOnce(() => {
+            this.Handstate = this.tmpWeapon; 
+            this.bulletNum = gameInfo.weaponbulletNum[this.Handstate]
+        }, 1)
+        
+    }
+    hurt(hurtNum:number){
+        this.HP -= hurtNum;
     }
 
 }

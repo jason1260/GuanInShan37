@@ -4,7 +4,7 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
-
+import gameInfo = require("./gameInfo");
 const {ccclass, property} = cc._decorator;
 
 @ccclass
@@ -30,7 +30,7 @@ export default class NewClass extends cc.Component {
     update(){
         const cursorNode = this.node.getChildByName("Cursor");
         const graphics = cursorNode.getComponent(cc.Graphics);
-        if(this.playerTs.Handstate == 'gun'){
+        if(gameInfo.rangedWeapon.includes(this.playerTs.Handstate)){
             graphics.clear()
             graphics.circle(0, 0, this.playerTs.shootRadius);
             graphics.lineWidth = 3;

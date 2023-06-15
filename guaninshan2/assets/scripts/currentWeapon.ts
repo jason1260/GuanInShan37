@@ -26,9 +26,9 @@ export default class NewClass extends cc.Component {
 
     update (dt) {
         /* console.log(this.playerTs.Handstate) */
-        console.log(this.currentWeapon.getComponent(cc.Sprite).spriteFrame.name)
+        /* console.log(this.currentWeapon.getComponent(cc.Sprite).spriteFrame.name) */
 
-            if (this.playerTs.Handstate !== 'changing' && this.currentWeapon.getComponent(cc.Sprite).spriteFrame.name !== this.playerTs.Handstate && this.canSwitchWeapon){
+            if (this.playerTs.Handstate !== 'reloading' && this.playerTs.Handstate !== 'changing' && this.currentWeapon.getComponent(cc.Sprite).spriteFrame.name !== this.playerTs.Handstate && this.canSwitchWeapon){
                 /* cc.log(this.currentWeapon.getComponent(cc.Sprite).spriteFrame); */
                 this.swithcWeaponUI()
             }
