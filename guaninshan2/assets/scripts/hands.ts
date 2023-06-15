@@ -190,6 +190,8 @@ export default class NewClass extends cc.Component {
 
         // 创建射线的绘制节点
         const bullet = cc.instantiate(this.bulletPrefab);
+        bullet.getComponent('bullet').setProperty(10,1)
+        console.log(bullet.getComponent('bullet').attackNum)
         /* const parentNode = this.node.parent; */
         const nodeIndex = this.node.children.indexOf(this.leftHand);
         this.node.insertChild(bullet, nodeIndex - 1);

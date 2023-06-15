@@ -30,8 +30,8 @@ export default class AIhands extends hands {
             this.changingAni()
         if (this.AIplayerTs.Handstate != 'changing' && !this.attacking)
             this.idleAni()
-        
-        this.mousePt = this.AIplayerTs.attackingTarget.getPosition();
+        if (this.AIplayerTs.attackingTarget != null)
+            this.mousePt = this.AIplayerTs.attackingTarget.getPosition();
         this.HandPos();
         this.attack();
     }
@@ -54,7 +54,6 @@ export default class AIhands extends hands {
     attack() {
         if (this.AIplayerTs.Handstate === 'changing' || this.attacking) return;
         this.attacking = true;
-        console.log('fefe')
         switch (this.AIplayerTs.Handstate) {
             case 'rifle':
             this.shoot();
@@ -127,6 +126,7 @@ export default class AIhands extends hands {
 
         // 创建射线的绘制节点
         const bullet = cc.instantiate(this.bulletPrefab);
+        bullet.getComponent('bullet').setProperty(10,1)
         /* const parentNode = this.node.parent; */
         const nodeIndex = this.node.children.indexOf(this.leftHand);
 

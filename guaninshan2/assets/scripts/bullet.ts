@@ -16,6 +16,9 @@ export default class NewClass extends cc.Component {
     @property
     text: string = 'hello';
 
+    public attackNum: number = 0;
+    public floor: number = 1;
+    public ts = null;
     // LIFE-CYCLE CALLBACKS:
 
     // onLoad () {}
@@ -23,7 +26,17 @@ export default class NewClass extends cc.Component {
     start () {
     }
     onCollisionEnter(other, self) {
+        
+        if(other.node.group == 'player'){
+            this.ts = other.node.getComponent('player') || other.node.getComponent('AIplayer')
+            console.log(this.attackNum)
+            this.ts.hurt(this.attackNum)
+        }
         this.node.destroy()
+    }
+    setProperty(attackNum: number,floor: number){
+        this.attackNum = attackNum;
+        this.floor = floor;
     }
     // update (dt) {}
 }

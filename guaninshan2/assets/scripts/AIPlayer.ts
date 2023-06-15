@@ -36,6 +36,8 @@ export default class AIPlayer extends Player {
     }
 
     update (dt) {
+        if(this.HP <= 0)
+            this.node.destroy();
         this.findEnemy();
         if (this.attackingList === null) {
             this.findNearstEnemy(); 
@@ -50,8 +52,8 @@ export default class AIPlayer extends Player {
         if (this.attackingTarget != null) {
             this.aiming(this.attackingTarget.getPosition()); //滑鼠移到目標並rotate
         }
-
-        this.enemyDistance = cc.Vec2.distance(this.node.getPosition(), this.attackingTarget.getPosition());
+        if (this.attackingTarget != null)
+            this.enemyDistance = cc.Vec2.distance(this.node.getPosition(), this.attackingTarget.getPosition());
         if (this.enemyDistance < this.changeWeaponRadius && gameInfo.rangedWeapon.includes(this.Handstate)) {
             this.changeWeapon();
         }
@@ -95,7 +97,7 @@ export default class AIPlayer extends Player {
                 path.push([x, y])
             }
 
-            cc.log(startX, startY, endX, endY, path)
+      
 
             let existed = false;
             this.attackingList.forEach(element => {
