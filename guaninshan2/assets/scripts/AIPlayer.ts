@@ -21,7 +21,9 @@ export default class AIPlayer extends Player {
 
     attackingTarget: cc.Node = null;
 
-    sight = 12;
+    nearstTarget: cc.Node = null;
+
+    sight = 25;
 
     enemyDistance = null;
 
@@ -36,12 +38,12 @@ export default class AIPlayer extends Player {
     }
 
     update (dt) {
-        if(this.HP <= 0)
-            this.node.destroy();
+        // cc.log(this.attackingTarget)
         this.findEnemy();
+
         if (this.attackingList === null) {
             this.findNearstEnemy(); 
-            this.findEnemyDest(this.attackingTarget); //找最近敵人
+            this.findEnemyDest(this.nearstTarget); //找最近敵人
         }
 
         else {
@@ -52,8 +54,10 @@ export default class AIPlayer extends Player {
         if (this.attackingTarget != null) {
             this.aiming(this.attackingTarget.getPosition()); //滑鼠移到目標並rotate
         }
-        if (this.attackingTarget != null)
+
+        if (this.attackingTarget != null) 
             this.enemyDistance = cc.Vec2.distance(this.node.getPosition(), this.attackingTarget.getPosition());
+        
         if (this.enemyDistance < this.changeWeaponRadius && gameInfo.rangedWeapon.includes(this.Handstate)) {
             this.changeWeapon();
         }
@@ -72,40 +76,46 @@ export default class AIPlayer extends Player {
     findEnemy() { 
         //使用pathing_Map檢測有敵人可否攻擊
         // 將看到的敵人都加入attacking
-        let playerMapPos = [Math.floor((this.node.getPosition().x+480)/48), Math.floor((this.node.getPosition().y+320)/48)];
+        let startplace = this.node.convertToWorldSpaceAR(new cc.Vec2(0, 0));
+
+        let playerMapPos = [Math.floor(startplace.x / 48),Math.floor(startplace.y / 48)];
 
         this.playerList.forEach(target => {
-            let targetMapPos = [Math.floor((target.getPosition().x+480)/48), Math.floor((target.getPosition().y+320)/48)];
+            let endplace = target.convertToWorldSpaceAR(new cc.Vec2(0, 0));
+            let targetMapPos = [Math.floor(endplace.x / 48), Math.floor(endplace.y / 48)];
 
-            const [startX, startY] = playerMapPos;
-            const [endX, endY] = targetMapPos;
-            const dx = endX - startX;
-            const dy = endY - startY;
-            const distance = Math.sqrt(dx * dx + dy * dy);
+            let [startX, startY] = playerMapPos;
+            let [endX, endY] = targetMapPos;
+            let dx = endX - startX;
+            let dy = endY - startY;
+            let distance = Math.sqrt(dx * dx + dy * dy);
             let findTarget = true;
 
-            if (this.sight < distance) return;
-
-            let path = [];
-
-            for (let i = 1; i < distance; i++) {
-                const x = Math.round(startX + (dx * i) / distance);
-                const y = Math.round(startY + (dy * i) / distance);
-                if (pathing_Map[x][y] == 1) {
-                    findTarget = false;
+            // cc.log(this.sight, distance)
+            // cc.log(startX, startY, endX, endY)
+            // cc.log(startX, dx, distance, Math.round(startX + (dx * 2) / distance))
+            if (this.sight > distance) {
+                let path = [];
+                for (let i = 1; i < distance; i++) {
+                    const x = Math.round(startX + (dx * i) / distance);
+                    const y = Math.round(startY + (dy * i) / distance);
+                    // cc.log(x, y)
+                    if (pathing_Map[x][24-y] == 1) {
+                        findTarget = false;
+                    }
+                    path.push([x, y])
                 }
-                path.push([x, y])
+
+                // cc.log(startX, startY, endX, endY, path)
+
+                let existed = false;
+                this.attackingList.forEach(element => {
+                    if (target === element)
+                        existed = true;
+                });
+                if(!existed && findTarget)
+                    this.attackingList.push(target);
             }
-
-      
-
-            let existed = false;
-            this.attackingList.forEach(element => {
-                if (target === element)
-                    existed = true;
-            });
-            if(!existed && findTarget)
-                this.attackingList.push(target);
         });
 
     }
@@ -121,7 +131,7 @@ export default class AIPlayer extends Player {
                 nearstEnemy = playerNode;
             }
         });
-        this.attackingTarget = nearstEnemy;
+        this.nearstTarget = nearstEnemy;
     }
 
     aiming(targetPos){

@@ -81,8 +81,11 @@ export default class GM extends cc.Component {
                         another.offset = cc.v2(tiledSize.width / 2, tiledSize.height / 2).add(cc.v2(-320, -200));
                         another.size = tiledSize;
 
-                        // 设置Map对应位置为1
-                        Map[i][j] = 1;
+                        // 设置Map对应位置为1z
+                        if (layerName == 'secFloor')
+                            Map[i][j] = 2;
+                        else 
+                            Map[i][j] = 1;
                     }
                 }
             }

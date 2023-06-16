@@ -1,5 +1,6 @@
 import gameInfo = require("./gameInfo");
 import hands from "./hands";
+import { pathing_Map } from "./GM";
 
 const {ccclass, property} = cc._decorator;
 
@@ -18,6 +19,8 @@ export default class AIhands extends hands {
     public knifeAttackRadius = 70;
 
     public onFloor: number = 1;
+
+    noObstacle = true;
 
     onCollisionStay (other, self) {
         if (other.node.group === 'secFloor') this.onFloor = 2;
@@ -40,10 +43,52 @@ export default class AIhands extends hands {
             this.changingAni()
         if (this.AIplayerTs.Handstate != 'changing' && !this.attacking)
             this.idleAni()
+        
         if (this.AIplayerTs.attackingTarget != null)
             this.mousePt = this.AIplayerTs.attackingTarget.getPosition();
+        else 
+            this.mousePt = cc.v2(0, 0)
+        
         this.HandPos();
+        this.checkobstacle();
         this.attack();
+    }
+
+    checkobstacle() {
+        if (this.AIplayerTs.attackingTarget == null) return;
+        let startplace = this.node.convertToWorldSpaceAR(new cc.Vec2(0, 0));
+        let endplace = this.AIplayerTs.attackingTarget.convertToWorldSpaceAR(new cc.Vec2(0, 0));
+
+
+        let playerMapPos = [Math.floor(startplace.x / 48),Math.floor(startplace.y / 48)];
+        let targetMapPos = [Math.floor(endplace.x / 48), Math.floor(endplace.y / 48)];
+        
+        let [startX, startY] = playerMapPos;
+        let [endX, endY] = targetMapPos;
+        let dx = endX - startX;
+        let dy = endY - startY;
+        let distance = Math.sqrt(dx * dx + dy * dy);
+
+        // cc.log( playerMapPos, targetMapPos)
+
+        // cc.log(startX, startY, endX, endY);
+        // cc.log(this.sight, distance)
+        let flag = 0;
+        // cc.log(this.AIplayerTs.sight , distance)
+        if (this.AIplayerTs.sight > distance) {
+            let path = [];
+            for (let i = 1; i < distance; i++) {
+                const x = Math.round(startX + (dx * i) / distance);
+                const y = Math.round(startY + (dy * i) / distance);
+                // cc.log(x, y, this.AIplayerTs.pathing_Map)
+                if (pathing_Map[x][24-y] == 1) {
+                    flag = 1;
+                }
+                path.push([x, y])
+            }
+            // cc.log(path, playerMapPos, targetMapPos, pathing_Map[4][8])
+            this.noObstacle = flag ? false : true;
+        }  
     }
 
     idleAni() {
@@ -62,20 +107,30 @@ export default class AIhands extends hands {
     }
 
     attack() {
-        if (this.AIplayerTs.Handstate === 'changing' || this.attacking) return;
+        if (this.AIplayerTs.Handstate === 'changing' || this.attacking || this.AIplayerTs.attackingTarget == null) return;
         this.attacking = true;
+        cc.log(this.noObstacle)
         switch (this.AIplayerTs.Handstate) {
-            case 'rifle':
-            this.shoot();
-            this.scheduleOnce(() => {
-              this.attacking = false;
-            }, gameInfo.weaponAttackTime[this.AIplayerTs.Handstate]);
+          case 'rifle':
+            if (this.noObstacle){
+                this.shoot();
+                this.scheduleOnce(() => {
+                this.attacking = false;
+                }, gameInfo.weaponAttackTime[this.AIplayerTs.Handstate]);
+            }
+            else 
+                this.attacking = false;
             break;
           case 'gun':
-            this.shoot();
-            this.scheduleOnce(() => {
-              this.attacking = false;
-            }, gameInfo.weaponAttackTime[this.AIplayerTs.Handstate]);
+            // cc.log(this.AIplayerTs.noObstacle);
+            if (this.noObstacle){
+                this.shoot();
+                this.scheduleOnce(() => {
+                this.attacking = false;
+                }, gameInfo.weaponAttackTime[this.AIplayerTs.Handstate]);
+            }
+            else 
+                this.attacking = false;
             break;
       
           case 'knife':
@@ -132,7 +187,6 @@ export default class AIhands extends hands {
         const startPos = this.node.getPosition();
         // cc.log(startPos);
         const direction = dest.sub(startPos).normalize();
-        const endPos = startPos.add(direction.mul(2000));
 
         // 创建射线的绘制节点
         const bullet = cc.instantiate(this.bulletPrefab);
