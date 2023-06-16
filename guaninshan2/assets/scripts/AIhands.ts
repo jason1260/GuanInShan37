@@ -170,6 +170,10 @@ export default class AIhands extends hands {
                                 this.leftAngle = 45;
                                 this.attacking = false;
                                 AIknife_valid = false;
+                                const knife = this.leftHand.children[0];
+                                if(!knife) return;
+                                if (knife.children[0])
+                                    knife.children[0].destroy();
                             } else {
                                 // 继续更新角度
                                 setTimeout(update, interval * 1000);
@@ -204,7 +208,7 @@ export default class AIhands extends hands {
 
         // 创建射线的绘制节点
         const bullet = cc.instantiate(this.bulletPrefab);
-        bullet.getComponent('bullet').setProperty(gameInfo.weaponDamage[this.AIplayerTs.Handstate], this.onFloor)
+        bullet.getComponent('bullet').setProperty(gameInfo.weaponDamage[this.AIplayerTs.Handstate], this.onFloor,this.node)
         /* const parentNode = this.node.parent; */
         const nodeIndex = this.node.children.indexOf(this.leftHand);
 
@@ -217,24 +221,27 @@ export default class AIhands extends hands {
         bullet.getComponent(cc.Collider).enabled = false;
         bullet.getComponent(cc.RigidBody).linearVelocity = direction.mul(gameInfo.bulletVelocity[this.AIplayerTs.Handstate]);
     }
-
+    
     initBullet2knife() {
 
         const bullet = cc.instantiate(this.bulletPrefab);
         bullet.opacity = 0;
-        bullet.getComponent('bullet').setProperty(gameInfo.weaponDamage[this.AIplayerTs.Handstate], this.onFloor)
+        bullet.getComponent('bullet').setProperty(gameInfo.weaponDamage[this.AIplayerTs.Handstate], this.onFloor,this.node)
         // console.log(bullet.getComponent('bullet').attackNum)
 
         const knife = this.leftHand.children[0];
         if (!knife) return
         knife.addChild(bullet)
-        bullet.setPosition(new cc.Vec2(this.leftHand.position.x, this.leftHand.position.y));
+        if(this.AIplayerTs.Handstate == 'knife')
+            bullet.setPosition(new cc.Vec2(this.leftHand.position.x, this.leftHand.position.y));
+        else{
+            bullet.setPosition(new cc.Vec2(this.leftHand.position.x-10, this.leftHand.position.y+10));
+            bullet.angle = 45;
+            bullet.width=50;
+            bullet.height=10;
+        }
+        
         bullet.getComponent(cc.Collider).enabled = false;
-        this.scheduleOnce(() => {
-            const knife = this.leftHand.children[0];
-            if(!knife) return;
-            if (knife.children[0])
-                knife.children[0].destroy();
-        }, 0.05)
+
     }
 }

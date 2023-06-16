@@ -23,6 +23,7 @@ export default class NewClass extends cc.Component {
     @property(cc.Prefab)
     bulletPrefab: cc.Prefab
 
+
     public GM = null;
 
 
@@ -108,6 +109,10 @@ export default class NewClass extends cc.Component {
                   this.leftAngle = 45;
                   this.attacking = false;
                   knife_valid = false;
+                  const knife = this.leftHand.children[0];
+                  if(!knife) return;
+                  if(knife.children[0])
+                      knife.children[0].destroy();
                 } else {
                   // 继续更新角度
                   setTimeout(update, interval * 1000);
@@ -206,7 +211,7 @@ export default class NewClass extends cc.Component {
 
         // 创建射线的绘制节点
         const bullet = cc.instantiate(this.bulletPrefab);
-        bullet.getComponent('bullet').setProperty(gameInfo.weaponDamage[this.playerTs.Handstate],this.onFloor)
+        bullet.getComponent('bullet').setProperty(gameInfo.weaponDamage[this.playerTs.Handstate],this.onFloor,this.node)
         /* console.log("floor: ", this.onFloor)
         console.log(bullet.getComponent('bullet').attackNum) */
         /* const parentNode = this.node.parent; */
@@ -220,20 +225,24 @@ export default class NewClass extends cc.Component {
 
         const bullet = cc.instantiate(this.bulletPrefab);
         bullet.opacity = 0;
-        bullet.getComponent('bullet').setProperty(gameInfo.weaponDamage[this.playerTs.Handstate],this.onFloor)
+
+        bullet.getComponent('bullet').setProperty(gameInfo.weaponDamage[this.playerTs.Handstate],this.onFloor,this.node)
         /* console.log(bullet.getComponent('bullet').attackNum) */
 
         const knife = this.leftHand.children[0];
         if(!knife) return
         knife.addChild(bullet)
-        bullet.setPosition(new cc.Vec2(this.leftHand.position.x, this.leftHand.position.y));
+        if(this.playerTs.Handstate == 'knife')
+            bullet.setPosition(new cc.Vec2(this.leftHand.position.x, this.leftHand.position.y));
+        else{
+            bullet.setPosition(new cc.Vec2(this.leftHand.position.x-10, this.leftHand.position.y+10));
+            bullet.angle = 45;
+            bullet.width=50;
+            bullet.height=10;
+        }
+
         bullet.getComponent(cc.Collider).enabled = false;
-        this.scheduleOnce(()=>{
-            const knife = this.leftHand.children[0];
-            if(!knife) return;
-            if(knife.children[0])
-                knife.children[0].destroy();
-        },0.05)
+        
     }
     getRandomInCircle_polar_better(radius) {
         let length = Math.sqrt(Math.random()) * radius;
