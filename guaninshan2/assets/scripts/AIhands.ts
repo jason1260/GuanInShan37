@@ -170,6 +170,7 @@ export default class AIhands extends hands {
                                 this.leftAngle = 45;
                                 this.attacking = false;
                                 AIknife_valid = false;
+                                if(!this.leftHand) return 
                                 const knife = this.leftHand.children[0];
                                 if(!knife) return;
                                 if (knife.children[0])
