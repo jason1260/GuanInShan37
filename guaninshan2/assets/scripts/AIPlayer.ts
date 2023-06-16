@@ -174,4 +174,8 @@ export default class AIPlayer extends Player {
         this.dirAngle = degree;
         this.node.angle = degree;
     }
+
+    onCollisionStay(otherCollider, selfCollider) {
+
+    }
 }

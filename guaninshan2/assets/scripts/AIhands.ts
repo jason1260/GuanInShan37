@@ -145,7 +145,7 @@ export default class AIhands extends hands {
                 else
                     this.attacking = false;
                 break;
-
+            case 'stick':
             case 'knife':
                 if (this.AIplayerTs.enemyDistance < this.knifeAttackRadius) {
                     this.leftAngle = 0;

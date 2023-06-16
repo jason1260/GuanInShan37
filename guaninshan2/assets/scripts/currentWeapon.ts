@@ -2,12 +2,14 @@ const { ccclass, property } = cc._decorator;
 const Input = {}
 const weaponIconScale={
     knife:4,
+    stick:4,
     gun:4,
     rifle:1,
     sniper:0.2
 }
 const weaponIconSize={
     knife:{w:14,h:13},
+    stick:{w:14,h:13},
     gun:{w:20,h:20},
     rifle:{w:114,h:36},
     sniper:{w:720,h:220}

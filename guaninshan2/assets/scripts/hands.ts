@@ -82,7 +82,7 @@ export default class NewClass extends cc.Component {
               this.attacking = false;
             }, gameInfo.weaponAttackTime[this.playerTs.Handstate]);
             break;
-            
+        case 'stick':
         case 'knife':
             this.leftAngle = 0;
             this.initBullet2knife()
@@ -148,6 +148,7 @@ export default class NewClass extends cc.Component {
                 this.leftAngle = 5
                 this.rightAngle = -this.leftAngle;
                 break;
+            case 'stick':
             case 'knife':
                 this.leftAngle = 45
                 this.rightAngle = -this.leftAngle;

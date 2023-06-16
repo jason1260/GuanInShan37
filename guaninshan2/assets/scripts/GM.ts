@@ -29,6 +29,8 @@ export default class GM extends cc.Component {
     changeSE: cc.AudioClip = null;
     @property(cc.AudioClip)
     emptySE: cc.AudioClip = null;
+    @property(cc.AudioClip)
+    stickSE: cc.AudioClip = null;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -104,6 +106,9 @@ export default class GM extends cc.Component {
     playeffect(handstate) {
         if(handstate === "knife"){
             cc.audioEngine.playEffect(this.knifeSE, false);
+        }
+        else if(handstate === "stick"){
+            cc.audioEngine.playEffect(this.stickSE, false);
         }
         else if(handstate === "gun"){
             cc.audioEngine.playEffect(this.gunSE, false);
