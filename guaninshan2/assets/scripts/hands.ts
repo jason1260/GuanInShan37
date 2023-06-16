@@ -149,6 +149,9 @@ export default class NewClass extends cc.Component {
                 this.rightAngle = -this.leftAngle;
                 break;
             case 'stick':
+                this.leftAngle = 10;
+                this.rightAngle = -this.leftAngle;
+                break;
             case 'knife':
                 this.leftAngle = 45
                 this.rightAngle = -this.leftAngle;

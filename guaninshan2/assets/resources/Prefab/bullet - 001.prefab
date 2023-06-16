@@ -135,8 +135,8 @@
         0,
         0,
         1,
-        10,
-        10,
+        1,
+        1,
         1
       ]
     },
@@ -179,48 +179,48 @@
     "_stopped": false,
     "playOnLoad": true,
     "autoRemoveOnFinish": false,
-    "totalParticles": 100,
+    "totalParticles": 200,
     "duration": -1,
-    "emissionRate": 201.5,
-    "life": 0.7,
+    "emissionRate": 300,
+    "life": 0.20000000298023224,
     "lifeVar": 0.5,
     "_startColor": {
       "__type__": "cc.Color",
-      "r": 233,
-      "g": 14,
-      "b": 46,
+      "r": 237,
+      "g": 31,
+      "b": 31,
       "a": 163
     },
     "_startColorVar": {
       "__type__": "cc.Color",
-      "r": 233,
-      "g": 72,
-      "b": 89,
+      "r": 243,
+      "g": 14,
+      "b": 58,
       "a": 198
     },
     "_endColor": {
       "__type__": "cc.Color",
-      "r": 240,
-      "g": 138,
-      "b": 140,
+      "r": 206,
+      "g": 13,
+      "b": 35,
       "a": 214
     },
     "_endColorVar": {
       "__type__": "cc.Color",
-      "r": 53,
-      "g": 10,
-      "b": 11,
+      "r": 211,
+      "g": 71,
+      "b": 115,
       "a": 188
     },
     "angle": 360,
     "angleVar": 360,
-    "startSize": 6,
-    "startSizeVar": 20,
-    "endSize": 30,
+    "startSize": 3.369999885559082,
+    "startSizeVar": 50,
+    "endSize": 30.31999969482422,
     "endSizeVar": 0,
-    "startSpin": -20,
+    "startSpin": -47.369998931884766,
     "startSpinVar": 0,
-    "endSpin": 0,
+    "endSpin": -47.369998931884766,
     "endSpinVar": -142.11000061035156,
     "sourcePos": {
       "__type__": "cc.Vec2",
@@ -237,10 +237,10 @@
     "emitterMode": 0,
     "gravity": {
       "__type__": "cc.Vec2",
-      "x": 1,
+      "x": 0.25,
       "y": 0.8600000143051147
     },
-    "speed": 30,
+    "speed": 0,
     "speedVar": 190.7899932861328,
     "tangentialAccel": -92.11000061035156,
     "tangentialAccelVar": 65.79000091552734,
@@ -264,7 +264,7 @@
     "asset": {
       "__id__": 0
     },
-    "fileId": "acer1yl+NJ2pRXQUOpBUTa",
+    "fileId": "8epHy3thFEsqzA9rc5lqcF",
     "sync": false
   },
   {
