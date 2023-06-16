@@ -8,7 +8,7 @@
 const { ccclass, property } = cc._decorator;
 import Player from "./player";
 import { pathing_Map } from "./GM";
-
+import gameInfo = require("./gameInfo");
 interface GridNode {
     x: number;
     y: number;
@@ -28,6 +28,7 @@ export default class Astar extends cc.Component {
     private flag: boolean;
     private counter: number;
     private nextstep: cc.Vec2 = null;
+    public handState: string = "";
     stx: number = 0;
     sty: number = 0;
     edx: number = 0;
@@ -37,7 +38,8 @@ export default class Astar extends cc.Component {
     counter2: number = 0;
     step: number = 0;
     walkPath: boolean;
-    speed: number = 250;
+    speed: number = 200;
+    samplediameter: number = 288;
 
     onLoad(): void {
         this.flag = false;
@@ -48,7 +50,6 @@ export default class Astar extends cc.Component {
         this.walkPath = false;
         this.speed = 250;
     }
-
     update() {
         if (!this.flag) { this.createGrid(); this.flag = true };
         if (this.counter <= 30) this.counter += 1;
@@ -57,15 +58,31 @@ export default class Astar extends cc.Component {
             const endplace = this.target.convertToWorldSpaceAR(new cc.Vec2(0, 0));
             /* console.log(endplace.x / 48, endplace.y / 48); */
             this.stx = Math.floor(this.startplace.x / 48);
-            this.edx = Math.floor(endplace.x / 48);
             this.sty = Math.floor(this.startplace.y / 48);
-            this.edy = Math.floor(endplace.y / 48);
+            // smaple end point
+            if (!gameInfo.rangedWeapon.includes(this.handState)) this.samplediameter = 144;
+            const random1 = Math.random();
+            this.edx = endplace.x - (this.samplediameter / 2) + (random1 * this.samplediameter);
+            const random2 = Math.random();
+            this.edy = endplace.y - (this.samplediameter / 2) + (random2 * this.samplediameter);
+            this.edx = Math.floor(this.edx / 48);
+            this.edy = Math.floor(this.edy / 48);
+            if (this.edx < 0) this.edx = 0;
+            else if (this.edx > 39) this.edx = 39;
+            if (this.edy < 0) this.edy = 0;
+            else if (this.edy > 24) this.edy = 24;
+            //
             this.counter = 0;
             this.counter2 = 0;
             this.step = 0;
             const startNode = this.grid[this.sty][this.stx];
             const endNode = this.grid[this.edy][this.edx];
-            if (Math.abs(this.stx - this.edx) + Math.abs(this.sty - this.edy) < 2) this.selfNode.getComponent(cc.RigidBody).linearVelocity = cc.v2(0, 0);
+            const dis = Math.abs(this.stx - this.edx) + Math.abs(this.sty - this.edy);
+            // move slower when too close to others
+            if (dis < 2) this.speed *= 0.6;
+            else this.speed = 200;
+            // make sure it keeps social distancing
+            if (dis < 1) this.selfNode.getComponent(cc.RigidBody).linearVelocity = cc.v2(0, 0);
             else {
                 const path = this.calculateNextStep(startNode, endNode);
 
@@ -92,7 +109,9 @@ export default class Astar extends cc.Component {
         // }
     }
 
-
+    setHandState(hand: string) {
+        this.handState = hand;
+    }
     setTarget(Target: cc.Node) {
         this.target = Target;
     }
