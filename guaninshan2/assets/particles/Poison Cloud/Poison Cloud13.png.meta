@@ -1,0 +1,38 @@
+{
+  "ver": "2.3.7",
+  "uuid": "9cfa952e-fd3b-42e6-ad17-b7220ea424cf",
+  "importer": "texture",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 144,
+  "height": 144,
+  "platformSettings": {},
+  "subMetas": {
+    "Poison Cloud13": {
+      "ver": "1.0.6",
+      "uuid": "4bdf906f-ee78-4b96-b10d-f2c7ba47fc13",
+      "importer": "sprite-frame",
+      "rawTextureUuid": "9cfa952e-fd3b-42e6-ad17-b7220ea424cf",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0.5,
+      "offsetY": -13.5,
+      "trimX": 54,
+      "trimY": 27,
+      "width": 37,
+      "height": 117,
+      "rawWidth": 144,
+      "rawHeight": 144,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
