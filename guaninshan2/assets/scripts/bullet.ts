@@ -18,25 +18,36 @@ export default class NewClass extends cc.Component {
 
     public attackNum: number = 0;
     public floor: number = 1;
+    public selfNode:cc.Node = null;
     public ts = null;
     // LIFE-CYCLE CALLBACKS:
 
     // onLoad () {}
 
     start () {
+        console.log("start")
     }
     onCollisionEnter(other, self) {
+        console.log(this.attackNum)
         if (other.node.group === 'secWall' && this.floor === 2) return;
+        if (other.node == this.selfNode){
+            this.node.destroy();
+            return;
+        };
         if(other.node.group == 'player'){
             this.ts = other.node.getComponent('player') || other.node.getComponent('AIplayer')
-            /* console.log(this.attackNum) */
+            
             this.ts.hurt(this.attackNum)
         }
         this.node.destroy()
     }
-    setProperty(attackNum: number,floor: number){
+    onCollisionStay(other, self) {
+        console.log(this.attackNum)
+    }
+    setProperty(attackNum: number,floor: number, selfNode:cc.Node){
         this.attackNum = attackNum;
         this.floor = floor;
+        this.selfNode = selfNode;
     }
     // update (dt) {}
 }
