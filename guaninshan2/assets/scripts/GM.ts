@@ -22,6 +22,8 @@ export default class GM extends cc.Component {
     @property(cc.AudioClip)
     rifleSE: cc.AudioClip = null;
     @property(cc.AudioClip)
+    sniperSE: cc.AudioClip = null;
+    @property(cc.AudioClip)
     reloadSE: cc.AudioClip = null;
     @property(cc.AudioClip)
     changeSE: cc.AudioClip = null;
@@ -108,6 +110,9 @@ export default class GM extends cc.Component {
         }
         else if(handstate === "rifle"){
             cc.audioEngine.playEffect(this.rifleSE, false);
+        }
+        else if(handstate === "sniper"){
+            cc.audioEngine.playEffect(this.sniperSE, false);
         }
         else if(handstate === "reload"){
             cc.audioEngine.playEffect(this.reloadSE, false);
