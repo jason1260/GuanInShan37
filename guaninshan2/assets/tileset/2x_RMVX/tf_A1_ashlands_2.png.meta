@@ -1,0 +1,38 @@
+{
+  "ver": "2.3.7",
+  "uuid": "ff3a0a14-ac6d-4a2d-acfe-598be7955617",
+  "importer": "texture",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 512,
+  "height": 384,
+  "platformSettings": {},
+  "subMetas": {
+    "tf_A1_ashlands_2": {
+      "ver": "1.0.6",
+      "uuid": "3b917a45-9ed6-4dda-937e-1963137d80bc",
+      "importer": "sprite-frame",
+      "rawTextureUuid": "ff3a0a14-ac6d-4a2d-acfe-598be7955617",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": -160,
+      "offsetY": 48,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 192,
+      "height": 288,
+      "rawWidth": 512,
+      "rawHeight": 384,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
