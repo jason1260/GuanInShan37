@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "bullet - 001",
+    "_name": "bullet",
     "_objFlags": 0,
     "_parent": null,
     "_children": [
@@ -34,13 +34,10 @@
       },
       {
         "__id__": 8
-      },
-      {
-        "__id__": 9
       }
     ],
     "_prefab": {
-      "__id__": 10
+      "__id__": 9
     },
     "_opacity": 255,
     "_color": {
@@ -64,8 +61,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -388.499,
-        511.072,
+        586.964,
+        247.592,
         0,
         0,
         0,
@@ -135,8 +132,8 @@
         0,
         0,
         1,
-        10,
-        10,
+        1,
+        1,
         1
       ]
     },
@@ -166,7 +163,7 @@
         "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
       }
     ],
-    "_srcBlendFactor": 770,
+    "_srcBlendFactor": 0,
     "_dstBlendFactor": 1,
     "_custom": true,
     "_file": {
@@ -179,48 +176,48 @@
     "_stopped": false,
     "playOnLoad": true,
     "autoRemoveOnFinish": false,
-    "totalParticles": 100,
+    "totalParticles": 299,
     "duration": -1,
-    "emissionRate": 201.5,
-    "life": 0.7,
+    "emissionRate": 300,
+    "life": 0.20000000298023224,
     "lifeVar": 0.5,
     "_startColor": {
       "__type__": "cc.Color",
-      "r": 233,
-      "g": 14,
-      "b": 46,
+      "r": 47,
+      "g": 222,
+      "b": 98,
       "a": 163
     },
     "_startColorVar": {
       "__type__": "cc.Color",
-      "r": 233,
-      "g": 72,
-      "b": 89,
+      "r": 79,
+      "g": 230,
+      "b": 61,
       "a": 198
     },
     "_endColor": {
       "__type__": "cc.Color",
-      "r": 240,
-      "g": 138,
-      "b": 140,
+      "r": 79,
+      "g": 222,
+      "b": 37,
       "a": 214
     },
     "_endColorVar": {
       "__type__": "cc.Color",
-      "r": 53,
-      "g": 10,
-      "b": 11,
+      "r": 15,
+      "g": 227,
+      "b": 70,
       "a": 188
     },
     "angle": 360,
     "angleVar": 360,
-    "startSize": 6,
-    "startSizeVar": 20,
-    "endSize": 30,
+    "startSize": 3.369999885559082,
+    "startSizeVar": 50,
+    "endSize": 30.31999969482422,
     "endSizeVar": 0,
-    "startSpin": -20,
+    "startSpin": -47.369998931884766,
     "startSpinVar": 0,
-    "endSpin": 0,
+    "endSpin": -47.369998931884766,
     "endSpinVar": -142.11000061035156,
     "sourcePos": {
       "__type__": "cc.Vec2",
@@ -237,10 +234,10 @@
     "emitterMode": 0,
     "gravity": {
       "__type__": "cc.Vec2",
-      "x": 1,
+      "x": 0.25,
       "y": 0.8600000143051147
     },
-    "speed": 30,
+    "speed": 0,
     "speedVar": 190.7899932861328,
     "tangentialAccel": -92.11000061035156,
     "tangentialAccelVar": 65.79000091552734,
@@ -264,7 +261,7 @@
     "asset": {
       "__id__": 0
     },
-    "fileId": "acer1yl+NJ2pRXQUOpBUTa",
+    "fileId": "bcVbulaTlLbZWGcapUjLYh",
     "sync": false
   },
   {
@@ -320,20 +317,8 @@
     "_angularVelocity": 0,
     "_fixedRotation": false,
     "enabledContactListener": true,
-    "bullet": false,
+    "bullet": true,
     "awakeOnLoad": true,
-    "_id": ""
-  },
-  {
-    "__type__": "c169bmgNldIN4lzdhT/X4U4",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "label": null,
-    "text": "hello",
     "_id": ""
   },
   {
@@ -343,9 +328,9 @@
     "node": {
       "__id__": 1
     },
-    "_enabled": false,
+    "_enabled": true,
     "tag": 0,
-    "_density": 1,
+    "_density": 0,
     "_sensor": false,
     "_friction": 0.2,
     "_restitution": 0,
@@ -363,24 +348,15 @@
     "_id": ""
   },
   {
-    "__type__": "cc.BoxCollider",
+    "__type__": "6c7b7wH03JKw6+9QkMWcXQ5",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 1
     },
     "_enabled": true,
-    "tag": 0,
-    "_offset": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_size": {
-      "__type__": "cc.Size",
-      "width": 10,
-      "height": 10
-    },
+    "label": null,
+    "text": "hello",
     "_id": ""
   },
   {
