@@ -1,6 +1,6 @@
 {
   "ver": "2.3.7",
-  "uuid": "265eab00-c293-46f2-82db-9001eb1784a4",
+  "uuid": "00faaeac-1e44-4676-85ac-b8d04dcb463d",
   "importer": "texture",
   "type": "sprite",
   "wrapMode": "clamp",
@@ -12,19 +12,19 @@
   "height": 200,
   "platformSettings": {},
   "subMetas": {
-    "少林": {
+    "selling": {
       "ver": "1.0.6",
-      "uuid": "227f151b-692f-4cc5-bfa1-d90f429afa26",
+      "uuid": "4f5ddb07-5b41-4c20-9d3b-6b125c7907b9",
       "importer": "sprite-frame",
-      "rawTextureUuid": "265eab00-c293-46f2-82db-9001eb1784a4",
+      "rawTextureUuid": "00faaeac-1e44-4676-85ac-b8d04dcb463d",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
-      "offsetX": -8.5,
+      "offsetX": -2.5,
       "offsetY": 0,
-      "trimX": 64,
+      "trimX": 76,
       "trimY": 81,
-      "width": 55,
+      "width": 43,
       "height": 38,
       "rawWidth": 200,
       "rawHeight": 200,
