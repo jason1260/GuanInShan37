@@ -65,11 +65,11 @@ export default class Astar extends cc.Component {
             this.step = 0;
             const startNode = this.grid[this.sty][this.stx];
             const endNode = this.grid[this.edy][this.edx];
-            if (Math.abs(this.stx - this.edx) + Math.abs(this.sty - this.edy) < 4) this.selfNode.getComponent(cc.RigidBody).linearVelocity = cc.v2(0, 0);
+            if (Math.abs(this.stx - this.edx) + Math.abs(this.sty - this.edy) < 2) this.selfNode.getComponent(cc.RigidBody).linearVelocity = cc.v2(0, 0);
             else {
                 const path = this.calculateNextStep(startNode, endNode);
 
-               /*  console.log(path); */
+                /*  console.log(path); */
                 if (!path) console.log("error");
                 else if (path.length < 2) this.selfNode.getComponent(cc.RigidBody).linearVelocity = cc.v2(0, 0);
                 else {
@@ -93,10 +93,10 @@ export default class Astar extends cc.Component {
     }
 
 
-    setTarget (Target: cc.Node) {
+    setTarget(Target: cc.Node) {
         this.target = Target;
     }
-    setSelf (Self: cc.Node) {
+    setSelf(Self: cc.Node) {
         this.selfNode = Self;
     }
 
@@ -221,7 +221,7 @@ export default class Astar extends cc.Component {
             const gridRow: GridNode[] = [];
 
             for (let col = 0; col < numCols; col++) {
-                const walkable = pathing_Map[col][24 - row] === 0 || pathing_Map[col][24-row] === 2;
+                const walkable = pathing_Map[col][24 - row] === 0 || pathing_Map[col][24 - row] === 2;
 
                 const gridNode: GridNode = {
                     x: col,
