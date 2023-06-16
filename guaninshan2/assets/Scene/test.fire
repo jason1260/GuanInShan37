@@ -2862,9 +2862,13 @@
     "knifePrefab": {
       "__uuid__": "b0770928-bf17-46fb-aaf1-a9101f96374a"
     },
+<<<<<<< HEAD
     "stickPrefab": {
       "__uuid__": "f6e09b8b-c686-44ff-bf41-5852f980e728"
     },
+=======
+    "stickPrefab": null,
+>>>>>>> b40a1c32ac0221b4353177b6642fc469f1432851
     "riflePrefab": {
       "__uuid__": "04f4d6a9-f134-447e-a846-c6fb8883d57c"
     },
