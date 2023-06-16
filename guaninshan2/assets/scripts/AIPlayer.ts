@@ -1,6 +1,7 @@
 import Player from "./player";
 import { pathing_Map } from "./GM";
 import gameInfo = require("./gameInfo");
+import Astar from "./astar";
 
 export var AIweapon;
 
@@ -27,7 +28,11 @@ export default class AIPlayer extends Player {
 
     enemyDistance = null;
 
+    astar = new Astar();
+
     onLoad () {
+        this.astar.setSelf(this.node)
+        // this.astar.setTarget();
         this.playerList = [cc.find("Canvas/Main Camera/player")];
         AIweapon = "knife";
         this.GM = cc.find("Canvas/GM").getComponent('GM');
@@ -43,12 +48,16 @@ export default class AIPlayer extends Player {
 
         if (this.attackingList === null) {
             this.findNearstEnemy(); 
-            this.findEnemyDest(this.nearstTarget); //找最近敵人
+            this.astar.setTarget(this.nearstTarget);
+            this.astar.update();
+            // this.findEnemyDest(this.nearstTarget); //找最近敵人
         }
 
         else {
             this.attackingTarget = this.attackingList[0];
-            this.findEnemyDest(this.attackingTarget);
+            this.astar.setTarget(this.attackingTarget);
+            this.astar.update();
+            // this.findEnemyDest(this.attackingTarget);
         }
 
         if (this.attackingTarget != null) {
@@ -67,10 +76,6 @@ export default class AIPlayer extends Player {
 
         if (this.Handstate !== 'changing' && this.Handstate !== 'reloading')
             this.speed = this.baseSpeed - gameInfo.weaponWeight[this.Handstate];
-    }
-
-    findEnemyDest (attackingTarget: cc.Node) {
-        
     }
 
     findEnemy() { 

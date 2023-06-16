@@ -87,7 +87,7 @@ export default class AIhands extends hands {
                 path.push([x, y])
             }
             // cc.log(path, playerMapPos, targetMapPos, pathing_Map[4][8])
-            this.noObstacle = flag ? false : true;
+            this.noObstacle = (!(pathing_Map[startX][24-startY] == 2) && flag) ? false : true;
         }  
     }
 

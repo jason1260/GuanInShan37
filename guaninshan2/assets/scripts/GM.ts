@@ -84,6 +84,8 @@ export default class GM extends cc.Component {
                         // 设置Map对应位置为1z
                         if (layerName == 'secFloor')
                             Map[i][j] = 2;
+                        else if (layerName == 'secWall')
+                            Map[i][j] = 3;
                         else 
                             Map[i][j] = 1;
                     }
