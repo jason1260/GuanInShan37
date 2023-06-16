@@ -96,10 +96,10 @@ export default class Astar extends cc.Component {
                     // const lv = cc.v2((path[0].x - this.stx) * 250, (path[0].y - this.sty) * 250);
                     if (xv && yv) {
                         lv = cc.v2((xv) * this.speed * 0.7, yv * this.speed * 0.7);
-                        console.log("speed", this.speed, xv, yv, lv);
+                        /* console.log("speed", this.speed, xv, yv, lv); */
                     }
                     else lv = cc.v2(xv * this.speed, yv * this.speed);
-                    console.log("velocity", xv, yv, this.speed);
+                    /* console.log("velocity", xv, yv, this.speed); */
                     this.selfNode.getComponent(cc.RigidBody).linearVelocity = lv;
                 }
             }
@@ -144,7 +144,7 @@ export default class Astar extends cc.Component {
 
             // Check if the current node is the destination
             if (currentNode.x == end.x && currentNode.y == end.y) {
-                console.log("hello");
+                /* console.log("hello"); */
                 const path: GridNode[] = [];
                 let current = currentNode;
 
@@ -152,12 +152,11 @@ export default class Astar extends cc.Component {
                     path.push(current);
                     current = current.parent;
                     if (current && current.x == start.x && current.y == start.y) {
-                        console.log("hello");
+                        /* console.log("hello"); */
                         break;
                     }
                 }
 
-                if (!path) console.log("very hello");
                 if (!path) return null;
 
                 return path.reverse();
@@ -232,7 +231,7 @@ export default class Astar extends cc.Component {
     createGrid() {
         const numRows = pathing_Map[0].length;
         const numCols = pathing_Map.length;
-        console.log(pathing_Map);
+        /* console.log(pathing_Map); */
 
         this.grid = [];
 
@@ -255,7 +254,7 @@ export default class Astar extends cc.Component {
             this.grid.push(gridRow);
         }
 
-        console.log("this.grid", this.grid);
+        /* console.log("this.grid", this.grid); */
     }
 
     calculateHeuristic(nodeA: GridNode, nodeB: GridNode): number {

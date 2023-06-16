@@ -29,7 +29,7 @@ export default class NewClass extends cc.Component {
         if (other.node.group === 'secWall' && this.floor === 2) return;
         if(other.node.group == 'player'){
             this.ts = other.node.getComponent('player') || other.node.getComponent('AIplayer')
-            console.log(this.attackNum)
+            /* console.log(this.attackNum) */
             this.ts.hurt(this.attackNum)
         }
         this.node.destroy()

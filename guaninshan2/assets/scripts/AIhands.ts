@@ -17,7 +17,7 @@ export default class AIhands extends hands {
 
     public target = null;
 
-    public knifeAttackRadius = 70;
+    public knifeAttackRadius = 80;
 
     public onFloor: number = 1;
 
@@ -47,8 +47,10 @@ export default class AIhands extends hands {
         if (this.AIplayerTs.Handstate != 'changing' && !this.attacking)
             this.idleAni()
 
-        if (this.AIplayerTs.attackingTarget != null)
+        if (this.AIplayerTs.attackingTarget && this.AIplayerTs.attackingTarget.name != ''){
+            // cc.log(this.AIplayerTs.attackingTarget)
             this.mousePt = this.AIplayerTs.attackingTarget.getPosition();
+        }
         else
             this.mousePt = cc.v2(0, 0)
 
@@ -58,7 +60,7 @@ export default class AIhands extends hands {
     }
 
     checkCanShoot() {
-        if (this.AIplayerTs.attackingTarget == null) return;
+        if (!this.AIplayerTs.attackingTarget || this.AIplayerTs.attackingTarget.name == '') return;
         let startplace = this.node.convertToWorldSpaceAR(new cc.Vec2(0, 0));
         let endplace = this.AIplayerTs.attackingTarget.convertToWorldSpaceAR(new cc.Vec2(0, 0));
 
@@ -99,7 +101,7 @@ export default class AIhands extends hands {
             nofloorWall = (floorWallflag) ? false : true;
         } 
         
-        this.Canshoot = (this.onFloor == 2 && this.noObstacle)|| (this.onFloor == 1 && pathing_Map[endX][24-endY] == 0 && nofloorWall);
+        this.Canshoot = (this.onFloor == 2 && this.noObstacle)|| (this.onFloor == 1 && pathing_Map[endX][24-endY] == 0 && nofloorWall && this.noObstacle);
     }
 
     idleAni() {
@@ -118,7 +120,7 @@ export default class AIhands extends hands {
     }
 
     attack() {
-        if (this.AIplayerTs.Handstate === 'changing' || this.attacking || this.AIplayerTs.attackingTarget == null) return;
+        if (this.AIplayerTs.Handstate === 'changing' || this.attacking || !this.AIplayerTs.attackingTarget || this.AIplayerTs.attackingTarget.name == '') return;
         this.attacking = true;
         /* cc.log(this.noObstacle) */
         switch (this.AIplayerTs.Handstate) {
@@ -221,7 +223,7 @@ export default class AIhands extends hands {
         const bullet = cc.instantiate(this.bulletPrefab);
         bullet.opacity = 0;
         bullet.getComponent('bullet').setProperty(gameInfo.weaponDamage[this.AIplayerTs.Handstate], this.onFloor)
-        console.log(bullet.getComponent('bullet').attackNum)
+        // console.log(bullet.getComponent('bullet').attackNum)
 
         const knife = this.leftHand.children[0];
         if (!knife) return

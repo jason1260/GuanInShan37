@@ -203,8 +203,8 @@ export default class NewClass extends cc.Component {
         // 创建射线的绘制节点
         const bullet = cc.instantiate(this.bulletPrefab);
         bullet.getComponent('bullet').setProperty(gameInfo.weaponDamage[this.playerTs.Handstate],this.onFloor)
-        console.log("floor: ", this.onFloor)
-        console.log(bullet.getComponent('bullet').attackNum)
+        /* console.log("floor: ", this.onFloor)
+        console.log(bullet.getComponent('bullet').attackNum) */
         /* const parentNode = this.node.parent; */
         const nodeIndex = this.node.children.indexOf(this.leftHand);
         this.node.insertChild(bullet, nodeIndex - 1);
@@ -217,7 +217,7 @@ export default class NewClass extends cc.Component {
         const bullet = cc.instantiate(this.bulletPrefab);
         bullet.opacity = 0;
         bullet.getComponent('bullet').setProperty(gameInfo.weaponDamage[this.playerTs.Handstate],this.onFloor)
-        console.log(bullet.getComponent('bullet').attackNum)
+        /* console.log(bullet.getComponent('bullet').attackNum) */
 
         const knife = this.leftHand.children[0];
         if(!knife) return
