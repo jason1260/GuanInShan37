@@ -109,7 +109,7 @@ export default class AIhands extends hands {
     attack() {
         if (this.AIplayerTs.Handstate === 'changing' || this.attacking || this.AIplayerTs.attackingTarget == null) return;
         this.attacking = true;
-        cc.log(this.noObstacle)
+        /* cc.log(this.noObstacle) */
         switch (this.AIplayerTs.Handstate) {
           case 'rifle':
             if (this.noObstacle){
@@ -136,6 +136,7 @@ export default class AIhands extends hands {
           case 'knife':
             if (this.AIplayerTs.enemyDistance < this.knifeAttackRadius){
                 this.leftAngle = 0;
+                this.initBullet2knife()
                 AIknife_valid = true;
         
                 // 逐渐改变角度的函数
@@ -190,7 +191,7 @@ export default class AIhands extends hands {
 
         // 创建射线的绘制节点
         const bullet = cc.instantiate(this.bulletPrefab);
-        bullet.getComponent('bullet').setProperty(10, this.onFloor);
+        bullet.getComponent('bullet').setProperty(gameInfo.weaponDamage[this.AIplayerTs.Handstate],this.onFloor)
         /* const parentNode = this.node.parent; */
         const nodeIndex = this.node.children.indexOf(this.leftHand);
 
@@ -201,6 +202,24 @@ export default class AIhands extends hands {
 
         bullet.setPosition(new cc.Vec2(this.leftHand.position.x, this.leftHand.position.y));
         bullet.getComponent(cc.Collider).enabled = false;
-        bullet.getComponent(cc.RigidBody).linearVelocity = direction.mul(this.bulletVelocity);
+        bullet.getComponent(cc.RigidBody).linearVelocity = direction.mul(gameInfo.bulletVelocity[this.AIplayerTs.Handstate]);
+    }
+    initBullet2knife() {
+
+        const bullet = cc.instantiate(this.bulletPrefab);
+        bullet.opacity = 0;
+        bullet.getComponent('bullet').setProperty(gameInfo.weaponDamage[this.AIplayerTs.Handstate],this.onFloor)
+        console.log(bullet.getComponent('bullet').attackNum)
+
+        const knife = this.leftHand.children[0];
+        if(!knife) return
+        knife.addChild(bullet)
+        bullet.setPosition(new cc.Vec2(this.leftHand.position.x, this.leftHand.position.y));
+        bullet.getComponent(cc.Collider).enabled = false;
+        this.scheduleOnce(()=>{
+            const knife = this.leftHand.children[0];
+            if(knife.children[0])
+                knife.children[0].destroy();
+        },0.05)
     }
 }

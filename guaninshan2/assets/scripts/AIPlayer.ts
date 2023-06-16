@@ -45,6 +45,8 @@ export default class AIPlayer extends Player {
     update (dt) {
         // cc.log(this.attackingTarget)
         this.findEnemy();
+        if(this.HP <= 0)
+            this.node.destroy();
 
         if (this.attackingList === null) {
             this.findNearstEnemy(); 

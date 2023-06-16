@@ -36,6 +36,18 @@ const gameInfo = {
     dropsTag2weapon : {
         0:'rifle',
         1:'sniper'
+    },
+    weaponDamage: {
+        knife:15,
+        gun:15,
+        rifle:10,
+        sniper:80
+    },
+    bulletVelocity: {
+        knife:1,
+        gun:100,
+        rifle:1000,
+        sniper:1000
     }
 }
 

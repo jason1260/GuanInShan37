@@ -85,6 +85,7 @@ export default class NewClass extends cc.Component {
             
         case 'knife':
             this.leftAngle = 0;
+            this.initBullet2knife()
             knife_valid = true;
 
             this.GM.playeffect(this.playerTs.Handstate);
@@ -201,7 +202,7 @@ export default class NewClass extends cc.Component {
 
         // 创建射线的绘制节点
         const bullet = cc.instantiate(this.bulletPrefab);
-        bullet.getComponent('bullet').setProperty(10,this.onFloor)
+        bullet.getComponent('bullet').setProperty(gameInfo.weaponDamage[this.playerTs.Handstate],this.onFloor)
         console.log("floor: ", this.onFloor)
         console.log(bullet.getComponent('bullet').attackNum)
         /* const parentNode = this.node.parent; */
@@ -209,7 +210,25 @@ export default class NewClass extends cc.Component {
         this.node.insertChild(bullet, nodeIndex - 1);
         bullet.setPosition(new cc.Vec2(this.leftHand.position.x, this.leftHand.position.y));
         bullet.getComponent(cc.Collider).enabled = false;
-        bullet.getComponent(cc.RigidBody).linearVelocity = direction.mul(this.bulletVelocity);
+        bullet.getComponent(cc.RigidBody).linearVelocity = direction.mul(gameInfo.bulletVelocity[this.playerTs.Handstate]);
+    }
+    initBullet2knife() {
+
+        const bullet = cc.instantiate(this.bulletPrefab);
+        bullet.opacity = 0;
+        bullet.getComponent('bullet').setProperty(gameInfo.weaponDamage[this.playerTs.Handstate],this.onFloor)
+        console.log(bullet.getComponent('bullet').attackNum)
+
+        const knife = this.leftHand.children[0];
+        if(!knife) return
+        knife.addChild(bullet)
+        bullet.setPosition(new cc.Vec2(this.leftHand.position.x, this.leftHand.position.y));
+        bullet.getComponent(cc.Collider).enabled = false;
+        this.scheduleOnce(()=>{
+            const knife = this.leftHand.children[0];
+            if(knife.children[0])
+                knife.children[0].destroy();
+        },0.05)
     }
     getRandomInCircle_polar_better(radius) {
         let length = Math.sqrt(Math.random()) * radius;

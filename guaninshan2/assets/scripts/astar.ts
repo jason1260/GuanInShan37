@@ -55,7 +55,7 @@ export default class Astar extends cc.Component {
         else {
             this.startplace = this.selfNode.convertToWorldSpaceAR(new cc.Vec2(0, 0));
             const endplace = this.target.convertToWorldSpaceAR(new cc.Vec2(0, 0));
-            console.log(endplace.x / 48, endplace.y / 48);
+            /* console.log(endplace.x / 48, endplace.y / 48); */
             this.stx = Math.floor(this.startplace.x / 48);
             this.edx = Math.floor(endplace.x / 48);
             this.sty = Math.floor(this.startplace.y / 48);
@@ -69,7 +69,7 @@ export default class Astar extends cc.Component {
             else {
                 const path = this.calculateNextStep(startNode, endNode);
 
-                console.log(path);
+               /*  console.log(path); */
                 if (!path) console.log("error");
                 else if (path.length < 2) this.selfNode.getComponent(cc.RigidBody).linearVelocity = cc.v2(0, 0);
                 else {
