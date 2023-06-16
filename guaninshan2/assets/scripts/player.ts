@@ -139,6 +139,7 @@ export default class Player extends cc.Component {
         if(this.Handstate == 'changing' || this.Handstate == 'reloading')
             return;
         if(Input[cc.macro.KEY.space]){
+            this.generateDrops(this.Handstate)
             this.Handstate = gameInfo.dropsTag2weapon[otherCollider.getComponent(cc.BoxCollider).tag]
             this.deleteWeapon();
             this.addWeapon();
@@ -147,7 +148,20 @@ export default class Player extends cc.Component {
         }
 
     }
-
+    generateDrops(weaponType:string){
+        this.scheduleOnce(()=>{
+            cc.resources.load(`Prefab/${weaponType}Drop`, cc.Prefab, (err, prefab) => {
+                if(err){
+                    console.log("沒辦法大便");
+                    return;
+                }
+                const newNode = cc.instantiate(prefab);
+                newNode.position = this.node.position.add(this.node.parent.position);
+                const nodeIndex = this.node.parent.getSiblingIndex();
+                this.node.parent.parent.insertChild(newNode, nodeIndex);
+            });
+        },0.3)
+    }
 
     onKeyDown(e) {
 
