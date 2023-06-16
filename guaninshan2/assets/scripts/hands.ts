@@ -225,7 +225,7 @@ export default class NewClass extends cc.Component {
     initBullet2knife() {
 
         const bullet = cc.instantiate(this.bulletPrefab);
-        bullet.opacity = 0;
+        // bullet.opacity = 0;
 
         bullet.getComponent('bullet').setProperty(gameInfo.weaponDamage[this.playerTs.Handstate],this.onFloor,this.node)
         /* console.log(bullet.getComponent('bullet').attackNum) */
@@ -236,9 +236,9 @@ export default class NewClass extends cc.Component {
         if(this.playerTs.Handstate == 'knife')
             bullet.setPosition(new cc.Vec2(this.leftHand.position.x, this.leftHand.position.y));
         else{
-            bullet.setPosition(new cc.Vec2(this.leftHand.position.x-10, this.leftHand.position.y+10));
+            bullet.setPosition(new cc.Vec2(this.leftHand.position.x-17, this.leftHand.position.y+3));
             bullet.angle = 45;
-            bullet.width=50;
+            bullet.width=35;
             bullet.height=10;
         }
 

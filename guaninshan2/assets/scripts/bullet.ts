@@ -31,7 +31,6 @@ export default class NewClass extends cc.Component {
         console.log(this.attackNum)
         if (other.node.group === 'secWall' && this.floor === 2) return;
         if (other.node == this.selfNode){
-            this.node.destroy();
             return;
         };
         if(other.node.group == 'player'){
