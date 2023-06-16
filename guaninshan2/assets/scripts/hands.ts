@@ -75,11 +75,7 @@ export default class NewClass extends cc.Component {
         
         switch (this.playerTs.Handstate) {
         case 'rifle':
-            this.shoot();
-            this.scheduleOnce(() => {
-              this.attacking = false;
-            }, gameInfo.weaponAttackTime[this.playerTs.Handstate]);
-            break;
+        case 'sniper':
         case 'gun':
             this.shoot();
             this.scheduleOnce(() => {
@@ -137,6 +133,11 @@ export default class NewClass extends cc.Component {
         this.rightRadius = 25;
         this.leftRadius = 25;
         switch (this.playerTs.Handstate) {
+            case 'sniper':
+                this.leftAngle = 5
+                this.rightRadius = 45
+                this.rightAngle = -this.leftAngle;
+                break;
             case 'rifle':
                 this.leftAngle = 5
                 this.rightRadius = 45

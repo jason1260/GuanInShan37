@@ -22,6 +22,8 @@ export default class Player extends cc.Component {
     knifePrefab: cc.Prefab = null;
     @property(cc.Prefab)
     riflePrefab: cc.Prefab = null;
+    @property(cc.Prefab)
+    sniperPrefab: cc.Prefab = null;
 
     public GM = null;
 
@@ -215,6 +217,11 @@ export default class Player extends cc.Component {
                 const rifle = cc.instantiate(this.riflePrefab);
                 /* const parentNode = this.node.parent; */
                 this.leftHand.addChild(rifle)
+                break;
+            case "sniper":
+                const sniper = cc.instantiate(this.sniperPrefab);
+                /* const parentNode = this.node.parent; */
+                this.leftHand.addChild(sniper)
                 break;
             case "knife":
                 const knife = cc.instantiate(this.knifePrefab);

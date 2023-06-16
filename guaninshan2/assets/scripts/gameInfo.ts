@@ -8,19 +8,22 @@ const gameInfo = {
     weaponWeight : {
         knife:30,
         gun:50,
-        rifle:100,
+        rifle:70,
+        sniper:100
     },
     weaponbulletNum : {
         knife:1,
         gun:10,
         rifle:20,
+        sniper:5
     },
     weaponAttackTime : {
         knife: 0.02,
         gun:0.5,
         rifle:0.2,
+        sniper:1
     },
-    rangedWeapon : ['gun','rifle'],
+    rangedWeapon : ['gun','rifle','sniper'],
     nearWeapon : ['knife'],
     weaponRadius : {
         reload:1,
@@ -28,9 +31,11 @@ const gameInfo = {
         knife:1,
         gun:1,
         rifle:1.5,
+        sniper:0.5
     },
     dropsTag2weapon : {
-        0:'rifle'
+        0:'rifle',
+        1:'sniper'
     }
 }
 

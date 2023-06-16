@@ -3,12 +3,14 @@ const Input = {}
 const weaponIconScale={
     knife:4,
     gun:4,
-    rifle:1
+    rifle:1,
+    sniper:0.2
 }
 const weaponIconSize={
     knife:{w:14,h:13},
     gun:{w:20,h:20},
-    rifle:{w:114,h:36}
+    rifle:{w:114,h:36},
+    sniper:{w:720,h:220}
 }
 @ccclass
 export default class NewClass extends cc.Component {
