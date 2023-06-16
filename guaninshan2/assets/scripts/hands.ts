@@ -225,7 +225,7 @@ export default class NewClass extends cc.Component {
     initBullet2knife() {
 
         const bullet = cc.instantiate(this.bulletPrefab);
-        // bullet.opacity = 0;
+        bullet.opacity = 0;
 
         bullet.getComponent('bullet').setProperty(gameInfo.weaponDamage[this.playerTs.Handstate],this.onFloor,this.node)
         /* console.log(bullet.getComponent('bullet').attackNum) */
