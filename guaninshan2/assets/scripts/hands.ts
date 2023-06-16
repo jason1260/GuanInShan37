@@ -226,6 +226,7 @@ export default class NewClass extends cc.Component {
         bullet.getComponent(cc.Collider).enabled = false;
         this.scheduleOnce(()=>{
             const knife = this.leftHand.children[0];
+            if(!knife) return;
             if(knife.children[0])
                 knife.children[0].destroy();
         },0.05)

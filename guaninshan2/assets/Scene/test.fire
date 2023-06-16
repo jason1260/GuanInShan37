@@ -1884,8 +1884,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -73.805,
-        -89.671,
+        -252.703,
+        19.858,
         0,
         0,
         0,
@@ -2768,8 +2768,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -285.653,
-        154.05,
+        39.285,
+        -101.518,
         0,
         0,
         0,
@@ -3536,7 +3536,6 @@
       "__uuid__": "04f4d6a9-f134-447e-a846-c6fb8883d57c"
     },
     "sniperPrefab": null,
-    "AstarDestRadius": 4,
     "changeWeaponRadius": 200,
     "_id": "e2FlWYrL5AqINGhasOxS7G"
   },

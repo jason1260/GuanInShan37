@@ -23,6 +23,8 @@ export default class AIhands extends hands {
 
     noObstacle = true;
 
+    Canshoot = false;
+
     onCollisionStay(other, self) {
         if (other.node.group === 'secFloor') this.onFloor = 2;
     }
@@ -51,11 +53,11 @@ export default class AIhands extends hands {
             this.mousePt = cc.v2(0, 0)
 
         this.HandPos();
-        this.checkobstacle();
+        this.checkCanShoot();
         this.attack();
     }
 
-    checkobstacle() {
+    checkCanShoot() {
         if (this.AIplayerTs.attackingTarget == null) return;
         let startplace = this.node.convertToWorldSpaceAR(new cc.Vec2(0, 0));
         let endplace = this.AIplayerTs.attackingTarget.convertToWorldSpaceAR(new cc.Vec2(0, 0));
@@ -74,7 +76,9 @@ export default class AIhands extends hands {
 
         // cc.log(startX, startY, endX, endY);
         // cc.log(this.sight, distance)
-        let flag = 0;
+        let obstacleflag = 0;
+        let floorWallflag = 0;
+        let nofloorWall = false;
         // cc.log(this.AIplayerTs.sight , distance)
         if (this.AIplayerTs.sight > distance) {
             let path = [];
@@ -82,14 +86,20 @@ export default class AIhands extends hands {
                 const x = Math.round(startX + (dx * i) / distance);
                 const y = Math.round(startY + (dy * i) / distance);
                 // cc.log(x, y, this.AIplayerTs.pathing_Map)
-                if (pathing_Map[x][24 - y] == 1) {
-                    flag = 1;
+                if (pathing_Map[x][24-y] == 1) {
+                    obstacleflag = 1;
+                }
+                else if (pathing_Map[x][24-y] == 3) {
+                    floorWallflag = 1;
                 }
                 path.push([x, y])
             }
             // cc.log(path, playerMapPos, targetMapPos, pathing_Map[4][8])
-            this.noObstacle = (!(pathing_Map[startX][24 - startY] == 2) && flag) ? false : true;
-        }
+            this.noObstacle = (obstacleflag) ? false : true;
+            nofloorWall = (floorWallflag) ? false : true;
+        } 
+        
+        this.Canshoot = (this.onFloor == 2 && this.noObstacle)|| (this.onFloor == 1 && pathing_Map[endX][24-endY] == 0 && nofloorWall);
     }
 
     idleAni() {
@@ -113,7 +123,7 @@ export default class AIhands extends hands {
         /* cc.log(this.noObstacle) */
         switch (this.AIplayerTs.Handstate) {
             case 'rifle':
-                if (this.noObstacle) {
+                if (this.Canshoot) {
                     this.shoot();
                     this.scheduleOnce(() => {
                         this.attacking = false;
@@ -124,7 +134,7 @@ export default class AIhands extends hands {
                 break;
             case 'gun':
                 // cc.log(this.AIplayerTs.noObstacle);
-                if (this.noObstacle) {
+                if (this.Canshoot) {
                     this.shoot();
                     this.scheduleOnce(() => {
                         this.attacking = false;
@@ -205,6 +215,7 @@ export default class AIhands extends hands {
         bullet.getComponent(cc.Collider).enabled = false;
         bullet.getComponent(cc.RigidBody).linearVelocity = direction.mul(gameInfo.bulletVelocity[this.AIplayerTs.Handstate]);
     }
+
     initBullet2knife() {
 
         const bullet = cc.instantiate(this.bulletPrefab);
@@ -219,6 +230,7 @@ export default class AIhands extends hands {
         bullet.getComponent(cc.Collider).enabled = false;
         this.scheduleOnce(() => {
             const knife = this.leftHand.children[0];
+            if(!knife) return;
             if (knife.children[0])
                 knife.children[0].destroy();
         }, 0.05)
