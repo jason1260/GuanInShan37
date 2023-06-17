@@ -4,11 +4,17 @@ const { ccclass, property } = cc._decorator;
 export default class CameraTransposer extends cc.Component {
 
 
-    @property(cc.Node)
+    
     target: cc.Node = null;
     // LIFE-CYCLE CALLBACKS:
-
+    onload(){
+        
+    }
     update(dt) {
+        if(!this.target){
+            this.target = cc.find("Canvas/Main Camera/player")
+            if(!this.target) return
+        }
         // using convertToWorldSpaceAR + convertToNodeSpaceAR because
         // they are inaccurate and causes camera jitter. :(
 

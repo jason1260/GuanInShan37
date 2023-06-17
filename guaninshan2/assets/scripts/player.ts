@@ -14,7 +14,7 @@ export default class Player extends cc.Component {
 
     
 
-    @property(cc.Node)
+    
     leftHand: cc.Node = null;
     @property(cc.Prefab)
     gunPrefab: cc.Prefab = null;
@@ -48,6 +48,7 @@ export default class Player extends cc.Component {
     public mousePt: cc.Vec2 = cc.v2(0, 0)
 
     onLoad() {
+        this.leftHand = this.node.getChildByName("leftHand");
         cc.resources.load(`role/${this.role}`, cc.SpriteFrame, (err, spriteFrame) => {
             if (err) {
               console.error("加载图像资源失败：", err);

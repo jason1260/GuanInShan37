@@ -8,13 +8,7 @@
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
-
-    @property(cc.Label)
-    label: cc.Label = null;
-
-    @property
-    text: string = 'hello';
+export default class Bullet extends cc.Component {
 
     public attackNum: number = 0;
     public floor: number = 1;

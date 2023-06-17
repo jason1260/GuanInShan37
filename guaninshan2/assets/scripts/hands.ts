@@ -10,14 +10,14 @@ import gameInfo = require("./gameInfo");
 export var knife_valid;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class hands extends cc.Component {
 
-    @property(cc.Node)
+
     leftHand: cc.Node = null;
 
-    @property(cc.Node)
+ 
     rightHand: cc.Node = null;
-    @property(cc.Node)
+
     cursor: cc.Node = null;
 
     @property(cc.Prefab)
@@ -41,6 +41,10 @@ export default class NewClass extends cc.Component {
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
+        this.leftHand = this.node.getChildByName("leftHand");
+        this.rightHand = this.node.getChildByName("rightHand");
+        this.cursor = this.node.parent.getChildByName("cursor");
+
         cc.find("Canvas/scene2/bg").on(cc.Node.EventType.MOUSE_MOVE, this.onMouseMove, this)
         cc.find("Canvas/scene2/bg").on(cc.Node.EventType.MOUSE_DOWN, this.onMouseMove, this)
         cc.find("Canvas/scene2/bg").on(cc.Node.EventType.MOUSE_DOWN, this.attack, this)

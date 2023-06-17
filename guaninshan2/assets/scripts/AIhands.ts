@@ -34,6 +34,9 @@ export default class AIhands extends hands {
     }
 
     onLoad() {
+        this.leftHand = this.node.getChildByName("leftHand");
+        this.rightHand = this.node.getChildByName("rightHand");
+        
         this.AIplayerTs = this.node.getComponent('AIPlayer');
         AIknife_valid = false;
     }

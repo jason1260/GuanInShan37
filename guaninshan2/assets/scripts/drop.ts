@@ -8,7 +8,7 @@
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class Drop extends cc.Component {
 
     public baseScale:number = 0;
     public startPosY:number = 0;

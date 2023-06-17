@@ -10,8 +10,8 @@ const {ccclass, property} = cc._decorator;
 @ccclass
 export default class AIPlayer extends Player {
 
-    @property()
-    changeWeaponRadius: number = 150;
+    
+    public changeWeaponRadius: number = 150;
 
     playerList = [];
 
@@ -30,6 +30,9 @@ export default class AIPlayer extends Player {
     AIhandsTs = null;
 
     onLoad () {
+        this.role="tanmen"
+        this.leftHand = this.node.getChildByName("leftHand");
+
 
         cc.resources.load(`role/${this.role}`, cc.SpriteFrame, (err, spriteFrame) => {
             if (err) {

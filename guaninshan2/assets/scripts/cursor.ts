@@ -8,26 +8,29 @@ import gameInfo = require("./gameInfo");
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class Cursor extends cc.Component {
 
-    @property(cc.Node)
     player: cc.Node = null;
 
     public playerTs = null;
 
     onLoad() {
         cc.game.canvas.style.cursor = 'none';
-        this.playerTs = this.player.getComponent('player');
         
     }
  
     start () {
-        cc.find("Canvas/scene2/bg").on(cc.Node.EventType.MOUSE_MOVE, this.onMouseMove, this)
-        /* cc.Canvas.instance.node.on('mousemove', this.onMouseMove, this); */
-        this.createCursor();
+        
     }
 
     update(){
+        if(!this.player){
+            this.player = cc.find("Canvas/Main Camera/player")
+            if(!this.player) return
+            this.playerTs = this.player.getComponent('player');
+            cc.find("Canvas/scene2/bg").on(cc.Node.EventType.MOUSE_MOVE, this.onMouseMove, this)
+            this.createCursor();
+        }
         const cursorNode = this.node.getChildByName("Cursor");
         const graphics = cursorNode.getComponent(cc.Graphics);
         if(this.playerTs.bulletNum <= 0){

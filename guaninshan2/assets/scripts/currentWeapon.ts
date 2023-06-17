@@ -15,7 +15,7 @@ const weaponIconSize={
     sniper:{w:720,h:220}
 }
 @ccclass
-export default class NewClass extends cc.Component {
+export default class CurrentWeapon extends cc.Component {
     private currentWeapon: cc.Node = null;
     private nextWeapon: cc.Node = null;
     private canSwitchWeapon: boolean = true;
