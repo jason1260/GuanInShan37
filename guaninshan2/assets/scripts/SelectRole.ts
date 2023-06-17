@@ -32,10 +32,14 @@ export default class SelectRole extends cc.Component {
     startBtn: cc.Button;
 
     public currentRole: string;
+    public currentParticle: cc.ParticleSystem;
     public snode: cc.Node;
     public tnode: cc.Node;
     public enode: cc.Node;
-
+    public sparticle: cc.ParticleSystem;
+    public tparticle: cc.ParticleSystem;
+    public eparticle: cc.ParticleSystem;
+    public emissionRate: number = 200;
 
     onLoad() {
         this.selling.node.on(cc.Node.EventType.TOUCH_END, this.changeSelling, this);
@@ -46,7 +50,13 @@ export default class SelectRole extends cc.Component {
         this.snode = cc.find("Canvas/selling");
         this.tnode = cc.find("Canvas/tanmen");
         this.enode = cc.find("Canvas/errmei");
-        console.log(this.currentRole)
+        this.sparticle = cc.find("Canvas/slParticle").getComponent(cc.ParticleSystem);
+        this.tparticle = cc.find("Canvas/tmParticle").getComponent(cc.ParticleSystem);
+        this.eparticle = cc.find("Canvas/emParticle").getComponent(cc.ParticleSystem);
+        this.currentParticle = this.sparticle;
+        this.eparticle.emissionRate = 0;
+        this.tparticle.emissionRate = 0;
+        console.log(this.currentRole);
     }
 
     startgame() {
@@ -98,6 +108,10 @@ export default class SelectRole extends cc.Component {
             .to(0.5, { opacity:255 })
             .start();
         
+        this.currentParticle.emissionRate = 0;
+        this.sparticle.emissionRate = this.emissionRate;
+        this.currentParticle = this.sparticle;
+        cc.log(this.currentParticle);
         this.currentRole = "selling";
     }
 
@@ -145,6 +159,11 @@ export default class SelectRole extends cc.Component {
             .delay(1)
             .to(0.5, { opacity:255 })
             .start();
+
+        this.currentParticle.emissionRate = 0;
+        this.tparticle.emissionRate = this.emissionRate;
+        this.currentParticle = this.tparticle;
+        cc.log(this.currentParticle);
         this.currentRole = "tanmen";
     }
 
@@ -193,6 +212,10 @@ export default class SelectRole extends cc.Component {
             .to(0.5, { opacity:255 })
             .start();
         
+        this.currentParticle.emissionRate = 0;
+        this.eparticle.emissionRate = this.emissionRate;
+        this.currentParticle = this.eparticle;
+        cc.log(this.currentParticle);
         this.currentRole = "errmei";
     }
 
