@@ -30,6 +30,8 @@ export default class AIPlayer extends Player {
 
     AIhandsTs = null;
 
+    changeWeaponCD = 0;
+
     onLoad() {
         this.onIce = false;
         this.onMud = false;
@@ -131,18 +133,21 @@ export default class AIPlayer extends Player {
         }
 
 
-
         if (this.attackingTarget && this.attackingTarget.name != '')
             this.enemyDistance = cc.Vec2.distance(this.node.getPosition(), this.attackingTarget.getPosition());
 
-        if (this.enemyDistance < this.changeWeaponRadius && gameInfo.rangedWeapon.includes(this.Handstate)) {
-            this.changeWeapon();
-        }
-        else if (this.enemyDistance > this.changeWeaponRadius && gameInfo.nearWeapon.includes(this.Handstate) && this.AIhandsTs.Canshoot) {
-            this.changeWeapon();
-        }
-        else if (gameInfo.rangedWeapon.includes(this.Handstate) && !this.AIhandsTs.Canshoot) {
-            this.changeWeapon();
+        this.changeWeaponCD += dt;
+        if (this.changeWeaponCD >= 0.3) {
+            this.changeWeaponCD = 0;
+            if (this.enemyDistance < this.changeWeaponRadius && gameInfo.rangedWeapon.includes(this.Handstate)) {
+                this.changeWeapon();
+            }
+            else if (this.enemyDistance > this.changeWeaponRadius && gameInfo.nearWeapon.includes(this.Handstate) && this.AIhandsTs.Canshoot) {
+                this.changeWeapon();
+            }
+            else if (gameInfo.rangedWeapon.includes(this.Handstate) && !this.AIhandsTs.Canshoot) {
+                this.changeWeapon();
+            }
         }
 
         if (this.Handstate !== 'changing' && this.Handstate !== 'reloading')
