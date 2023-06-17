@@ -41,7 +41,6 @@ export default class Player extends cc.Component {
     public speed: number = 200;
     public rotateSpeed: number = 30;
     public HP: number = 100;
-    public CD: number = 0;
     public role: string = 'selling';
     public bulletNum: number = 20;
     public score: number = 0;
@@ -107,17 +106,10 @@ export default class Player extends cc.Component {
         //die
         if (this.HP < 0)
             this.playerDie();
-<<<<<<< HEAD
-
-        if (this.CD < 100)
-            this.CD += 0.1;
-            
-=======
         //CD
         console.log(this.CD)
         if(this.CD < 100)
             this.CD += 0.1;
->>>>>>> 87aa509a92ac79b3e72edc5980326f1584785ea6
         //update speed
         if (this.Handstate !== 'changing' && this.Handstate !== 'reloading')
             this.speed = this.baseSpeed - gameInfo.weaponWeight[this.Handstate];
