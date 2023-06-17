@@ -16,15 +16,12 @@ export default class UI extends cc.Component {
     scoreLabel: cc.Label = null;
 
     private playerTs = null;
+    private playerHpMax: number = 0;
 
     onLoad () {
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
-        this.playerTs = cc.find('Canvas/Main Camera/player').getComponent('player');
-        this.bulletLabel.string = this.playerTs.bulletNum;
-        this.hpBar.progress = this.playerTs.HP / 100;
-        this.hpBarColor.color = cc.color((1-Math.pow(this.hpBar.progress, 6))*255, this.hpBar.progress*255, 0);
-        this.scoreLabel.string = this.playerTs.score;
+        this.playerTs = cc.find('Canvas/scene2/player/player').getComponent('player');
     }
 
     start () {
@@ -32,6 +29,15 @@ export default class UI extends cc.Component {
     }
 
     update (dt) {
+        if(!this.playerTs){
+            this.playerTs = cc.find('Canvas/scene2/player/player').getComponent('player');
+            if(!this.playerTs) return
+            this.bulletLabel.string = this.playerTs.bulletNum;
+            this.playerHpMax = this.playerTs.HP;
+            this.hpBar.progress = this.playerTs.HP / this.playerHpMax;
+            this.hpBarColor.color = cc.color((1-Math.pow(this.hpBar.progress, 6))*255, this.hpBar.progress*255, 0);
+            this.scoreLabel.string = this.playerTs.score;
+        }
         this.hpUpdate();
         this.scoreUpdate();
         this.bulletUpdate();
@@ -41,7 +47,7 @@ export default class UI extends cc.Component {
         if (event.keyCode === cc.macro.KEY.o && this.playerTs.HP > 0) {
             this.playerTs.HP -= 1;
             this.hpUpdate();
-        } else if (event.keyCode === cc.macro.KEY.p && this.playerTs.HP < 100) {
+        } else if (event.keyCode === cc.macro.KEY.p && this.playerTs.HP < this.playerHpMax) {
             this.playerTs.HP += 1;
             this.hpUpdate();
         }
@@ -52,7 +58,7 @@ export default class UI extends cc.Component {
     }
 
     hpUpdate () {
-        this.hpBar.progress = this.playerTs.HP / 100;
+        this.hpBar.progress = this.playerTs.HP / this.playerHpMax;
         this.hpBarColor.color = cc.color((1-Math.pow(this.hpBar.progress, 6))*255, this.hpBar.progress*255, 0);
     }
 
