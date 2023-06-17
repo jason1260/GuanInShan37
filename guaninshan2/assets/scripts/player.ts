@@ -319,7 +319,7 @@ export default class Player extends cc.Component {
         this.bleedAnim(hurtNum);
 
         // 将节点颜色设置为白色
-        let originColor = this.node.color;
+        let originColor = cc.Color.WHITE;
         this.node.color = cc.Color.RED;
         
         // 创建显示文字的节点

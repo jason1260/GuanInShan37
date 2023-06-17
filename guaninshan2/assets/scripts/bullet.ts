@@ -33,7 +33,7 @@ export default class Bullet extends cc.Component {
         this.node.destroy()
     }
     setProperty(attackNum: number,floor: number, selfNode:cc.Node){
-        this.attackNum = attackNum;
+        this.attackNum = attackNum + Math.floor((0.1 * Math.random() - 0.05) * 2 * attackNum);
         this.floor = floor;
         this.selfNode = selfNode;
     }
