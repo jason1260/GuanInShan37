@@ -1,3 +1,5 @@
+import gameInfo = require("./gameInfo");
+
 const {ccclass, property} = cc._decorator;
 
 @ccclass
@@ -6,8 +8,14 @@ export default class UI extends cc.Component {
     @property(cc.ProgressBar)
     hpBar: cc.ProgressBar = null;
 
+    @property(cc.ProgressBar)
+    skillBar: cc.ProgressBar = null;
+
     @property(cc.Node)
     hpBarColor: cc.Node = null;
+
+    @property(cc.Node)
+    skillBarColor: cc.Node = null;
 
     @property(cc.Label)
     bulletLabel: cc.Label = null;
@@ -35,10 +43,11 @@ export default class UI extends cc.Component {
     
     update (dt) {
         if(!this.playerTs){
-            this.playerTs = cc.find('Canvas/scene2/player/player').getComponent('player');
+            this.playerTs = cc.find('Canvas/Main Camera/player').getComponent('player');
             if(!this.playerTs) return
             this.bulletLabel.string = this.playerTs.bulletNum;
-            this.playerHpMax = this.playerTs.HP;
+            this.playerHpMax = gameInfo.roleHP[this.playerTs.role];
+            this.skillBar.progress = this.playerTs.CD / 100;
             this.hpBar.progress = this.playerTs.HP / this.playerHpMax;
             this.hpBarColor.color = cc.color((1-Math.pow(this.hpBar.progress, 6))*255, this.hpBar.progress*255, 0);
             this.scoreLabel.string = this.playerTs.score;
@@ -46,14 +55,17 @@ export default class UI extends cc.Component {
         this.hpUpdate();
         this.scoreUpdate();
         this.bulletUpdate();
+        this.skillUpdate();
     }
 
     onKeyDown (event) {
         if (event.keyCode === cc.macro.KEY.o && this.playerTs.HP > 0) {
             this.playerTs.HP -= 1;
+            this.playerTs.CD -= 1;
             this.hpUpdate();
         } else if (event.keyCode === cc.macro.KEY.p && this.playerTs.HP < this.playerHpMax) {
             this.playerTs.HP += 1;
+            this.playerTs.CD += 1;
             this.hpUpdate();
         }
     }
@@ -73,5 +85,10 @@ export default class UI extends cc.Component {
 
     scoreUpdate () {
         this.scoreLabel.string = this.playerTs.score;
+    }
+
+    skillUpdate () {
+        this.skillBar.progress = this.playerTs.CD / 100;
+        this.skillBarColor.color = cc.color(255, 255, 255-this.skillBar.progress*255);
     }
 }
