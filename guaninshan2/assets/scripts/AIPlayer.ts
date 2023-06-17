@@ -137,7 +137,7 @@ export default class AIPlayer extends Player {
             this.enemyDistance = cc.Vec2.distance(this.node.getPosition(), this.attackingTarget.getPosition());
 
         this.changeWeaponCD += dt;
-        if (this.changeWeaponCD >= 0.3) {
+        if (this.changeWeaponCD >= 0.5) {
             this.changeWeaponCD = 0;
             if (this.enemyDistance < this.changeWeaponRadius && gameInfo.rangedWeapon.includes(this.Handstate)) {
                 this.changeWeapon();
