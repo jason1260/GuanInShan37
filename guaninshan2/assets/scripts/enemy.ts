@@ -60,26 +60,26 @@ export default class Enemy extends cc.Component {
     }
 
     onCollisionEnter(other, self) {
-        console.log("hello knife touch");
+        // console.log("hello knife touch");
         if (other.node.group == 'knife' && weapon == "knife" && knife_valid) {
-            console.log("hurts ", this.life);
+            // console.log("hurts ", this.life);
             this.life -= 10;
         } else if (other.node.group == 'gun' && weapon == 'gun') {
             this.life -= 10;
-            console.log("gun hits");
+            // console.log("gun hits");
         }
     }
 
     onCollisionStay(other, self) {
-        console.log("ouside collision stay");
+        // console.log("ouside collision stay");
         if (this.being_attacked == true) return;
-        console.log("inside collision stay");
+        // console.log("inside collision stay");
         if (other.node.group == 'knife' && weapon == 'knife' && knife_valid) {
             this.being_attacked = true;
             this.scheduleOnce(() => {
                 this.life -= 10;
                 this.being_attacked = false;
-                console.log("knife attacked");
+                // console.log("knife attacked");
             }, 0.2)
         }
     }

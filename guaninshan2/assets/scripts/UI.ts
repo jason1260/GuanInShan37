@@ -1,4 +1,4 @@
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class UI extends cc.Component {
@@ -18,12 +18,12 @@ export default class UI extends cc.Component {
     private playerTs = null;
     private playerHpMax: number = 0;
 
-    onLoad () {
+    onLoad() {
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
     }
 
-    start () {
+    start() {
 
     }
     onDestroy() {
@@ -32,15 +32,15 @@ export default class UI extends cc.Component {
         this.playerTs = null;
         console.log("UI destroy")
     }
-    
-    update (dt) {
-        if(!this.playerTs){
-            this.playerTs = cc.find('Canvas/scene2/player/player').getComponent('player');
-            if(!this.playerTs) return
+
+    update(dt) {
+        if (!this.playerTs) {
+            this.playerTs = cc.find('Canvas/Main Camera/player').getComponent('player');
+            if (!this.playerTs) return
             this.bulletLabel.string = this.playerTs.bulletNum;
             this.playerHpMax = this.playerTs.HP;
             this.hpBar.progress = this.playerTs.HP / this.playerHpMax;
-            this.hpBarColor.color = cc.color((1-Math.pow(this.hpBar.progress, 6))*255, this.hpBar.progress*255, 0);
+            this.hpBarColor.color = cc.color((1 - Math.pow(this.hpBar.progress, 6)) * 255, this.hpBar.progress * 255, 0);
             this.scoreLabel.string = this.playerTs.score;
         }
         this.hpUpdate();
@@ -48,7 +48,7 @@ export default class UI extends cc.Component {
         this.bulletUpdate();
     }
 
-    onKeyDown (event) {
+    onKeyDown(event) {
         if (event.keyCode === cc.macro.KEY.o && this.playerTs.HP > 0) {
             this.playerTs.HP -= 1;
             this.hpUpdate();
@@ -58,20 +58,20 @@ export default class UI extends cc.Component {
         }
     }
 
-    onKeyUp () {
+    onKeyUp() {
 
     }
 
-    hpUpdate () {
+    hpUpdate() {
         this.hpBar.progress = this.playerTs.HP / this.playerHpMax;
-        this.hpBarColor.color = cc.color((1-Math.pow(this.hpBar.progress, 6))*255, this.hpBar.progress*255, 0);
+        this.hpBarColor.color = cc.color((1 - Math.pow(this.hpBar.progress, 6)) * 255, this.hpBar.progress * 255, 0);
     }
 
-    bulletUpdate () {
+    bulletUpdate() {
         this.bulletLabel.string = this.playerTs.bulletNum;
     }
 
-    scoreUpdate () {
+    scoreUpdate() {
         this.scoreLabel.string = this.playerTs.score;
     }
 }

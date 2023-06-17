@@ -62,7 +62,7 @@ export default class GM extends cc.Component {
     onLoad() {
         cc.director.getPhysicsManager().enabled = true;
         cc.director.getCollisionManager().enabled = true;
-        console.log("123", cc.find("persistnode").getComponent("persistNode"))
+        // console.log("123", cc.find("persistnode").getComponent("persistNode"))
         this.playerRole = cc.find("persistnode").getComponent("persistNode").playerRole;
         this.bornPosparent = cc.find("Canvas/Main Camera");
         // cc.director.getPhysicsManager().debugDrawFlags = 1;
@@ -76,9 +76,9 @@ export default class GM extends cc.Component {
 
     drawColliderboxes() {
         let tiledSize = this.tiledMap.getTileSize();
-        let layers = ['blocks', 'lowBlks', 'secWall', 'secFloor'];
+        let layers = ['blocks', 'lowBlks', 'secWall', 'secFloor', 'ice', 'mud'];
         let tag = 15;
-        let groups = ['wall', 'shortwall', 'secWall', 'secFloor'];
+        let groups = ['wall', 'shortwall', 'secWall', 'secFloor', 'ice', 'mud'];
         let groups_id = 0;
 
         // 创建二维数组Map，并初始化为0
@@ -92,7 +92,9 @@ export default class GM extends cc.Component {
         }
 
         for (var layerName of layers) {
+            console.log("one", layerName);
             let layer = this.tiledMap.getLayer(layerName);
+            if (!layer) { tag++; groups_id++; continue; }
             cc.log(layerName, layer);
             let layerSize = layer.getLayerSize();
 
@@ -109,7 +111,7 @@ export default class GM extends cc.Component {
                         collider.size = tiledSize;
                         collider.tag = tag;
                         collider.friction = 0.2;
-                        if (layerName === "secFloor") collider.sensor = true;
+                        if (layerName === "secFloor" || layerName === 'ice' || layerName === 'mud') collider.sensor = true;
                         collider.apply();
                         let another = tiled.node.addComponent(cc.BoxCollider);
                         another.offset = cc.v2(tiledSize.width / 2, tiledSize.height / 2).add(cc.v2(-320, -200));
@@ -120,7 +122,9 @@ export default class GM extends cc.Component {
                             Map[i][j] = 2;
                         else if (layerName == 'secWall')
                             Map[i][j] = 3;
-                        else 
+                        else if (layerName == 'ice' || layerName == 'mud')
+                            Map[i][j] = 4;
+                        else
                             Map[i][j] = 1;
                     }
                 }
@@ -129,33 +133,34 @@ export default class GM extends cc.Component {
             groups_id++;
         }
 
+        console.log("Map", Map);
         pathing_Map = Map; // 将Map赋值给类成员变量
-        cc.log(pathing_Map);
+        cc.log("pathing_Map", pathing_Map);
     }
 
     playeffect(handstate) {
-        if(handstate === "knife"){
+        if (handstate === "knife") {
             cc.audioEngine.playEffect(this.knifeSE, false);
         }
-        else if(handstate === "stick"){
+        else if (handstate === "stick") {
             cc.audioEngine.playEffect(this.stickSE, false);
         }
-        else if(handstate === "gun"){
+        else if (handstate === "gun") {
             cc.audioEngine.playEffect(this.gunSE, false);
         }
-        else if(handstate === "rifle"){
+        else if (handstate === "rifle") {
             cc.audioEngine.playEffect(this.rifleSE, false);
         }
-        else if(handstate === "sniper"){
+        else if (handstate === "sniper") {
             cc.audioEngine.playEffect(this.sniperSE, false);
         }
-        else if(handstate === "reload"){
+        else if (handstate === "reload") {
             cc.audioEngine.playEffect(this.reloadSE, false);
         }
-        else if (handstate === "changing"){
+        else if (handstate === "changing") {
             cc.audioEngine.playEffect(this.changeSE, false);
         }
-        else if (handstate === "empty"){
+        else if (handstate === "empty") {
             cc.audioEngine.playEffect(this.emptySE, false);
         }
 
@@ -169,12 +174,12 @@ export default class GM extends cc.Component {
     }
 
     setBornPos() {
-        for(let node in this.bornPosparent.children){
+        for (let node in this.bornPosparent.children) {
 
-            if(this.bornPosparent.children[node].group == "player")
+            if (this.bornPosparent.children[node].group == "player")
                 this.bornPosparent.children[node].destroy();
         }
-        
+
         const playerRole = this.playerRole;
         let roles = ["selling", "errmei", "tanmen"];
         let pos = ["postion1", "postion2"];
@@ -182,13 +187,13 @@ export default class GM extends cc.Component {
         // cc.log()
 
         let setPlayer = false;
-        
+
 
         for (let j = 0; j <= 2; j++) {
             let role = roles[j];
             for (let i = 0; i <= 1; i++) {
-                console.log("playerRole", playerRole);
-                console.log("role", role);
+                // console.log("playerRole", playerRole);
+                // console.log("role", role);
                 // console.log("setPlayer", setPlayer);
                 if (playerRole == role && !setPlayer) {
 
@@ -198,7 +203,7 @@ export default class GM extends cc.Component {
                     player.setPosition(bornPosition[roles[j]][pos[i]]);
                     ts.setRole(role);
                     this.bornPosparent.insertChild(player, 0);
-                    console.log("player", player);
+                    // console.log("player", player);
                 }
                 else {
                     let AI = cc.instantiate(this.AIPrefab);
@@ -206,11 +211,11 @@ export default class GM extends cc.Component {
                     AI.setPosition(bornPosition[roles[j]][pos[i]]);
                     ts.setRole(role);
                     this.bornPosparent.insertChild(AI, 1);
-                    console.log("AI", AI);
+                    // console.log("AI", AI);
                 }
             }
         }
-        
+
     }
- 
+
 }

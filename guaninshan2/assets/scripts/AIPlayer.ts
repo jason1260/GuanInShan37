@@ -5,12 +5,12 @@ import Astar from "./astar";
 
 export var AIweapon;
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class AIPlayer extends Player {
 
-    
+
     public changeWeaponRadius: number = 150;
 
     playerList = [];
@@ -29,19 +29,19 @@ export default class AIPlayer extends Player {
 
     AIhandsTs = null;
 
-    onLoad () {
+    onLoad() {
         this.leftHand = this.node.getChildByName("leftHand");
 
 
         cc.resources.load(`role/${this.role}`, cc.SpriteFrame, (err, spriteFrame) => {
             if (err) {
-              console.error("加载图像资源失败：", err);
-              return;
+                console.error("加载图像资源失败：", err);
+                return;
             }
-            console.log(spriteFrame)
+            // console.log(spriteFrame)
             // 获取 Sprite 组件
-            this.node.getComponent(cc.Sprite).spriteFrame= spriteFrame;
-           
+            this.node.getComponent(cc.Sprite).spriteFrame = spriteFrame;
+
         });
         this.HP = gameInfo.roleHP[this.role]
         this.changeWeaponRadius = gameInfo.roleChangeWeaponRadius[this.role]
@@ -57,20 +57,20 @@ export default class AIPlayer extends Player {
         this.AIhandsTs = this.node.getComponent('AIhands');
     }
 
-    start () {
+    start() {
 
     }
 
-    update (dt) {
-        console.log(this.bulletNum)
+    update(dt) {
+        // console.log(this.bulletNum)
         //update speed
         if (this.Handstate !== 'changing' && this.Handstate !== 'reloading')
             this.astar.speed = this.baseSpeed - gameInfo.weaponWeight[this.Handstate];
         //reload
-        if(this.bulletNum <= 0 && this.Handstate !== 'changing' && this.Handstate !== 'reloading')
+        if (this.bulletNum <= 0 && this.Handstate !== 'changing' && this.Handstate !== 'reloading')
             this.reload()
         // cc.log(this.attackingTarget)
-        console.log()
+        // console.log()
         if (this.HP <= 0)
             this.node.destroy();
         this.astar.setHandState(this.Handstate);
@@ -87,14 +87,14 @@ export default class AIPlayer extends Player {
         } */
         this.setPlayerList();
         this.findEnemy();
-        this.findNearstEnemy(); 
+        this.findNearstEnemy();
         /* this.attackingTarget = this.attackingList[this.attackingList.length-1]; */
-        if(!this.nearstTarget) return
+        if (!this.nearstTarget) return
         this.attackingTarget = this.nearstTarget;
         // cc.log(this.attackingList)
 
         if (this.attackingList.length == 0) {
-            this.findNearstEnemy(); 
+            this.findNearstEnemy();
             this.astar.setTarget(this.nearstTarget);
             this.astar.update();
             // cc.log("nearstTarget", this.nearstTarget)
@@ -110,9 +110,9 @@ export default class AIPlayer extends Player {
 
 
 
-        if (this.attackingTarget && this.attackingTarget.name != '') 
+        if (this.attackingTarget && this.attackingTarget.name != '')
             this.enemyDistance = cc.Vec2.distance(this.node.getPosition(), this.attackingTarget.getPosition());
-        
+
         if (this.enemyDistance < this.changeWeaponRadius && gameInfo.rangedWeapon.includes(this.Handstate)) {
             this.changeWeapon();
         }
@@ -126,18 +126,18 @@ export default class AIPlayer extends Player {
 
     setPlayerList() {
         this.playerList = cc.find("Canvas/Main Camera").children;
-        this.playerList=this.playerList.filter((child)=>child.group == "player")
+        this.playerList = this.playerList.filter((child) => child.group == "player")
         /* console.log(this.playerList) */
         // cc.find("Canvas/Main Camera/players/player")
     }
 
 
-    findEnemy() { 
+    findEnemy() {
         //使用pathing_Map檢測有敵人可否攻擊
         // 將看到的敵人都加入attacking
         let startplace = this.node.convertToWorldSpaceAR(new cc.Vec2(0, 0));
 
-        let playerMapPos = [Math.floor(startplace.x / 48),Math.floor(startplace.y / 48)];
+        let playerMapPos = [Math.floor(startplace.x / 48), Math.floor(startplace.y / 48)];
         this.attackingList = []
         this.playerList.forEach(target => {
             if (target == this.node) return;
@@ -160,31 +160,31 @@ export default class AIPlayer extends Player {
                     const x = Math.round(startX + (dx * i) / distance);
                     const y = Math.round(startY + (dy * i) / distance);
                     // cc.log(x, y)
-                    if (pathing_Map[x][24-y] == 1) {
+                    if (pathing_Map[x][24 - y] == 1) {
                         findTarget = false;
                     }
                     path.push([x, y])
                 }
 
                 // cc.log(startX, startY, endX, endY, path)
-                
+
                 let existed = false;
 
-                if(!existed && findTarget)
+                if (!existed && findTarget)
                     this.attackingList.push(target);
             }
         });
     }
-    reload(){
+    reload() {
         this.tmpWeapon = this.Handstate;
         this.Handstate = 'reloading';
         this.scheduleOnce(() => {
-            this.Handstate = this.tmpWeapon; 
-            console.log(this.Handstate)
+            this.Handstate = this.tmpWeapon;
+            // console.log(this.Handstate)
             this.bulletNum = gameInfo.weaponbulletNum[this.Handstate];
-            console.log("哈哈",this.bulletNum)
+            // console.log("哈哈",this.bulletNum)
         }, 1)
-        
+
     }
     findNearstEnemy() {
         //從playerlist開始找
@@ -194,7 +194,7 @@ export default class AIPlayer extends Player {
         this.playerList.forEach(playerNode => {
             // cc.log("player", playerNode)
             let ts = playerNode.getComponent('player') || playerNode.getComponent('AIplayer')
-            if(playerNode != this.node && this.role != ts.role){
+            if (playerNode != this.node && this.role != ts.role) {
                 let distance = cc.Vec2.distance(this.node.getPosition(), playerNode.getPosition());
                 if (nearstDistance > distance) {
                     nearstDistance = distance;
@@ -205,12 +205,12 @@ export default class AIPlayer extends Player {
         this.nearstTarget = nearstEnemy;
     }
 
-    aiming(targetPos){
+    aiming(targetPos) {
         let mousePos = targetPos;
         let playerPos = this.node.getPosition()
         let direction = mousePos.sub(playerPos);
         // console.log(direction.x)
-        if(direction.x == 0 &&  direction.y == 0 && direction.z == 0 ) return;
+        if (direction.x == 0 && direction.y == 0 && direction.z == 0) return;
         let angle = cc.v2(1, 0).signAngle(direction);
         let degree = cc.misc.radiansToDegrees(angle);
         this.dirAngle = degree;
