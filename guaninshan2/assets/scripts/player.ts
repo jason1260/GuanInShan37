@@ -44,7 +44,7 @@ export default class Player extends cc.Component {
     public role: string = 'selling';
     public bulletNum: number = 20;
     public score: number = 0;
-    public CD: number = 0;
+    public CD: number = 100;
 
     public baseSpeed: number = 200;
     public lv: cc.Vec2 = null;
@@ -414,6 +414,22 @@ export default class Player extends cc.Component {
 
     release(){
         //zoom in
+        const tmp_cam = cc.find('Canvas/Main Camera');
+        cc.tween(tmp_cam.getComponent(cc.Camera))
+            .to(0.3, { zoomRatio: 5 })
+            .to(0.3, { zoomRatio: 1 })
+            .start()
+
+        const curr_pos = this.node.convertToWorldSpaceAR(cc.v3(0, 0, 0));
+        const origin_pos = tmp_cam.convertToWorldSpaceAR(cc.v3(0, 0, 0));
+        const curr_local = tmp_cam.parent.convertToNodeSpaceAR(curr_pos);
+        const origin_local = tmp_cam.parent.convertToNodeSpaceAR(origin_pos);
+        console.log(curr_local, origin_local);
+        cc.tween(tmp_cam)
+            .to(0.3, { position: cc.v3(curr_local.x, curr_local.y, 0) })
+            .to(0.3, { position: cc.v3(origin_local.x, origin_local.y, 0) })
+            .start()
+        //===========//
         this.CD = 0;
         this.deleteWeapon();
         this.GM.playeffect('changing');
