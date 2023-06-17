@@ -22,13 +22,11 @@ export default class NewClass extends cc.Component {
     public ts = null;
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {}
-
-    start () {
-        console.log("start")
+    onLoad () {
     }
+
+
     onCollisionEnter(other, self) {
-        console.log(this.attackNum)
         if (other.node.group === 'secWall' && this.floor === 2) return;
         if (other.node == this.selfNode){
             return;
@@ -39,9 +37,6 @@ export default class NewClass extends cc.Component {
             this.ts.hurt(this.attackNum)
         }
         this.node.destroy()
-    }
-    onCollisionStay(other, self) {
-        console.log(this.attackNum)
     }
     setProperty(attackNum: number,floor: number, selfNode:cc.Node){
         this.attackNum = attackNum;

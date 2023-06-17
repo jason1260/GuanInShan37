@@ -42,9 +42,9 @@ export default class AIhands extends hands {
     }
 
     update(dt) {
-        if (this.AIplayerTs.Handstate == 'changing')
+        if (this.AIplayerTs.Handstate == 'changing' || this.AIplayerTs.Handstate == 'reloading')
             this.changingAni()
-        if (this.AIplayerTs.Handstate != 'changing' && !this.attacking)
+        if (this.AIplayerTs.Handstate != 'reloading' && this.AIplayerTs.Handstate != 'changing' && !this.attacking)
             this.idleAni()
 
         if (this.AIplayerTs.attackingTarget && this.AIplayerTs.attackingTarget.name != ''){
@@ -105,9 +105,25 @@ export default class AIhands extends hands {
     }
 
     idleAni() {
+        this.rightRadius = 25;
+        this.leftRadius = 25;
         switch (this.AIplayerTs.Handstate) {
+            case 'sniper':
+                this.leftAngle = 5
+                this.rightRadius = 45
+                this.rightAngle = -this.leftAngle;
+                break;
+            case 'rifle':
+                this.leftAngle = 5
+                this.rightRadius = 45
+                this.rightAngle = -this.leftAngle;
+                break;
             case 'gun':
                 this.leftAngle = 5
+                this.rightAngle = -this.leftAngle;
+                break;
+            case 'stick':
+                this.leftAngle = 10;
                 this.rightAngle = -this.leftAngle;
                 break;
             case 'knife':
@@ -120,20 +136,12 @@ export default class AIhands extends hands {
     }
 
     attack() {
-        if (this.AIplayerTs.Handstate === 'changing' || this.attacking || !this.AIplayerTs.attackingTarget || this.AIplayerTs.attackingTarget.name == '') return;
+        if (this.AIplayerTs.Handstate === 'changing' || this.attacking || !this.AIplayerTs.attackingTarget || this.AIplayerTs.attackingTarget.name == '' || this.AIplayerTs.Handstate == 'reloading') return;
         this.attacking = true;
         /* cc.log(this.noObstacle) */
         switch (this.AIplayerTs.Handstate) {
             case 'rifle':
-                if (this.Canshoot) {
-                    this.shoot();
-                    this.scheduleOnce(() => {
-                        this.attacking = false;
-                    }, gameInfo.weaponAttackTime[this.AIplayerTs.Handstate]);
-                }
-                else
-                    this.attacking = false;
-                break;
+            case 'sniper':
             case 'gun':
                 // cc.log(this.AIplayerTs.noObstacle);
                 if (this.Canshoot) {
@@ -197,7 +205,10 @@ export default class AIhands extends hands {
     //在这个示例中，我添加了一个名为 rotateAngle 的函数，该函数用于逐渐改变角度。它接受目标角度和持续时间作为参数，并使用递归调用来实现逐帧更新角度直到达到目标角度为止。可以根据需要调整每帧的间隔时间 interval，以控制动画的流畅度。
     shoot() {
         // cc.log("AIshoot!!!!!!!!!!!!!!!!!!!!!");
-
+        if(this.AIplayerTs.bulletNum <= 0) {
+            return;
+        }
+        this.AIplayerTs.bulletNum -= 1;
         //這裡的radius和cursor的差兩倍
         const dest = this.getRandomInCircle_polar_better(this.AIplayerTs.shootRadius);
 

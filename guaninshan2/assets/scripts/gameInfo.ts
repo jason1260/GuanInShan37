@@ -27,7 +27,7 @@ const gameInfo = {
         sniper: 1
     },
     rangedWeapon: ['gun', 'rifle', 'sniper'],
-    nearWeapon: ['knife', 'stick'],
+    nearWeapon: ['knife'],
     weaponRadius: {
         reload: 1,
         changing: 1,
@@ -44,7 +44,7 @@ const gameInfo = {
     },
     weaponDamage: {
         knife: 15,
-        stick: 20,
+        stick: 10,
         gun: 15,
         rifle: 10,
         sniper: 80
@@ -55,6 +55,26 @@ const gameInfo = {
         gun: 1000,
         rifle: 1000,
         sniper: 1000
+    },
+    roleHP:{
+        selling:130,
+        tanmen:85,
+        errmei:100
+    },
+    roleSpeed:{
+        selling:180,
+        tanmen:220,
+        errmei:200
+    },
+    roleChangeWeaponRadius:{
+        selling:0,
+        tanmen:180,
+        errmei:150
+    },
+    roleNextWeapon:{
+        selling:"stick",
+        tanmen:"rifle",
+        errmei:"sniper",
     }
 }
 

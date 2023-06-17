@@ -38,7 +38,7 @@ export default class Astar extends cc.Component {
     counter2: number = 0;
     step: number = 0;
     walkPath: boolean;
-    speed: number = 200;
+    speed: number = 0;
     samplediameter: number = 288;
 
     onLoad(): void {
@@ -48,7 +48,6 @@ export default class Astar extends cc.Component {
         this.step = 0;
         this.nextstep = cc.v2(0, 0);
         this.walkPath = false;
-        this.speed = 250;
     }
     update() {
         if (!this.flag) { this.createGrid(); this.flag = true };
@@ -80,7 +79,6 @@ export default class Astar extends cc.Component {
             const dis = Math.abs(this.stx - this.edx) + Math.abs(this.sty - this.edy);
             // move slower when too close to others
             if (dis < 2) this.speed *= 0.6;
-            else this.speed = 200;
             // make sure it keeps social distancing
             if (dis < 1) this.selfNode.getComponent(cc.RigidBody).linearVelocity = cc.v2(0, 0);
             else {

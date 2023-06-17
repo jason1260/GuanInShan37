@@ -32,7 +32,7 @@ export default class Player extends cc.Component {
     public speed: number = 200;
     public rotateSpeed: number = 30;
     public HP:number = 100;
-    public role: string = '少林';
+    public role: string = 'selling';
     public bulletNum:number = 20;
     public score:number = 0;
     
@@ -48,6 +48,21 @@ export default class Player extends cc.Component {
     public mousePt: cc.Vec2 = cc.v2(0, 0)
 
     onLoad() {
+        cc.resources.load(`role/${this.role}`, cc.SpriteFrame, (err, spriteFrame) => {
+            if (err) {
+              console.error("加载图像资源失败：", err);
+              return;
+            }
+            console.log(spriteFrame)
+            // 获取 Sprite 组件
+            this.node.getComponent(cc.Sprite).spriteFrame= spriteFrame;
+           
+        });
+        this.HP = gameInfo.roleHP[this.role]
+        this.baseSpeed = gameInfo.roleSpeed[this.role]
+
+
+
         for (var member in Input) delete Input[member];
         this.score = 0;
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
@@ -268,6 +283,9 @@ export default class Player extends cc.Component {
     }
     playerDie(){
         cc.director.loadScene(cc.director.getScene().name);
+    }
+    setRole(role:string){
+        this.role = role;
     }
 
 }

@@ -30,6 +30,22 @@ export default class AIPlayer extends Player {
     AIhandsTs = null;
 
     onLoad () {
+
+        cc.resources.load(`role/${this.role}`, cc.SpriteFrame, (err, spriteFrame) => {
+            if (err) {
+              console.error("加载图像资源失败：", err);
+              return;
+            }
+            console.log(spriteFrame)
+            // 获取 Sprite 组件
+            this.node.getComponent(cc.Sprite).spriteFrame= spriteFrame;
+           
+        });
+        this.HP = gameInfo.roleHP[this.role]
+        this.changeWeaponRadius = gameInfo.roleChangeWeaponRadius[this.role]
+        this.baseSpeed = gameInfo.roleSpeed[this.role]
+        this.nextWeapon = gameInfo.roleNextWeapon[this.role]
+
         this.astar.setSelf(this.node)
         // this.astar.setTarget();
 
@@ -44,11 +60,19 @@ export default class AIPlayer extends Player {
     }
 
     update (dt) {
+        console.log(this.bulletNum)
+        //update speed
+        if (this.Handstate !== 'changing' && this.Handstate !== 'reloading')
+            this.astar.speed = this.baseSpeed - gameInfo.weaponWeight[this.Handstate];
+        //reload
+        if(this.bulletNum <= 0 && this.Handstate !== 'changing' && this.Handstate !== 'reloading')
+            this.reload()
         // cc.log(this.attackingTarget)
         console.log()
         if (this.HP <= 0)
             this.node.destroy();
         this.astar.setHandState(this.Handstate);
+        /* 窮追猛打 
         if(!this.attackingTarget){
             this.setPlayerList();
             this.findEnemy();
@@ -58,8 +82,13 @@ export default class AIPlayer extends Player {
             this.setPlayerList();
             this.findEnemy();
             this.attackingTarget = this.attackingList[this.attackingList.length-1];
-        }
-
+        } */
+        this.setPlayerList();
+        this.findEnemy();
+        this.findNearstEnemy(); 
+        /* this.attackingTarget = this.attackingList[this.attackingList.length-1]; */
+        if(!this.nearstTarget) return
+        this.attackingTarget = this.nearstTarget;
         // cc.log(this.attackingList)
 
         if (this.attackingList.length == 0) {
@@ -144,7 +173,17 @@ export default class AIPlayer extends Player {
             }
         });
     }
-
+    reload(){
+        this.tmpWeapon = this.Handstate;
+        this.Handstate = 'reloading';
+        this.scheduleOnce(() => {
+            this.Handstate = this.tmpWeapon; 
+            console.log(this.Handstate)
+            this.bulletNum = gameInfo.weaponbulletNum[this.Handstate];
+            console.log("哈哈",this.bulletNum)
+        }, 1)
+        
+    }
     findNearstEnemy() {
         //從playerlist開始找
         let nearstEnemy = null;
@@ -152,7 +191,8 @@ export default class AIPlayer extends Player {
         // cc.log(this.playerList)
         this.playerList.forEach(playerNode => {
             // cc.log("player", playerNode)
-            if(playerNode != this.node){
+            let ts = playerNode.getComponent('player') || playerNode.getComponent('AIplayer')
+            if(playerNode != this.node && this.role != ts.role){
                 let distance = cc.Vec2.distance(this.node.getPosition(), playerNode.getPosition());
                 if (nearstDistance > distance) {
                     nearstDistance = distance;
