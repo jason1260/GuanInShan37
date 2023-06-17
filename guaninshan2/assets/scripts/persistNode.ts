@@ -17,8 +17,9 @@ export default class persist extends cc.Component {
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
-        cc.game.addPersistRootNode(this.node);
         this.selectTs = cc.find("Canvas").getComponent("SelectRole");
+        cc.game.addPersistRootNode(this.node);
+        
     }
 
     start() {
@@ -26,8 +27,6 @@ export default class persist extends cc.Component {
     }
 
     update(dt) {
-        if (this.selectTs) {
-            this.playerRole = this.selectTs.currentRole;
-        }
+
     }
 }

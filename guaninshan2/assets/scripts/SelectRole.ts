@@ -46,9 +46,11 @@ export default class SelectRole extends cc.Component {
         this.snode = cc.find("Canvas/selling");
         this.tnode = cc.find("Canvas/tanmen");
         this.enode = cc.find("Canvas/errmei");
+        console.log(this.currentRole)
     }
 
     startgame() {
+        cc.find("persistnode").getComponent("persistNode").playerRole = this.currentRole;
         cc.director.loadScene('test');
     }
 
