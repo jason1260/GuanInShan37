@@ -62,7 +62,7 @@ export default class GM extends cc.Component {
     onLoad() {
         cc.director.getPhysicsManager().enabled = true;
         cc.director.getCollisionManager().enabled = true;
-        console.log("123", cc.find("persistnode").getComponent("persistNode").playerRole)
+        console.log("123", cc.find("persistnode").getComponent("persistNode"))
         this.playerRole = cc.find("persistnode").getComponent("persistNode").playerRole;
         this.bornPosparent = cc.find("Canvas/Main Camera");
         // cc.director.getPhysicsManager().debugDrawFlags = 1;
