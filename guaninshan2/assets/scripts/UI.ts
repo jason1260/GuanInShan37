@@ -48,6 +48,8 @@ export default class UI extends cc.Component {
             this.bulletLabel.string = this.playerTs.bulletNum;
             this.playerHpMax = gameInfo.roleHP[this.playerTs.role];
             this.skillBar.progress = this.playerTs.CD / 100;
+            this.skillBarColor.color = cc.color(255, 255, 255)
+            cc.log("skill: ", this.skillBar.progress)
             this.hpBar.progress = this.playerTs.HP / this.playerHpMax;
             this.hpBarColor.color = cc.color((1 - Math.pow(this.hpBar.progress, 6)) * 255, this.hpBar.progress * 255, 0);
             this.scoreLabel.string = this.playerTs.score;

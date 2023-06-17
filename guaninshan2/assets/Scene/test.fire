@@ -3119,7 +3119,9 @@
     "hpBarColor": {
       "__id__": 64
     },
-    "skillBarColor": null,
+    "skillBarColor": {
+      "__id__": 75
+    },
     "bulletLabel": {
       "__id__": 69
     },

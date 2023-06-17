@@ -32,6 +32,7 @@ export default class Player extends cc.Component {
     public speed: number = 200;
     public rotateSpeed: number = 30;
     public HP: number = 100;
+    public CD: number = 0;
     public role: string = 'selling';
     public bulletNum: number = 20;
     public score: number = 0;
@@ -171,6 +172,8 @@ export default class Player extends cc.Component {
         this.node.getComponent(cc.RigidBody).linearVelocity = this.lv;
 
         //anime
+
+        if (this.CD < 100) this.CD += 0.1;
 
     }
 
