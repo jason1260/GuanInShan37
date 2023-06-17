@@ -10,6 +10,7 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class AIPlayer extends Player {
 
+    isDie = false;
 
     public changeWeaponRadius: number = 150;
 
@@ -64,6 +65,15 @@ export default class AIPlayer extends Player {
     update(dt) {
         // console.log(this.bulletNum)
         //update speed
+        if (this.isDie)
+            return;
+        
+        if (this.HP <= 0){
+            this.isDie = true;
+            this.node.getComponent(cc.RigidBody).linearVelocity = cc.v2(0,0);
+            this.AIdie();
+            return;
+        }
         if (this.Handstate !== 'changing' && this.Handstate !== 'reloading')
             this.astar.speed = this.baseSpeed - gameInfo.weaponWeight[this.Handstate];
         //reload
@@ -71,8 +81,6 @@ export default class AIPlayer extends Player {
             this.reload()
         // cc.log(this.attackingTarget)
         // console.log()
-        if (this.HP <= 0)
-            this.node.destroy();
         this.astar.setHandState(this.Handstate);
         /* 窮追猛打 
         if(!this.attackingTarget){
@@ -116,12 +124,30 @@ export default class AIPlayer extends Player {
         if (this.enemyDistance < this.changeWeaponRadius && gameInfo.rangedWeapon.includes(this.Handstate)) {
             this.changeWeapon();
         }
-        else if (this.enemyDistance > this.changeWeaponRadius && gameInfo.nearWeapon.includes(this.Handstate)) {
+        else if (this.enemyDistance > this.changeWeaponRadius && gameInfo.nearWeapon.includes(this.Handstate) && this.AIhandsTs.Canshoot) {
+            this.changeWeapon();
+        }
+        else if (gameInfo.rangedWeapon.includes(this.Handstate) && !this.AIhandsTs.Canshoot){
             this.changeWeapon();
         }
 
         if (this.Handstate !== 'changing' && this.Handstate !== 'reloading')
             this.speed = this.baseSpeed - gameInfo.weaponWeight[this.Handstate];
+    }
+
+    AIdie() {
+        // 创建淡出动画
+        let fadeOut = cc.fadeOut(0.5);
+        // 创建动画完成后的回调函数
+        let callback = cc.callFunc(() => {
+          this.node.destroy();
+        });
+        // 创建动作序列，先淡出再执行回调函数销毁节点
+        let sequence = cc.sequence(fadeOut, callback);
+
+        this.node.stopAllActions();
+        // 运行动作序列
+        this.node.runAction(sequence);
     }
 
     setPlayerList() {

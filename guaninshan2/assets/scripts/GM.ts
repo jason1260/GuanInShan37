@@ -124,6 +124,8 @@ export default class GM extends cc.Component {
                             Map[i][j] = 3;
                         else if (layerName == 'ice' || layerName == 'mud')
                             Map[i][j] = 4;
+                        else if (layerName == 'lowBlks')
+                            Map[i][j] = 5;
                         else
                             Map[i][j] = 1;
                     }
