@@ -42,7 +42,7 @@ export default class SelectRole extends cc.Component {
         this.tangmen.node.on(cc.Node.EventType.TOUCH_END, this.changeTangmen, this);
         this.errmei.node.on(cc.Node.EventType.TOUCH_END, this.changeErrmei, this);
         this.startBtn.node.on(cc.Node.EventType.TOUCH_END, this.startgame, this);
-        this.currentRole = "shaolin";
+        this.currentRole = "selling";
         this.snode = cc.find("Canvas/selling");
         this.tnode = cc.find("Canvas/tanmen");
         this.enode = cc.find("Canvas/errmei");
@@ -53,82 +53,144 @@ export default class SelectRole extends cc.Component {
     }
 
     changeSelling() {
-        if (this.currentRole == "shaolin") return;
-        if (this.currentRole == "tangmen") {
+        if (this.currentRole == "selling") return;
+        if (this.currentRole == "tanmen") {
             cc.tween(this.tnode)
                 .to(0.5, { scale: 2 })
                 .start();
             cc.tween(this.tangmen_intro)
-                .to(0.5, { position: cc.v3(801, -14, 0) })
+                .to(0.5, { position: cc.v3(173, -666, 0) ,opacity:0})
+                .start();
+            cc.tween(cc.find("Canvas/tangmen/intro"))
+                .to(0.5, { opacity:0 })
+                .start();
+            cc.tween(cc.find("Canvas/tangmen/name"))
+                .to(0.5, { opacity:0 })
                 .start();
         } else if (this.currentRole == "errmei") {
             cc.tween(this.enode)
                 .to(0.5, { scale: 2 })
                 .start();
             cc.tween(this.errmei_intro)
-                .to(0.5, { position: cc.v3(165, 645, 0) })
+                .to(0.5, { position: cc.v3(800, 2, 0) ,opacity:0})
+                .start();
+            cc.tween(cc.find("Canvas/errrr/intro"))
+                .to(0.5, { opacity:0 })
+                .start();
+            cc.tween(cc.find("Canvas/errrr/name"))
+                .to(0.5, { opacity:0 })
                 .start();
         }
         cc.tween(this.snode)
             .to(0.5, { scale: 3 })
             .start();
         cc.tween(this.selling_intro)
-            .to(0.5, { position: cc.v3(163, -3, 0) })
+            .to(0.5, { position: cc.v3(163, -3, 0),opacity:255 })
             .start();
-
-        this.currentRole = "shaolin";
+        cc.tween(cc.find("Canvas/shaolin/name"))
+            .delay(0.5)
+            .to(0.5, { opacity:255 })
+            .start();
+        cc.tween(cc.find("Canvas/shaolin/intro"))
+            .delay(1)
+            .to(0.5, { opacity:255 })
+            .start();
+        
+        this.currentRole = "selling";
     }
 
     changeTangmen() {
         if (this.currentRole == "tangmen") return;
-        if (this.currentRole == "shaolin") {
+        if (this.currentRole == "selling") {
             cc.tween(this.snode)
                 .to(0.5, { scale: 2 })
                 .start();
             cc.tween(this.selling_intro)
-                .to(0.5, { position: cc.v3(795, -3, 0) })
+                .to(0.5, { position: cc.v3(163, 600, 0) ,opacity:0})
                 .start();
+            cc.tween(cc.find("Canvas/shaolin/intro"))
+                .to(0.5, { opacity:0 })
+                .start();
+            cc.tween(cc.find("Canvas/shaolin/name"))
+                .to(0.5, { opacity:0 })
+                .start();
+
         } else if (this.currentRole == "errmei") {
             cc.tween(this.enode)
                 .to(0.5, { scale: 2 })
                 .start();
             cc.tween(this.errmei_intro)
-                .to(0.5, { position: cc.v3(165, 645, 0) })
+                .to(0.5, { position: cc.v3(800, 2, 0),opacity:0 })
+                .start();
+            cc.tween(cc.find("Canvas/errrr/intro"))
+                .to(0.5, { opacity:0 })
+                .start();
+            cc.tween(cc.find("Canvas/errrr/name"))
+                .to(0.5, { opacity:0 })
                 .start();
         }
         cc.tween(this.tnode)
             .to(0.5, { scale: 3 })
             .start();
         cc.tween(this.tangmen_intro)
-            .to(0.5, { position: cc.v3(173, -14, 0) })
+            .to(0.5, { position: cc.v3(185, -14, 0),opacity:255 })
             .start();
-
-        this.currentRole = "tangmen";
+        cc.tween(cc.find("Canvas/tangmen/name"))
+            .delay(0.5)
+            .to(0.5, { opacity:255 })
+            .start();
+        cc.tween(cc.find("Canvas/tangmen/intro"))
+            .delay(1)
+            .to(0.5, { opacity:255 })
+            .start();
+        this.currentRole = "tanmen";
     }
 
     changeErrmei() {
         if (this.currentRole == "errmei") return;
-        if (this.currentRole == "shaolin") {
+        if (this.currentRole == "selling") {
             cc.tween(this.snode)
                 .to(0.5, { scale: 2 })
                 .start();
             cc.tween(this.selling_intro)
-                .to(0.5, { position: cc.v3(795, -3, 0) })
+                .to(0.5, { position: cc.v3(163, 600, 0) ,opacity:0})
                 .start();
-        } else if (this.currentRole == "tangmen") {
+            cc.tween(cc.find("Canvas/shaolin/intro"))
+                .to(0.5, { opacity:0 })
+                .start();
+            cc.tween(cc.find("Canvas/shaolin/name"))
+                .to(0.5, { opacity:0 })
+                .start();
+
+        } else if (this.currentRole == "tanmen") {
             cc.tween(this.tnode)
                 .to(0.5, { scale: 2 })
                 .start();
             cc.tween(this.tangmen_intro)
-                .to(0.5, { position: cc.v3(801, -14, 0) })
+                .to(0.5, { position: cc.v3(173, -666, 0) ,opacity:0})
+                .start();
+            cc.tween(cc.find("Canvas/tangmen/intro"))
+                .to(0.5, { opacity:0 })
+                .start();
+            cc.tween(cc.find("Canvas/tangmen/name"))
+                .to(0.5, { opacity:0 })
                 .start();
         }
         cc.tween(this.enode)
             .to(0.5, { scale: 3 })
             .start();
         cc.tween(this.errmei_intro)
-            .to(0.5, { position: cc.v3(165, -1, 0) })
+            .to(0.5, { position: cc.v3(160, -1, 0) ,opacity:255})
             .start();
+        cc.tween(cc.find("Canvas/errrr/name"))
+            .delay(0.5)
+            .to(0.5, { opacity:255 })
+            .start();
+        cc.tween(cc.find("Canvas/errrr/intro"))
+            .delay(1)
+            .to(0.5, { opacity:255 })
+            .start();
+        
         this.currentRole = "errmei";
     }
 

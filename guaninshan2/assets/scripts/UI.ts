@@ -21,13 +21,18 @@ export default class UI extends cc.Component {
     onLoad () {
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
-        this.playerTs = cc.find('Canvas/scene2/player/player').getComponent('player');
     }
 
     start () {
 
     }
-
+    onDestroy() {
+        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
+        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+        this.playerTs = null;
+        console.log("UI destroy")
+    }
+    
     update (dt) {
         if(!this.playerTs){
             this.playerTs = cc.find('Canvas/scene2/player/player').getComponent('player');

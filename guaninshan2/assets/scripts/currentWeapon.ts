@@ -25,12 +25,13 @@ export default class CurrentWeapon extends cc.Component {
     onLoad() {
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
-        this.playerTs = cc.find('Canvas/Main Camera/player').getComponent('player');
+        // this.playerTs = cc.find('Canvas/Main Camera/player').getComponent('player');
     }
 
     onDestroy() {
         cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+        this.playerTs = null;
     }
 
     start() {
@@ -39,6 +40,8 @@ export default class CurrentWeapon extends cc.Component {
     }
 
     update (dt) {
+        if (!this.playerTs)
+            this.playerTs = cc.find('Canvas/Main Camera/player').getComponent('player');
         /* console.log(this.playerTs.Handstate) */
         /* console.log(this.currentWeapon.getComponent(cc.Sprite).spriteFrame.name) */
         if (this.playerTs.Handstate !== 'reloading' && this.playerTs.Handstate !== 'changing' && this.currentWeapon.getComponent(cc.Sprite).spriteFrame.name !== this.playerTs.Handstate && this.canSwitchWeapon ){

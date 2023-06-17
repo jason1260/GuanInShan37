@@ -5,6 +5,21 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+const bornPosition = {
+    selling: {
+        postion1: cc.v2(-387.88, 763.765),
+        postion2: cc.v2(-273.542, 763.765)
+    },
+    errmei: {
+        postion1: cc.v2(1138.627, 798.069),
+        postion2: cc.v2(1012.84, 798.069)
+    },
+    tanmen: {
+        postion1: cc.v2(473.996, -196.733),
+        postion2: cc.v2(335.345, -196.733)
+    }
+}
+
 const { ccclass, property } = cc._decorator;
 
 export var pathing_Map; //[長][寬] //
@@ -32,16 +47,31 @@ export default class GM extends cc.Component {
     @property(cc.AudioClip)
     stickSE: cc.AudioClip = null;
 
+    @property(cc.Prefab)
+    AIPrefab: cc.Prefab
+
+    @property(cc.Prefab)
+    playerPrefab: cc.Prefab
+
+    playerRole = null;
+
+    bornPosparent = null;
+
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
         cc.director.getPhysicsManager().enabled = true;
         cc.director.getCollisionManager().enabled = true;
+        console.log("123", cc.find("persistnode").getComponent("persistNode").playerRole)
+        this.playerRole = cc.find("persistnode").getComponent("persistNode").playerRole;
+        this.bornPosparent = cc.find("Canvas/Main Camera");
         // cc.director.getPhysicsManager().debugDrawFlags = 1;
     }
 
     start() {
         this.drawColliderboxes();
+        this.setBornPos();
+        cc.log("?????????????", this.playerRole)
     }
 
     drawColliderboxes() {
@@ -138,4 +168,49 @@ export default class GM extends cc.Component {
         cc.audioEngine.stopMusic();
     }
 
+    setBornPos() {
+        for(let node in this.bornPosparent.children){
+
+            if(this.bornPosparent.children[node].group == "player")
+                this.bornPosparent.children[node].destroy();
+        }
+        
+        const playerRole = this.playerRole;
+        let roles = ["selling", "errmei", "tanmen"];
+        let pos = ["postion1", "postion2"];
+
+        // cc.log()
+
+        let setPlayer = false;
+        
+
+        for (let j = 0; j <= 2; j++) {
+            let role = roles[j];
+            for (let i = 0; i <= 1; i++) {
+                console.log("playerRole", playerRole);
+                console.log("role", role);
+                // console.log("setPlayer", setPlayer);
+                if (playerRole == role && !setPlayer) {
+
+                    setPlayer = true;
+                    let player = cc.instantiate(this.playerPrefab);
+                    let ts = player.getComponent('player') || player.getComponent('AIplayer')
+                    player.setPosition(bornPosition[roles[j]][pos[i]]);
+                    ts.setRole(role);
+                    this.bornPosparent.insertChild(player, 0);
+                    console.log("player", player);
+                }
+                else {
+                    let AI = cc.instantiate(this.AIPrefab);
+                    let ts = AI.getComponent('player') || AI.getComponent('AIplayer')
+                    AI.setPosition(bornPosition[roles[j]][pos[i]]);
+                    ts.setRole(role);
+                    this.bornPosparent.insertChild(AI, 1);
+                    console.log("AI", AI);
+                }
+            }
+        }
+        
+    }
+ 
 }
