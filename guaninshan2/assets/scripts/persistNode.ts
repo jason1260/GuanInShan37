@@ -8,18 +8,17 @@
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class persist extends cc.Component {
 
-    @property(cc.Label)
-    label: cc.Label = null;
+    playerRole = null;
 
-    @property
-    text: string = 'hello';
+    selectTs = null;
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
         cc.game.addPersistRootNode(this.node);
+        this.selectTs = cc.find("Canvas").getComponent("SelectRole");
     }
 
     start() {
@@ -27,6 +26,8 @@ export default class NewClass extends cc.Component {
     }
 
     update(dt) {
-        console.log("persist node exist");
+        if (this.selectTs) {
+            this.playerRole = this.selectTs.currentRole;
+        }
     }
 }

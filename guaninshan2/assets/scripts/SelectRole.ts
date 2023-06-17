@@ -42,7 +42,7 @@ export default class SelectRole extends cc.Component {
         this.tangmen.node.on(cc.Node.EventType.TOUCH_END, this.changeTangmen, this);
         this.errmei.node.on(cc.Node.EventType.TOUCH_END, this.changeErrmei, this);
         this.startBtn.node.on(cc.Node.EventType.TOUCH_END, this.startgame, this);
-        this.currentRole = "shaolin";
+        this.currentRole = "selling";
         this.snode = cc.find("Canvas/selling");
         this.tnode = cc.find("Canvas/tanmen");
         this.enode = cc.find("Canvas/errmei");
@@ -53,8 +53,8 @@ export default class SelectRole extends cc.Component {
     }
 
     changeSelling() {
-        if (this.currentRole == "shaolin") return;
-        if (this.currentRole == "tangmen") {
+        if (this.currentRole == "selling") return;
+        if (this.currentRole == "tanmen") {
             cc.tween(this.tnode)
                 .to(0.5, { scale: 2 })
                 .start();
@@ -76,12 +76,12 @@ export default class SelectRole extends cc.Component {
             .to(0.5, { position: cc.v3(163, -3, 0) })
             .start();
 
-        this.currentRole = "shaolin";
+        this.currentRole = "selling";
     }
 
     changeTangmen() {
-        if (this.currentRole == "tangmen") return;
-        if (this.currentRole == "shaolin") {
+        if (this.currentRole == "tanmen") return;
+        if (this.currentRole == "selling") {
             cc.tween(this.snode)
                 .to(0.5, { scale: 2 })
                 .start();
@@ -103,19 +103,19 @@ export default class SelectRole extends cc.Component {
             .to(0.5, { position: cc.v3(173, -14, 0) })
             .start();
 
-        this.currentRole = "tangmen";
+        this.currentRole = "tanmen";
     }
 
     changeErrmei() {
         if (this.currentRole == "errmei") return;
-        if (this.currentRole == "shaolin") {
+        if (this.currentRole == "selling") {
             cc.tween(this.snode)
                 .to(0.5, { scale: 2 })
                 .start();
             cc.tween(this.selling_intro)
                 .to(0.5, { position: cc.v3(795, -3, 0) })
                 .start();
-        } else if (this.currentRole == "tangmen") {
+        } else if (this.currentRole == "tanmen") {
             cc.tween(this.tnode)
                 .to(0.5, { scale: 2 })
                 .start();

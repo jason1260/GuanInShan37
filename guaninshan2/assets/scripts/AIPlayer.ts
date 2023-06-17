@@ -30,7 +30,6 @@ export default class AIPlayer extends Player {
     AIhandsTs = null;
 
     onLoad () {
-        this.role="tanmen"
         this.leftHand = this.node.getChildByName("leftHand");
 
 
