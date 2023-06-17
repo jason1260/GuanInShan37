@@ -25,6 +25,8 @@ export default class AIhands extends hands {
 
     Canshoot = false;
 
+    attackTimer = 0;
+
     onCollisionStay(other, self) {
         if (other.node.group === 'secFloor') this.onFloor = 2;
     }
@@ -62,7 +64,11 @@ export default class AIhands extends hands {
 
         this.HandPos();
         this.checkCanShoot();
-        this.attack();
+        this.attackTimer += dt;
+        if (this.attackTimer >= 0.33) {
+            this.attackTimer = 0;
+            this.attack();
+        }
     }
 
     checkCanShoot() {
@@ -161,7 +167,7 @@ export default class AIhands extends hands {
                 break;
             case 'stick':
             case 'knife':
-                if (this.AIplayerTs.enemyDistance < this.knifeAttackRadius) {
+                if (this.AIplayerTs.enemyDistance < this.knifeAttackRadius || this.AIplayerTs.Handstate == "stick") {
                     this.leftAngle = 0;
                     this.initBullet2knife()
                     AIknife_valid = true;
