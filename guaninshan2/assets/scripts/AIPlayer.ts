@@ -67,10 +67,10 @@ export default class AIPlayer extends Player {
         //update speed
         if (this.isDie)
             return;
-        
-        if (this.HP <= 0){
+
+        if (this.HP <= 0) {
             this.isDie = true;
-            this.node.getComponent(cc.RigidBody).linearVelocity = cc.v2(0,0);
+            this.node.getComponent(cc.RigidBody).linearVelocity = cc.v2(0, 0);
             this.AIdie();
             return;
         }
@@ -127,7 +127,7 @@ export default class AIPlayer extends Player {
         else if (this.enemyDistance > this.changeWeaponRadius && gameInfo.nearWeapon.includes(this.Handstate) && this.AIhandsTs.Canshoot) {
             this.changeWeapon();
         }
-        else if (gameInfo.rangedWeapon.includes(this.Handstate) && !this.AIhandsTs.Canshoot){
+        else if (gameInfo.rangedWeapon.includes(this.Handstate) && !this.AIhandsTs.Canshoot) {
             this.changeWeapon();
         }
 
@@ -140,7 +140,7 @@ export default class AIPlayer extends Player {
         let fadeOut = cc.fadeOut(0.5);
         // 创建动画完成后的回调函数
         let callback = cc.callFunc(() => {
-          this.node.destroy();
+            this.node.destroy();
         });
         // 创建动作序列，先淡出再执行回调函数销毁节点
         let sequence = cc.sequence(fadeOut, callback);
