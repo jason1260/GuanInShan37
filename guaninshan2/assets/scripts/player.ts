@@ -97,6 +97,10 @@ export default class Player extends cc.Component {
         //die
         if (this.HP < 0)
             this.playerDie();
+
+        if (this.CD < 100)
+            this.CD += 0.1;
+            
         //update speed
         if (this.Handstate !== 'changing' && this.Handstate !== 'reloading')
             this.speed = this.baseSpeed - gameInfo.weaponWeight[this.Handstate];
@@ -172,8 +176,6 @@ export default class Player extends cc.Component {
         this.node.getComponent(cc.RigidBody).linearVelocity = this.lv;
 
         //anime
-
-        if (this.CD < 100) this.CD += 0.1;
 
     }
 
