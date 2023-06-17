@@ -201,6 +201,7 @@ export default class GM extends cc.Component {
 
                     setPlayer = true;
                     let player = cc.instantiate(this.playerPrefab);
+                    cc.log(player.name);
                     let ts = player.getComponent('player') || player.getComponent('AIplayer')
                     player.setPosition(bornPosition[roles[j]][pos[i]]);
                     ts.setRole(role);

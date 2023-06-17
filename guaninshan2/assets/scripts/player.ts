@@ -109,7 +109,7 @@ export default class Player extends cc.Component {
         //CD
         console.log(this.CD)
         if(this.CD < 100)
-            this.CD += 0.1;
+            this.CD += 1;
         //update speed
         if (this.Handstate !== 'changing' && this.Handstate !== 'reloading')
             this.speed = this.baseSpeed - gameInfo.weaponWeight[this.Handstate];
@@ -462,7 +462,13 @@ export default class Player extends cc.Component {
 
     }
     healZone(){
-        
+        if (!this.healZonePrefab) {
+            cc.log("no healzone instance")
+            return;
+        }
+        const healZone = cc.instantiate(this.healZonePrefab);
+        this.node.addChild(healZone);
+        cc.log("healzone create");
     }
     poisonZone(){
         

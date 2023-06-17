@@ -1290,7 +1290,9 @@
       "__uuid__": "c67acba9-0055-47a4-bae3-cca23937a4d0"
     },
     "protectZonePrefab": null,
-    "healZonePrefab": null,
+    "healZonePrefab": {
+      "__uuid__": "b65f5a72-1beb-4179-bc0a-e459b67d5e2b"
+    },
     "poisonZonePrefab": null,
     "skillStartPrefab": {
       "__uuid__": "ffecaeba-ab09-4627-9215-37d607171a50"
