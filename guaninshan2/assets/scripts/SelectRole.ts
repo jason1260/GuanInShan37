@@ -61,7 +61,16 @@ export default class SelectRole extends cc.Component {
 
     startgame() {
         cc.find("persistnode").getComponent("persistNode").playerRole = this.currentRole;
-        cc.director.loadScene('test');
+        console.log("Stage:",cc.find("persistnode").getComponent("persistNode").selectStage);
+        if(cc.find("persistnode").getComponent("persistNode").selectStage == 1){
+            cc.director.loadScene('test');
+        }
+        else if(cc.find("persistnode").getComponent("persistNode").selectStage == 2){
+            cc.director.loadScene('IceAndFire');
+        }else if(cc.find("persistnode").getComponent("persistNode").selectStage == 3){
+            cc.director.loadScene('menu');
+        }
+        // cc.director.loadScene('test');
     }
 
     changeSelling() {

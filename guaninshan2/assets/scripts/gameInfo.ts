@@ -17,7 +17,7 @@ const gameInfo = {
         stick: 1,
         gun: 10,
         rifle: 20,
-        sniper: 5
+        sniper: 2
     },
     weaponAttackTime: {
         knife: 0.02,
@@ -40,7 +40,7 @@ const gameInfo = {
     dropsTag2weapon: {
         0: 'rifle',
         1: 'sniper',
-        2:  'stick'
+        2: 'stick'
     },
     weaponDamage: {
         knife: 15,
@@ -56,25 +56,25 @@ const gameInfo = {
         rifle: 1000,
         sniper: 1000
     },
-    roleHP:{
-        selling:130,
-        tanmen:85,
-        errmei:100
+    roleHP: {
+        selling: 130,
+        tanmen: 85,
+        errmei: 100
     },
-    roleSpeed:{
-        selling:180,
-        tanmen:220,
-        errmei:200
+    roleSpeed: {
+        selling: 180,
+        tanmen: 220,
+        errmei: 200
     },
-    roleChangeWeaponRadius:{
-        selling:0,
-        tanmen:180,
-        errmei:150
+    roleChangeWeaponRadius: {
+        selling: 0,
+        tanmen: 180,
+        errmei: 150
     },
-    roleNextWeapon:{
-        selling:"stick",
-        tanmen:"rifle",
-        errmei:"sniper",
+    roleNextWeapon: {
+        selling: "stick",
+        tanmen: "rifle",
+        errmei: "sniper",
     }
 }
 

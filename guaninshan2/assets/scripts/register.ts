@@ -1,4 +1,4 @@
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 declare const firebase: any;
 
 @ccclass
@@ -11,11 +11,11 @@ export default class Register extends cc.Component {
     toLogin: cc.Button = null;
 
     private playerTs = null;
-    
-    start () {
+
+    start() {
         // init logic
         this.registerBtn.node.on(cc.Node.EventType.TOUCH_END, this.register, this);
-        this.toLogin.node.on(cc.Node.EventType.TOUCH_END, () => {cc.director.loadScene("login");}, this);
+        this.toLogin.node.on(cc.Node.EventType.TOUCH_END, () => { cc.director.loadScene("login"); }, this);
     }
 
     register = async () => {
@@ -27,7 +27,7 @@ export default class Register extends cc.Component {
             alert("Please check password again!");
         } else {
             try {
-                console.log(username, password);
+                // console.log(username, password);
                 const reg = await firebase.auth().createUserWithEmailAndPassword(email, password);
                 const db = firebase.database();
                 try {
@@ -39,12 +39,12 @@ export default class Register extends cc.Component {
                         password: password,
                         score: 0
                     });
-                    console.log("setUserComplete");
+                    // console.log("setUserComplete");
                     cc.director.loadScene("test");
-                } catch(er) {
+                } catch (er) {
                     console.log(er.message);
                 }
-            } catch(error) {
+            } catch (error) {
                 alert(error.message);
             }
         }

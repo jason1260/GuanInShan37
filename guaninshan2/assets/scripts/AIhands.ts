@@ -45,6 +45,9 @@ export default class AIhands extends hands {
     }
 
     update(dt) {
+        if (this.AIplayerTs.isDie)
+            return;
+            
         if (this.AIplayerTs.Handstate == 'changing' || this.AIplayerTs.Handstate == 'reloading')
             this.changingAni()
         if (this.AIplayerTs.Handstate != 'reloading' && this.AIplayerTs.Handstate != 'changing' && !this.attacking)

@@ -33,13 +33,16 @@ export default class Selectstage extends cc.Component {
     }
 
     Tostage1(){
-        cc.director.loadScene("test");
+        cc.director.loadScene("Select");
+        cc.find("persistnode").getComponent("persistNode").selectStage = 1;
     }
     Tostage2(){
-        // cc.director.loadScene("stage2");
+        cc.director.loadScene("Select");
+        cc.find("persistnode").getComponent("persistNode").selectStage = 2;
     }
     Tostage3(){
-        // cc.director.loadScene("stage3");
+        cc.director.loadScene("Select");
+        cc.find("persistnode").getComponent("persistNode").selectStage = 3;
     }
 
     // update (dt) {}
