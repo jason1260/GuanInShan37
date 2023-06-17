@@ -27,6 +27,15 @@ export default class Player extends cc.Component {
     @property(cc.Prefab)
     sniperPrefab: cc.Prefab = null;
 
+    @property(cc.Prefab)
+    protectZonePrefab: cc.Prefab = null;
+    @property(cc.Prefab)
+    healZonePrefab: cc.Prefab = null;
+    @property(cc.Prefab)
+    poisonZonePrefab: cc.Prefab = null;
+    @property(cc.Prefab)
+    skillStartPrefab: cc.Prefab = null;
+
     public GM = null;
 
     public speed: number = 200;
@@ -36,6 +45,7 @@ export default class Player extends cc.Component {
     public role: string = 'selling';
     public bulletNum: number = 20;
     public score: number = 0;
+    public CD: number = 0;
 
     public baseSpeed: number = 200;
     public lv: cc.Vec2 = null;
@@ -97,10 +107,17 @@ export default class Player extends cc.Component {
         //die
         if (this.HP < 0)
             this.playerDie();
+<<<<<<< HEAD
 
         if (this.CD < 100)
             this.CD += 0.1;
             
+=======
+        //CD
+        console.log(this.CD)
+        if(this.CD < 100)
+            this.CD += 0.1;
+>>>>>>> 87aa509a92ac79b3e72edc5980326f1584785ea6
         //update speed
         if (this.Handstate !== 'changing' && this.Handstate !== 'reloading')
             this.speed = this.baseSpeed - gameInfo.weaponWeight[this.Handstate];
@@ -111,6 +128,12 @@ export default class Player extends cc.Component {
         if (Input[cc.macro.KEY.q]) {
             if (this.Handstate !== 'changing' && this.Handstate !== 'reloading') {
                 this.changeWeapon();
+            }
+        }
+        //skill
+        if (Input[cc.macro.KEY.g] && this.CD >= 100) {
+            if (this.Handstate !== 'changing' && this.Handstate !== 'reloading') {
+                this.release();
             }
         }
         //reload
@@ -395,5 +418,45 @@ export default class Player extends cc.Component {
             // 运行动作序列
             bloodNode.runAction(sequence);
         });
+    }
+
+    release(){
+        //zoom in
+        this.CD = 0;
+        this.deleteWeapon();
+        this.GM.playeffect('changing');
+        this.tmpWeapon = this.Handstate;
+        this.Handstate = 'changing'
+        const skillStart = cc.instantiate(this.skillStartPrefab);
+        this.node.addChild(skillStart)
+        
+
+        this.scheduleOnce(() => {
+            this.node.getChildByName("skillStart").destroy();
+            this.Handstate = this.tmpWeapon;
+            this.addWeapon();
+            switch (this.role) {
+                case "selling":
+                    this.protectZone()
+                    break;
+                case "tanmen":
+                    this.healZone()
+                    break;
+                case "errmei":
+                    this.poisonZone()
+                    break;
+                default:
+                    break;
+            }
+        }, 1)
+    }
+    protectZone(){
+
+    }
+    healZone(){
+        
+    }
+    poisonZone(){
+        
     }
 }
