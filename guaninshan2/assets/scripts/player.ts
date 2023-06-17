@@ -48,6 +48,7 @@ export default class Player extends cc.Component {
     public mousePt: cc.Vec2 = cc.v2(0, 0)
 
     onLoad() {
+        console.log("player onLoad")
         this.leftHand = this.node.getChildByName("leftHand");
         cc.resources.load(`role/${this.role}`, cc.SpriteFrame, (err, spriteFrame) => {
             if (err) {
@@ -283,7 +284,7 @@ export default class Player extends cc.Component {
         this.HP -= hurtNum;
     }
     playerDie(){
-        cc.director.loadScene(cc.director.getScene().name);
+        cc.director.loadScene("Select");
     }
     setRole(role:string){
         this.role = role;

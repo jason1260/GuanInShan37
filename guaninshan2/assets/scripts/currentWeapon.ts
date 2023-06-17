@@ -31,6 +31,7 @@ export default class CurrentWeapon extends cc.Component {
     onDestroy() {
         cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+        this.playerTs = null;
     }
 
     start() {

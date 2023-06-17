@@ -18,7 +18,9 @@ export default class Cursor extends cc.Component {
         cc.game.canvas.style.cursor = 'none';
         
     }
- 
+    onDestroy(){
+        cc.game.canvas.style.cursor = 'default';
+    }
     start () {
         
     }

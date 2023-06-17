@@ -169,6 +169,12 @@ export default class GM extends cc.Component {
     }
 
     setBornPos() {
+        for(let node in this.bornPosparent.children){
+
+            if(this.bornPosparent.children[node].group == "player")
+                this.bornPosparent.children[node].destroy();
+        }
+        
         const playerRole = this.playerRole;
         let roles = ["selling", "errmei", "tanmen"];
         let pos = ["postion1", "postion2"];
@@ -176,17 +182,23 @@ export default class GM extends cc.Component {
         // cc.log()
 
         let setPlayer = false;
+        
 
         for (let j = 0; j <= 2; j++) {
             let role = roles[j];
             for (let i = 0; i <= 1; i++) {
+                console.log("playerRole", playerRole);
+                console.log("role", role);
+                // console.log("setPlayer", setPlayer);
                 if (playerRole == role && !setPlayer) {
+
                     setPlayer = true;
                     let player = cc.instantiate(this.playerPrefab);
                     let ts = player.getComponent('player') || player.getComponent('AIplayer')
                     player.setPosition(bornPosition[roles[j]][pos[i]]);
                     ts.setRole(role);
                     this.bornPosparent.insertChild(player, 0);
+                    console.log("player", player);
                 }
                 else {
                     let AI = cc.instantiate(this.AIPrefab);
@@ -194,6 +206,7 @@ export default class GM extends cc.Component {
                     AI.setPosition(bornPosition[roles[j]][pos[i]]);
                     ts.setRole(role);
                     this.bornPosparent.insertChild(AI, 1);
+                    console.log("AI", AI);
                 }
             }
         }
