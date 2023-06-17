@@ -31,6 +31,9 @@ export default class AIPlayer extends Player {
     AIhandsTs = null;
 
     onLoad() {
+        this.onIce = false;
+        this.onMud = false;
+        this.iceCounter = 0;
         this.leftHand = this.node.getChildByName("leftHand");
 
 
@@ -67,15 +70,26 @@ export default class AIPlayer extends Player {
         //update speed
         if (this.isDie)
             return;
-        
-        if (this.HP <= 0){
+
+        if (this.HP <= 0) {
             this.isDie = true;
-            this.node.getComponent(cc.RigidBody).linearVelocity = cc.v2(0,0);
+            this.node.getComponent(cc.RigidBody).linearVelocity = cc.v2(0, 0);
             this.AIdie();
             return;
         }
-        if (this.Handstate !== 'changing' && this.Handstate !== 'reloading')
+        if (this.Handstate !== 'changing' && this.Handstate !== 'reloading') {
             this.astar.speed = this.baseSpeed - gameInfo.weaponWeight[this.Handstate];
+            if (this.onIce) this.astar.speed *= 2;
+            if (this.onMud) this.astar.speed *= 0.8;
+        }
+        //ice counter
+        if (this.onIce && this.iceCounter >= 10) {
+            this.onIce = false;
+            this.iceCounter = -1
+        }
+        if (this.iceCounter >= 0)
+            this.iceCounter++;
+        //
         //reload
         if (this.bulletNum <= 0 && this.Handstate !== 'changing' && this.Handstate !== 'reloading')
             this.reload()
@@ -127,7 +141,7 @@ export default class AIPlayer extends Player {
         else if (this.enemyDistance > this.changeWeaponRadius && gameInfo.nearWeapon.includes(this.Handstate) && this.AIhandsTs.Canshoot) {
             this.changeWeapon();
         }
-        else if (gameInfo.rangedWeapon.includes(this.Handstate) && !this.AIhandsTs.Canshoot){
+        else if (gameInfo.rangedWeapon.includes(this.Handstate) && !this.AIhandsTs.Canshoot) {
             this.changeWeapon();
         }
 
@@ -140,7 +154,7 @@ export default class AIPlayer extends Player {
         let fadeOut = cc.fadeOut(0.5);
         // 创建动画完成后的回调函数
         let callback = cc.callFunc(() => {
-          this.node.destroy();
+            this.node.destroy();
         });
         // 创建动作序列，先淡出再执行回调函数销毁节点
         let sequence = cc.sequence(fadeOut, callback);
@@ -243,7 +257,17 @@ export default class AIPlayer extends Player {
         this.node.angle = degree;
     }
 
-    onCollisionStay(otherCollider, selfCollider) {
+    onCollisionExit(otherCollider, selfCollider) {
+        // console.log(otherCollider.node.group)
+        if (otherCollider.node.group == 'ice') {
+            this.iceCounter = 0;
+        } else if (otherCollider.node.group == 'mud') this.onMud = false;
+    }
 
+    onCollisionStay(otherCollider, selfCollider) {
+        if (otherCollider.node.group == 'ice') {
+            this.iceCounter = -1;
+            this.onIce = true;
+        } else if (otherCollider.node.group == 'mud') this.onMud = true;
     }
 }

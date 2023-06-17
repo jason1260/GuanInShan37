@@ -80,7 +80,6 @@ export default class Astar extends cc.Component {
             const dis = Math.abs(this.stx - this.edx) + Math.abs(this.sty - this.edy);
             // move slower when too close to others
             if (dis < 2) this.speed *= 0.6;
-            else this.speed = 200;
             // make sure it keeps social distancing
             if (dis < 1) this.selfNode.getComponent(cc.RigidBody).linearVelocity = cc.v2(0, 0);
             else {
