@@ -149,7 +149,7 @@ export default class SelectRole extends cc.Component {
             .to(0.5, { scale: 3 })
             .start();
         cc.tween(this.tangmen_intro)
-            .to(0.5, { position: cc.v3(185, -14, 0),opacity:255 })
+            .to(0.5, { position: cc.v3(220, 35, 0),opacity:255 })
             .start();
         cc.tween(cc.find("Canvas/tangmen/name"))
             .delay(0.5)
