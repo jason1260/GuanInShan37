@@ -367,6 +367,7 @@ export default class GMBoss extends cc.Component {
             this.mapParent.children[0].destroy();
 
             this.currMapPos = cc.v2(this.currMapPos.x + 960, this.currMapPos.y);
+            this.randDrop();
         } else if (playerPos.x < this.currMapPos.x - 550) {
             const sample1 = Math.random(), sample2 = Math.random(), sample3 = Math.random();
             let map1, map2, map3
@@ -399,6 +400,7 @@ export default class GMBoss extends cc.Component {
             this.mapParent.children[3].destroy();
 
             this.currMapPos = cc.v2(this.currMapPos.x - 960, this.currMapPos.y);
+            this.randDrop();
         } else if (playerPos.y > this.currMapPos.y + 370) {
             const sample1 = Math.random(), sample2 = Math.random(), sample3 = Math.random();
             let map1, map2, map3
@@ -430,6 +432,7 @@ export default class GMBoss extends cc.Component {
             this.mapParent.children[9].destroy();
 
             this.currMapPos = cc.v2(this.currMapPos.x, this.currMapPos.y + 640);
+            this.randDrop();
         } else if (playerPos.y < this.currMapPos.y - 370) {
             const sample1 = Math.random(), sample2 = Math.random(), sample3 = Math.random();
             let map1, map2, map3
@@ -461,6 +464,7 @@ export default class GMBoss extends cc.Component {
             this.mapParent.children[0].destroy();
 
             this.currMapPos = cc.v2(this.currMapPos.x, this.currMapPos.y - 640);
+            this.randDrop();
         }
     }
     win(){
@@ -475,6 +479,27 @@ export default class GMBoss extends cc.Component {
         cc.find("persistnode").getComponent("persistNode").win = false;
         cc.delayTime(1);
         cc.director.loadScene("Win");
+    }
+    randDrop() {
+        let weapon= ['gun', 'rifle', 'sniper','knife','stick'];
+        const randomIndex = Math.floor(Math.random() * weapon.length);
+        let weaponType = weapon[randomIndex];  
+
+        cc.resources.load(`Prefab/${weaponType}Drop`, cc.Prefab, (err, prefab) => {
+            if (err) {
+                console.log("沒辦法大便");
+                return;
+            }
+            let player =cc.find("Canvas/Main Camera/player")
+            const newNode = cc.instantiate(prefab);
+            newNode.position = player.getPosition().add(player.parent.getPosition());
+            const sample1 = Math.random(), sample2 = Math.random();
+            const radius = 200;
+            newNode.position = newNode.position.add(cc.v2((radius * sample1) -100, (radius * sample2) -100));
+            const nodeIndex = player.parent.getSiblingIndex();
+            this.node.parent.parent.insertChild(newNode, nodeIndex);
+        });
+
     }
 
 }
