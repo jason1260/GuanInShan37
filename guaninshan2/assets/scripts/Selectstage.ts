@@ -18,7 +18,11 @@ export default class Selectstage extends cc.Component {
     @property(cc.Button)
     stage2: cc.Button = null;
     @property(cc.Button)
-    stage3: cc.Button = null; 
+    stage3: cc.Button = null;
+    @property(cc.Button)
+    setting: cc.Button = null;
+    
+    volume = 0.5;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -26,10 +30,27 @@ export default class Selectstage extends cc.Component {
         this.stage1.node.on('click', this.Tostage1, this);
         this.stage2.node.on('click', this.Tostage2, this);
         this.stage3.node.on('click', this.Tostage3, this);
+        this.setting.node.on("click", this.settingClick, this);
+        this.volume = cc.find("persistnode").getComponent("persistNode").volume;
+
+        // cc.find("Canvas/setting/board/volume").getComponent(cc.Slider).progress = cc.find("persistnode").getComponent("persistNode").volume;
+        cc.find("Canvas/setting/board/volume").on("slide", this.volumeChange, this);
+        cc.find("Canvas/setting/board").active = false;
+    }
+
+    volumeChange(){
+        cc.find("persistnode").getComponent("persistNode").volume = cc.find("Canvas/setting/board/volume").getComponent(cc.Slider).progress;
+        console.log(cc.find("persistnode").getComponent("persistNode").volume);
+        cc.find("Canvas/setting/board/volume_num").getComponent(cc.Label).string = (cc.find("persistnode").getComponent("persistNode").volume*100).toFixed(0);
+        // cc.audioEngine.setVolume(cc.find("persistnode").getComponent("persistNode").volume);
     }
 
     start () {
+        
+    }
 
+    settingClick(){
+        cc.find("Canvas/setting/board").active = !cc.find("Canvas/setting/board").active;
     }
 
     Tostage1(){

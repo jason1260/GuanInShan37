@@ -104,12 +104,12 @@ export default class Player extends cc.Component {
     }
 
     update(dt) {
-
+        this.namefix ()
         //die
         if (this.HP < 0)
             this.playerDie();
         //CD
-        console.log(this.CD)
+
         if(this.CD < 100)
             this.CD += 1;
         //update speed
@@ -444,6 +444,18 @@ export default class Player extends cc.Component {
             // 运行动作序列
             bloodNode.runAction(sequence);
         });
+    }
+    namefix () {
+        const offset = cc.v3(0, 20, 0);
+        const playerRotation = this.node.angle;
+        // 将nameNode的世界坐标转换为局部坐标
+        const nameNodePositionInLocal = this.node.convertToNodeSpaceAR(this.node.parent.convertToWorldSpaceAR(this.node.position).add(offset));
+        let nameNode = this.node.getChildByName("name");
+        // 设置nameNode的旋转角度为player的相反角度
+        nameNode.angle = -playerRotation;
+
+        // 将nameNode设置回原来的位置（在旋转之前的局部坐标）
+        nameNode.setPosition(nameNodePositionInLocal.add(cc.v3(0, 0, 0)));
     }
 
     release(){

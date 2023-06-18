@@ -25,8 +25,8 @@ export default class Bullet extends cc.Component {
         if (other.node == this.selfNode){
             return;
         };
-        if(other.node.group == 'player'){
-            this.ts = other.node.getComponent('player') || other.node.getComponent('AIplayer')
+        if(other.node.group == 'player' || other.node.group == 'boss'){
+            this.ts = other.node.getComponent('player') || other.node.getComponent('AIplayer') || other.node.getComponent('boss')
             
             this.ts.hurt(this.attackNum)
         }

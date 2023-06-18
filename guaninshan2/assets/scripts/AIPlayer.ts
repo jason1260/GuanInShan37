@@ -30,12 +30,15 @@ export default class AIPlayer extends Player {
 
     AIhandsTs = null;
 
+    changeWeaponCD = 0;
+
+    currentangle = null;
+
     onLoad() {
         this.onIce = false;
         this.onMud = false;
         this.iceCounter = 0;
         this.leftHand = this.node.getChildByName("leftHand");
-
 
         cc.resources.load(`role/${this.role}`, cc.SpriteFrame, (err, spriteFrame) => {
             if (err) {
@@ -57,7 +60,7 @@ export default class AIPlayer extends Player {
 
         this.setPlayerList();
         AIweapon = "knife";
-        this.GM = cc.find("Canvas/GM").getComponent('GM');
+        this.GM = cc.find("Canvas/GM").getComponent('GM') ;
         this.AIhandsTs = this.node.getComponent('AIhands');
     }
 
@@ -68,15 +71,22 @@ export default class AIPlayer extends Player {
     update(dt) {
         // console.log(this.bulletNum)
         //update speed
-        if (this.isDie)
+        this.namefix ()
+        if (this.isDie){
+            this.node.angle = this.currentangle;
             return;
+        }
 
         if (this.HP <= 0) {
             this.isDie = true;
+            this.attackingList = [];
+            this.attackingTarget = null;
+            this.currentangle = this.node.angle;
             this.node.getComponent(cc.RigidBody).linearVelocity = cc.v2(0, 0);
             this.AIdie();
             return;
         }
+
         if (this.Handstate !== 'changing' && this.Handstate !== 'reloading') {
             this.astar.speed = this.baseSpeed - gameInfo.weaponWeight[this.Handstate];
             if (this.onIce) this.astar.speed *= 2;
@@ -131,18 +141,21 @@ export default class AIPlayer extends Player {
         }
 
 
-
         if (this.attackingTarget && this.attackingTarget.name != '')
             this.enemyDistance = cc.Vec2.distance(this.node.getPosition(), this.attackingTarget.getPosition());
 
-        if (this.enemyDistance < this.changeWeaponRadius && gameInfo.rangedWeapon.includes(this.Handstate)) {
-            this.changeWeapon();
-        }
-        else if (this.enemyDistance > this.changeWeaponRadius && gameInfo.nearWeapon.includes(this.Handstate) && this.AIhandsTs.Canshoot) {
-            this.changeWeapon();
-        }
-        else if (gameInfo.rangedWeapon.includes(this.Handstate) && !this.AIhandsTs.Canshoot) {
-            this.changeWeapon();
+        this.changeWeaponCD += dt;
+        if (this.changeWeaponCD >= 0.5) {
+            this.changeWeaponCD = 0;
+            if (this.enemyDistance < this.changeWeaponRadius && gameInfo.rangedWeapon.includes(this.Handstate)) {
+                this.changeWeapon();
+            }
+            else if (this.enemyDistance > this.changeWeaponRadius && gameInfo.nearWeapon.includes(this.Handstate) && this.AIhandsTs.Canshoot) {
+                this.changeWeapon();
+            }
+            else if (gameInfo.rangedWeapon.includes(this.Handstate) && !this.AIhandsTs.Canshoot) {
+                this.changeWeapon();
+            }
         }
 
         if (this.Handstate !== 'changing' && this.Handstate !== 'reloading')
@@ -256,7 +269,18 @@ export default class AIPlayer extends Player {
         this.dirAngle = degree;
         this.node.angle = degree;
     }
+    changeWeapon() {
+        this.deleteWeapon();
+        this.tmpWeapon = this.nextWeapon;
+        this.nextWeapon = this.Handstate;
+        this.Handstate = 'changing'
+        this.scheduleOnce(() => {
+            this.Handstate = this.tmpWeapon;
+            this.addWeapon();
+            this.bulletNum = gameInfo.weaponbulletNum[this.Handstate]
+        }, 1)
 
+    }
     onCollisionExit(otherCollider, selfCollider) {
         // console.log(otherCollider.node.group)
         if (otherCollider.node.group == 'ice') {

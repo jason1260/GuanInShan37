@@ -19,7 +19,6 @@ const bornPosition = {
         postion2: cc.v2(335.345, -196.733)
     }
 }
-
 const roleName = {
     selling: {
         postion1: "妙覺",
@@ -34,13 +33,12 @@ const roleName = {
         postion2: "唐唐阿宏"
     }
 }
-
 const { ccclass, property } = cc._decorator;
 
 export var pathing_Map; //[長][寬] //
 
 @ccclass
-export default class GM extends cc.Component {
+export default class GMBoss extends cc.Component {
 
     @property(cc.TiledMap)
     tiledMap: cc.TiledMap = null;
@@ -61,8 +59,6 @@ export default class GM extends cc.Component {
     emptySE: cc.AudioClip = null;
     @property(cc.AudioClip)
     stickSE: cc.AudioClip = null;
-    @property(cc.AudioClip)
-    bgm: cc.AudioClip = null;
 
     @property(cc.Prefab)
     AIPrefab: cc.Prefab
@@ -73,8 +69,7 @@ export default class GM extends cc.Component {
     playerRole = null;
 
     bornPosparent = null;
-
-    volume = 1;
+    volume = null;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -89,10 +84,9 @@ export default class GM extends cc.Component {
     }
 
     start() {
-        this.drawColliderboxes();
+        /* this.drawColliderboxes(); */
         this.setBornPos();
-        this.playbgm(this.bgm);
-        cc.log("?????????????", this.playerRole);
+        cc.log("?????????????", this.playerRole)
     }
 
     drawColliderboxes() {
@@ -213,8 +207,6 @@ export default class GM extends cc.Component {
 
         let setPlayer = false;
 
-        let nameColor = cc.Color.BLUE;
-
 
         for (let j = 0; j <= 2; j++) {
             let role = roles[j];
@@ -239,8 +231,11 @@ export default class GM extends cc.Component {
                     default:
                         break;
                 }
-
+                // console.log("playerRole", playerRole);
+                // console.log("role", role);
+                // console.log("setPlayer", setPlayer);
                 if (playerRole == role && !setPlayer) {
+
                     setPlayer = true;
                     let player = cc.instantiate(this.playerPrefab);
                     cc.log(player.name);
@@ -255,15 +250,11 @@ export default class GM extends cc.Component {
                     // console.log("player", player);
                 }
                 else {
-                    let AI = cc.instantiate(this.AIPrefab);
+                    /* let AI = cc.instantiate(this.AIPrefab);
                     let ts = AI.getComponent('player') || AI.getComponent('AIplayer')
                     AI.setPosition(bornPosition[roles[j]][pos[i]]);
                     ts.setRole(role);
-                    nameNode.rotation = -90;
-                    nameNode.setPosition(cc.v2(50, 0));
-                    AI.addChild(nameNode);
-                    // console.log(AI.children)
-                    this.bornPosparent.insertChild(AI, 1);
+                    this.bornPosparent.insertChild(AI, 1); */
                     // console.log("AI", AI);
                 }
             }
