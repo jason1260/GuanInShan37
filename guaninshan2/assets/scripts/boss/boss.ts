@@ -120,7 +120,7 @@ export default class boss extends cc.Component {
         this.flashCD = Math.floor(this.flashCD / (this.angryBonus*3));
         this.EnergyballCD = Math.floor(this.EnergyballCD / this.angryBonus);
         this.chaseBallCD = Math.floor(this.chaseBallCD / this.angryBonus);
-        this.lighteningCD = Math.floor(this.lighteningCD / this.angryBonus);
+        this.lighteningCD = Math.floor(this.lighteningCD / (this.angryBonus*1.5));
         this.turnBackCD = Math.floor(this.turnBackCD / this.angryBonus);
         this.chaseBallhurt = Math.floor(this.chaseBallhurt * this.angryBonus);
         this.Energyballhurt = Math.floor(this.Energyballhurt * this.angryBonus);
@@ -201,7 +201,7 @@ export default class boss extends cc.Component {
         this.chaseBallTimer += dt;
         this.lighteningTimer += dt;
 
-        if (this.flashTimer >= this.flashCD && this.enemyDistance > this.safeRadius) {
+        if ((this.flashTimer >= this.flashCD && this.enemyDistance > this.safeRadius) || (this.flashTimer >= this.flashCD && this.isAngry)) {
             this.flashTimer = 0;
             this.isflashed = true;
             if (this.canTurnback)
@@ -221,7 +221,8 @@ export default class boss extends cc.Component {
 
         if (this.lighteningTimer >= this.lighteningCD) {
             this.lighteningTimer = 0;
-            let thunderPos =  this.getRandomInCircle_polar_better(0, 3*Math.sqrt(this.HP), this.attackingTarget)
+            let radius = (this.isAngry) ? 80*Math.sqrt(this.HP) :  5*Math.sqrt(this.HP);
+            let thunderPos =  this.getRandomInCircle_polar_better(0, radius, this.attackingTarget)
             this.generateThunder(this.lighteninghurt, thunderPos)
         }
 
