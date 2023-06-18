@@ -40,7 +40,7 @@ export default class Register extends cc.Component {
                         score: 0
                     });
                     // console.log("setUserComplete");
-                    cc.director.loadScene("test");
+                    cc.director.loadScene("Selectstage");
                 } catch (er) {
                     console.log(er.message);
                 }

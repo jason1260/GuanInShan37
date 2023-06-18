@@ -15,10 +15,11 @@ export default class Bullet extends cc.Component {
     public selfNode:cc.Node = null;
     public ts = null;
     // LIFE-CYCLE CALLBACKS:
+    public persist =  null;
 
     onLoad () {
+        this.persist = cc.find("persistnode").getComponent("persistNode");
     }
-
 
     onCollisionEnter(other, self) {
         if (other.node.group === 'secWall' && this.floor === 2) return;
@@ -28,7 +29,17 @@ export default class Bullet extends cc.Component {
         if(other.node.group == 'player' || other.node.group == 'boss'){
             this.ts = other.node.getComponent('player') || other.node.getComponent('AIplayer') || other.node.getComponent('boss')
             
-            this.ts.hurt(this.attackNum)
+            let isdie = this.ts.hurt(this.attackNum)
+            console.log(this.selfNode.name)
+            if(this.selfNode.name == "player"){
+                if(!isdie) return;
+                if(this.selfNode.getComponent('player').role !== other.node.getComponent('player').role){
+                    console.log("殺人拉")
+                    this.persist.score += 10;
+                }else{
+                    this.persist.score -= 20;
+                }
+            }
         }
         this.node.destroy()
     }
@@ -39,3 +50,6 @@ export default class Bullet extends cc.Component {
     }
     // update (dt) {}
 }
+
+    // LIFE-CYCLE CALLBACKS:
+

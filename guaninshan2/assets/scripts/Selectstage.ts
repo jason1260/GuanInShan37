@@ -32,6 +32,7 @@ export default class Selectstage extends cc.Component {
         this.stage3.node.on('click', this.Tostage3, this);
         this.setting.node.on("click", this.settingClick, this);
         this.volume = cc.find("persistnode").getComponent("persistNode").volume;
+        cc.find("persistnode").getComponent("persistNode").score = 0;
 
         // cc.find("Canvas/setting/board/volume").getComponent(cc.Slider).progress = cc.find("persistnode").getComponent("persistNode").volume;
         cc.find("Canvas/setting/board/volume").on("slide", this.volumeChange, this);

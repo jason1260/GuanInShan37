@@ -340,7 +340,7 @@ export default class Player extends cc.Component {
         }, 1)
 
     }
-    hurt(hurtNum: number) {
+    hurt(hurtNum: number):boolean {
         if (this.isProtect) hurtNum /= 2;
         this.HP -= hurtNum;
         this.bleedAnim(hurtNum);
@@ -372,6 +372,9 @@ export default class Player extends cc.Component {
         this.scheduleOnce(() => {
           this.node.color = originColor; // 恢复原来的颜色（假设原来的颜色为白色）
         }, 0.02);
+        if(this.HP <= 0)
+            return true;
+        return false;
 
     }
     heal(hurtNum: number) {

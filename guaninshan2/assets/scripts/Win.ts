@@ -26,7 +26,7 @@ export default class Win extends cc.Component {
     username = null;
 
     onLoad() {
-        // this.score = cc.find("persistnode").getComponent("persistNode").score;
+        this.score = cc.find("persistnode").getComponent("persistNode").score;
         // this.playerRole = cc.find("persistnode").getComponent("persistNode").playerRole;
         cc.find("Canvas/Board").opacity = 0;
         cc.find("Canvas/My").opacity = 0;
