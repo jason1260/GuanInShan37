@@ -1417,6 +1417,9 @@
     "energyBallDefendPrefab": {
       "__uuid__": "a2d0c1db-1e39-47b9-94cf-5bef61d55274"
     },
+    "thunderAimPrefab": {
+      "__uuid__": "b3cf07c6-a39c-4bb9-b5c3-f0ffe6396bf7"
+    },
     "_id": "b40/LY56tCc46lGlQtFFoy"
   },
   {
