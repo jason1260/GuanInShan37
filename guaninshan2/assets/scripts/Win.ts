@@ -48,6 +48,7 @@ export default class Win extends cc.Component {
         this.move_node.active = true;
         this.move_node.opacity = 0;
         console.log(this.move_node);
+        this.node.on(cc.Node.EventType.TOUCH_END, () => {cc.director.loadScene("Selectstage");}, this);
         // cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
     }
     start() {
