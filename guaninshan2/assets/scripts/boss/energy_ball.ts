@@ -53,7 +53,6 @@ export default class energyBall extends cc.Component {
         }else{
             this.counter+=1;
             if(this.counter >= 200 || !this.prev_lv){
-                console.log('update')
                 this.counter = 0;
                 const direction = this.targetNode.getPosition().sub(this.node.getPosition()).normalize();
                 this.prev_lv = direction.mul(this.speed);

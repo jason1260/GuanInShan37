@@ -107,7 +107,7 @@ export default class Player extends cc.Component {
         if (this.HP < 0)
             this.playerDie();
         //CD
-        console.log(this.CD)
+
         if(this.CD < 100)
             this.CD += 1;
         //update speed

@@ -5,12 +5,16 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import Player from "../player";
+
 const {ccclass, property} = cc._decorator;
 
 @ccclass
 export default class boss extends cc.Component {
 
     
+    @property(cc.Prefab)
+    thunderAimPrefab: cc.Prefab = null;
     @property(cc.Prefab)
     energyBallPrefab: cc.Prefab = null;
     @property(cc.Prefab)
@@ -31,13 +35,14 @@ export default class boss extends cc.Component {
     }
 
     start () {
+        this.generateThunder(0,this.node.getPosition().add(cc.v2(80,80)))
     }
 
     update (dt) {
         let randomAction = Math.random();
         if(randomAction<0.01 && ! this.isReleasing){
             /* this.generateAroundBall(1,3) */
-            this.generateChaseBall(1,300)
+            /* this.generateChaseBall(1,300) */
         }
         
         if (this.sp.x) {
@@ -59,7 +64,7 @@ export default class boss extends cc.Component {
         this.isReleasing = true;
         this.schedule(()=>{this.isReleasing = false;},0.1);
         //
-        console.log("generate1")
+
 
         const energyBall = cc.instantiate(this.energyBallDefendPrefab);
         energyBall.getComponent('energy_ball').setProperty(attackNum,speed,this.node,1)
@@ -78,7 +83,6 @@ export default class boss extends cc.Component {
         if(!targetplayer) null;
         this.isReleasing = true;
         this.schedule(()=>{this.isReleasing = false;},0.1);
-        console.log("generate2")
 
         const energyBall = cc.instantiate(this.energyBallPrefab);
         energyBall.getComponent('energy_ball').setProperty(attackNum,speed,this.node,2,targetplayer)
@@ -86,10 +90,19 @@ export default class boss extends cc.Component {
         this.node.parent.addChild(energyBall);
     }
     generateThunder(attackNum: number,position: cc.Vec2){
+        console.log("generateThunder")
         //CD
         this.isReleasing = true;
         this.schedule(()=>{this.isReleasing = false;},0.1);
         //
+        const thunder = cc.instantiate(this.thunderAimPrefab);
+        thunder.getComponent('thunder').setProperty(attackNum,this.node,position)
+        thunder.setPosition(position.add(this.node.parent.getPosition()));
+        console.log(thunder.getPosition())
+        
+        // index 1 =>在scene後面
+        this.node.parent.parent.insertChild(thunder,1);
+
     }
     randWakl(){
         
