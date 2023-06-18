@@ -62,6 +62,7 @@ export default class Player extends cc.Component {
     public moving: boolean;
 
     public healTimer: number = 0;
+    public poisonTimer: number = 0;
     public protectTimer: number = 0;
     public isProtect: boolean = false;
 
@@ -542,6 +543,28 @@ export default class Player extends cc.Component {
         this.node.parent.parent.insertChild(healZone, nodeIndex);
     }
     poisonZone(){
-        
+        if (!this.healZonePrefab) {
+            cc.log("no healzone instance")
+            return;
+        }
+        const poisonZone = cc.instantiate(this.poisonZonePrefab);
+        poisonZone.group = 'knife';
+        cc.log("poisonzone create");
+        let zoneCollider = poisonZone.getComponent(cc.CircleCollider);
+        if (!zoneCollider) cc.log("Cannot find collider");
+        zoneCollider.onCollisionStay = (other, self) => {
+            this.poisonTimer += 1;
+            if (this.poisonTimer >= 5) {
+                let tmpTs = other.getComponent('player');
+                // if (tmpTs) this.scheduleOnce(() => {tmpTs.hurt(-10);}, 0.2);
+                if (tmpTs && tmpTs.role !== 'tanmen') tmpTs.hurt(2);
+                else if (!tmpTs) cc.log("Cannot find ts");
+                this.poisonTimer = 0;
+            }
+        }
+        this.scheduleOnce(() => {poisonZone.destroy();}, 5);
+        poisonZone.position = this.node.position.add(this.node.parent.position);
+        const nodeIndex = this.node.parent.getSiblingIndex();
+        this.node.parent.parent.insertChild(poisonZone, nodeIndex);
     }
 }
