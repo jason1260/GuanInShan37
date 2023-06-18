@@ -59,7 +59,7 @@ export default class AIPlayer extends Player {
 
         this.setPlayerList();
         AIweapon = "knife";
-        this.GM = cc.find("Canvas/GM").getComponent('GM');
+        this.GM = cc.find("Canvas/GM").getComponent('GM') ;
         this.AIhandsTs = this.node.getComponent('AIhands');
     }
 
@@ -261,7 +261,18 @@ export default class AIPlayer extends Player {
         this.dirAngle = degree;
         this.node.angle = degree;
     }
+    changeWeapon() {
+        this.deleteWeapon();
+        this.tmpWeapon = this.nextWeapon;
+        this.nextWeapon = this.Handstate;
+        this.Handstate = 'changing'
+        this.scheduleOnce(() => {
+            this.Handstate = this.tmpWeapon;
+            this.addWeapon();
+            this.bulletNum = gameInfo.weaponbulletNum[this.Handstate]
+        }, 1)
 
+    }
     onCollisionExit(otherCollider, selfCollider) {
         // console.log(otherCollider.node.group)
         if (otherCollider.node.group == 'ice') {
