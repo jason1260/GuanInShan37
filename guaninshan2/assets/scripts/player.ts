@@ -62,6 +62,8 @@ export default class Player extends cc.Component {
     public moving: boolean;
 
     public healTimer: number = 0;
+    public protectTimer: number = 0;
+    public isProtect: boolean = false;
 
     onLoad() {
         // console.log("player onLoad")
@@ -337,6 +339,7 @@ export default class Player extends cc.Component {
 
     }
     hurt(hurtNum: number) {
+        if (this.isProtect) hurtNum *= 0.1;
         this.HP -= hurtNum;
         this.bleedAnim(hurtNum);
 
@@ -505,7 +508,8 @@ export default class Player extends cc.Component {
         }, 1)
     }
     protectZone(){
-
+        this.isProtect = true;
+        this.scheduleOnce(() => {this.isProtect = false;})
     }
     healZone(){
         if (!this.healZonePrefab) {
@@ -513,7 +517,7 @@ export default class Player extends cc.Component {
             return;
         }
         const healZone = cc.instantiate(this.healZonePrefab);
-        healZone.group = 'healzone';
+        healZone.group = 'knife';
         cc.log("healzone create");
         let zoneCollider = healZone.getComponent(cc.CircleCollider);
         if (!zoneCollider) cc.log("Cannot find collider");
@@ -522,11 +526,12 @@ export default class Player extends cc.Component {
             if (this.healTimer >= 5) {
                 let tmpTs = other.getComponent('player');
                 // if (tmpTs) this.scheduleOnce(() => {tmpTs.hurt(-10);}, 0.2);
-                if (tmpTs && tmpTs.HP < 100 && tmpTs.role === 'errmei') tmpTs.heal(1);
+                if (tmpTs && tmpTs.HP < 100 && tmpTs.role === 'errmei') tmpTs.heal(2);
                 else if (!tmpTs) cc.log("Cannot find ts");
                 this.healTimer = 0;
             }
         }
+        this.scheduleOnce(() => {healZone.destroy();}, 5);
         healZone.position = this.node.position.add(this.node.parent.position);
         const nodeIndex = this.node.parent.getSiblingIndex();
         this.node.parent.parent.insertChild(healZone, nodeIndex);
