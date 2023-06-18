@@ -61,6 +61,8 @@ export default class GM extends cc.Component {
     emptySE: cc.AudioClip = null;
     @property(cc.AudioClip)
     stickSE: cc.AudioClip = null;
+    @property(cc.AudioClip)
+    bgm: cc.AudioClip = null;
 
     @property(cc.Prefab)
     AIPrefab: cc.Prefab
@@ -72,6 +74,8 @@ export default class GM extends cc.Component {
 
     bornPosparent = null;
 
+    volume = 1;
+
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
@@ -80,13 +84,14 @@ export default class GM extends cc.Component {
         // console.log("123", cc.find("persistnode").getComponent("persistNode"))
         this.playerRole = cc.find("persistnode").getComponent("persistNode").playerRole;
         this.bornPosparent = cc.find("Canvas/Main Camera");
+        this.volume = cc.find("persistnode").getComponent("persistNode").volume;
         // cc.director.getPhysicsManager().debugDrawFlags = 1;
     }
 
     start() {
         this.drawColliderboxes();
         this.setBornPos();
-        cc.log("?????????????", this.playerRole)
+        cc.log("?????????????", this.playerRole);
     }
 
     drawColliderboxes() {
@@ -156,6 +161,7 @@ export default class GM extends cc.Component {
     }
 
     playeffect(handstate) {
+        cc.audioEngine.setEffectsVolume(this.volume);
         if (handstate === "knife") {
             cc.audioEngine.playEffect(this.knifeSE, false);
         }
@@ -184,6 +190,7 @@ export default class GM extends cc.Component {
     }
 
     playbgm(bgm) {
+        cc.audioEngine.setMusicVolume(this.volume);
         cc.audioEngine.playMusic(bgm, true);
     }
     stopbgm() {

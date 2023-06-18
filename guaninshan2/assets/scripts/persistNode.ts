@@ -16,10 +16,13 @@ export default class persist extends cc.Component {
 
     selectStage = null;
 
+    volume = null;
+
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
         this.selectTs = cc.find("Canvas").getComponent("Selectstage");
+        this.volume = 0.5;
         cc.game.addPersistRootNode(this.node);
         
     }

@@ -15,6 +15,7 @@ export default class Start extends cc.Component {
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
         this.node.on(cc.Node.EventType.TOUCH_END, () => {cc.director.loadScene("login");}, this);
+        // cc.find("persistnode").getComponent("persistNode").volume = 0.5;
     }
 
     start () {
