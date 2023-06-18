@@ -32,7 +32,7 @@ export default class boss extends cc.Component {
     flashCD:number = 10;
     EnergyballCD:number = 3;
     chaseBallCD:number = 5;
-    lighteningCD:number = 1;
+    lighteningCD:number = 2;
     turnBackCD:number = 6;
     walkingCD:number = 1;
 
@@ -221,7 +221,8 @@ export default class boss extends cc.Component {
 
         if (this.lighteningTimer >= this.lighteningCD) {
             this.lighteningTimer = 0;
-            this.generateThunder(this.lighteninghurt, this.attackingTarget.getPosition())
+            let thunderPos =  this.getRandomInCircle_polar_better(0, 3*Math.sqrt(this.HP), this.attackingTarget)
+            this.generateThunder(this.lighteninghurt, thunderPos)
         }
 
         if (this.canTurnback && this.isflashed){

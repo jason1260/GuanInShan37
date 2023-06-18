@@ -13,11 +13,7 @@ import gameInfo = require("../gameInfo");
 @ccclass
 export default class PlayerBoss extends Player {
 
-    @property(cc.Label)
-    label: cc.Label = null;
-
-    @property
-    text: string = 'hello';
+    bossPos = cc.v2(0, 0);
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -57,5 +53,72 @@ export default class PlayerBoss extends Player {
 
     update (dt) {
         super.update(dt);
+        this.bossPos = cc.find("Canvas/Main Camera/blue-boss1").getPosition();
+        this.showbossPosNotice();
+    }
+
+    showbossPosNotice() {
+        const playerPos = this.node.getPosition();
+        const bossDir = this.bossPos.sub(playerPos).normalize();
+    
+        let cameraEdgeDis = bossDir.mul(200);
+        let cameraEdgePos = cameraEdgeDis.add(playerPos);
+    
+        const distanceToCameraEdge = cc.Vec2.distance(playerPos, this.bossPos);
+        const threshold = 500; // 调整此阈值以控制头像出现的距离阈值
+        // console.log(distanceToCameraEdge)
+        if (distanceToCameraEdge >= threshold) {
+            // 在连线上显示 Boss 头像
+            let graphicsNode = cc.find("Canvas/Main Camera/graphicsNode");
+            if (!graphicsNode) {
+                let headIconNode = new cc.Node();
+                let graphicsNode = new cc.Node();
+                let graphics = graphicsNode.addComponent(cc.Graphics);
+                let headIconSprite = headIconNode.addComponent(cc.Sprite);
+                headIconNode.name = "headIcon";
+                graphicsNode.name = "graphicsNode";
+                cc.resources.load("blue-boss-idle", cc.SpriteFrame, (err, spriteFrame) => {
+                    if (err) {
+                        console.error("加载 Boss 头像预制资源失败：", err);
+                        return;
+                    }
+                    headIconSprite.spriteFrame = spriteFrame;
+
+
+                    let Node = cc.find("Canvas/Main Camera/graphicsNode");
+                    if (Node) {
+                        // headIcon.removeFromParent();
+                        Node.destroy();
+                    
+                    }
+                    graphicsNode.addChild(headIconNode);
+                    graphicsNode.setPosition(cameraEdgePos);
+                    graphics.circle(0, 0, 30);
+                    graphics.fillColor = cc.Color.WHITE;
+                    graphics.fill();
+                    
+                    // 绘制绿色边框
+                    graphics.circle(0, 0, 28);
+                    graphics.lineWidth = 5;
+                    graphics.strokeColor = cc.Color.RED;
+                    graphics.stroke();
+                    
+                    
+                    cc.find("Canvas/Main Camera").addChild(graphicsNode);
+                });
+            } 
+            
+            else {
+                graphicsNode.setPosition(cameraEdgePos);
+            }
+        } 
+        else {
+            // 隐藏 Boss 头像
+            const graphicsNode = cc.find("Canvas/Main Camera/graphicsNode");
+            if (graphicsNode) {
+                // headIcon.removeFromParent();
+                graphicsNode.destroy();
+            }
+        }
     }
 }
