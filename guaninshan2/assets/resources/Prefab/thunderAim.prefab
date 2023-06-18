@@ -58,8 +58,8 @@
         0,
         0,
         1,
-        1,
-        1,
+        0.6,
+        0.6,
         1
       ]
     },
@@ -116,7 +116,9 @@
       "__id__": 1
     },
     "_enabled": true,
-    "thunderPrefab": null,
+    "thunderPrefab": {
+      "__uuid__": "9cdea09b-9960-42b8-9f4e-0a57310e05bc"
+    },
     "bulletPrefab": {
       "__uuid__": "4fe1d85b-949e-413e-b23a-fa2b61197a8f"
     },

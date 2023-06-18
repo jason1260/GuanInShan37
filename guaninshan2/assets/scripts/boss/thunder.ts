@@ -28,12 +28,12 @@ export default class thunder extends cc.Component {
     start () {
         const duration = 1; // 动画持续时间，单位为秒
         // 创建一个渐变动作，将节点的 opacity 从 0 渐变到 1
-        const fadeInAction = cc.tween().to(duration, { opacity: 200 });
+        const fadeInAction = cc.tween().to(duration, { opacity: 255 });
         // 执行渐变动作
         cc.tween(this.node).then(fadeInAction).start();
-
+        this.scheduleOnce(()=>{this.createThunder()},0.6)
         this.scheduleOnce(()=>{this.createBullet()},1)
-        this.scheduleOnce(()=>{this.node.destroy()},1.5)
+        this.scheduleOnce(()=>{this.node.destroy()},1.2)
     }
 
     update (dt) {}
@@ -59,5 +59,17 @@ export default class thunder extends cc.Component {
 
         bullet.getComponent(cc.Collider).enabled = false;
         this.node.addChild(bullet)
+    }
+    createThunder(){
+        const thunder = cc.instantiate(this.thunderPrefab);
+
+        /* console.log(bullet.getComponent('bullet').attackNum) */
+
+        
+        thunder.setPosition(cc.v2(0,0));
+
+
+      
+        this.node.addChild(thunder)
     }
 }
