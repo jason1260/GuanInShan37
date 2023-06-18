@@ -42,7 +42,7 @@ export default class Player extends cc.Component {
     public rotateSpeed: number = 30;
     public HP: number = 100;
     public role: string = 'selling';
-    public bulletNum: number = 20;
+    public bulletNum: number = 1;
     public score: number = 0;
     public CD: number = 100;
 
@@ -219,11 +219,11 @@ export default class Player extends cc.Component {
             return;
         if (Input[cc.macro.KEY.space]) {
             this.generateDrops(this.Handstate)
-            this.Handstate = gameInfo.dropsTag2weapon[otherCollider.getComponent(cc.BoxCollider).tag]
             this.deleteWeapon();
-            this.addWeapon();
             otherCollider.node.destroy();
+            this.Handstate = gameInfo.dropsTag2weapon[otherCollider.getComponent(cc.BoxCollider).tag]
             this.bulletNum = gameInfo.weaponbulletNum[this.Handstate]
+            this.addWeapon();
         }
 
     }

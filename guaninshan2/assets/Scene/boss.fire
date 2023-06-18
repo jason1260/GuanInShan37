@@ -1411,9 +1411,6 @@
       "__id__": 33
     },
     "_enabled": true,
-    "thunderAimPrefab": {
-      "__uuid__": "b3cf07c6-a39c-4bb9-b5c3-f0ffe6396bf7"
-    },
     "energyBallPrefab": {
       "__uuid__": "824ba73a-51c2-4ddf-9afc-0c5bc5c21bb3"
     },
