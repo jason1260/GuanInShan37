@@ -19,7 +19,20 @@ const bornPosition = {
         postion2: cc.v2(335.345, -196.733)
     }
 }
-
+const roleName = {
+    selling: {
+        postion1: "妙覺",
+        postion2: "法喜充滿"
+    },
+    errmei: {
+        postion1: "靜虛",
+        postion2: "靜玄"
+    },
+    tanmen: {
+        postion1: "唐世政",
+        postion2: "唐唐阿宏"
+    }
+}
 const { ccclass, property } = cc._decorator;
 
 export var pathing_Map; //[長][寬] //
@@ -194,6 +207,26 @@ export default class GMBoss extends cc.Component {
         for (let j = 0; j <= 2; j++) {
             let role = roles[j];
             for (let i = 0; i <= 1; i++) {
+                // console.log("???")
+                let nameNode = new cc.Node();
+                nameNode.addComponent(cc.Label);
+                nameNode.name = "name";
+                let label = nameNode.getComponent(cc.Label);
+                label.string = roleName[roles[j]][pos[i]];
+                label.fontSize = 12;
+                switch (role) {
+                    case "selling":
+                        nameNode.color = cc.Color.ORANGE;
+                        break;
+                    case "errmei":
+                        nameNode.color = cc.Color.WHITE;
+                    break;
+                    case "tanmen":
+                        nameNode.color = cc.Color.BLUE;
+                    break;
+                    default:
+                        break;
+                }
                 // console.log("playerRole", playerRole);
                 // console.log("role", role);
                 // console.log("setPlayer", setPlayer);
@@ -205,6 +238,10 @@ export default class GMBoss extends cc.Component {
                     let ts = player.getComponent('player') || player.getComponent('AIplayer')
                     player.setPosition(bornPosition[roles[j]][pos[i]]);
                     ts.setRole(role);
+                    label.string = "這我";
+                    nameNode.rotation = -90;
+                    nameNode.setPosition(cc.v2(50, 0));
+                    player.addChild(nameNode);
                     this.bornPosparent.insertChild(player, 0);
                     // console.log("player", player);
                 }

@@ -32,12 +32,13 @@ export default class AIPlayer extends Player {
 
     changeWeaponCD = 0;
 
+    currentangle = null;
+
     onLoad() {
         this.onIce = false;
         this.onMud = false;
         this.iceCounter = 0;
         this.leftHand = this.node.getChildByName("leftHand");
-
 
         cc.resources.load(`role/${this.role}`, cc.SpriteFrame, (err, spriteFrame) => {
             if (err) {
@@ -70,15 +71,22 @@ export default class AIPlayer extends Player {
     update(dt) {
         // console.log(this.bulletNum)
         //update speed
-        if (this.isDie)
+        this.namefix ()
+        if (this.isDie){
+            this.node.angle = this.currentangle;
             return;
+        }
 
         if (this.HP <= 0) {
             this.isDie = true;
+            this.attackingList = [];
+            this.attackingTarget = null;
+            this.currentangle = this.node.angle;
             this.node.getComponent(cc.RigidBody).linearVelocity = cc.v2(0, 0);
             this.AIdie();
             return;
         }
+
         if (this.Handstate !== 'changing' && this.Handstate !== 'reloading') {
             this.astar.speed = this.baseSpeed - gameInfo.weaponWeight[this.Handstate];
             if (this.onIce) this.astar.speed *= 2;
