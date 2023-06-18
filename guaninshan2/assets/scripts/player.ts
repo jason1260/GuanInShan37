@@ -106,6 +106,7 @@ export default class Player extends cc.Component {
     }
 
     update(dt) {
+        // cc.log("protect", this.isProtect);
         this.namefix ()
         //die
         if (this.HP < 0)
@@ -509,7 +510,11 @@ export default class Player extends cc.Component {
     }
     protectZone(){
         this.isProtect = true;
-        this.scheduleOnce(() => {this.isProtect = false;})
+        const protectZone = cc.instantiate(this.protectZonePrefab);
+        const rotate = () => {protectZone.angle += 10;}
+        this.schedule(rotate);
+        this.node.addChild(protectZone);
+        this.scheduleOnce(() => {this.isProtect = false; this.unschedule(rotate); protectZone.destroy();}, 5);
     }
     healZone(){
         if (!this.healZonePrefab) {
