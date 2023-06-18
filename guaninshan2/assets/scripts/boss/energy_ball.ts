@@ -16,7 +16,10 @@ export default class energyBall extends cc.Component {
     public type: number = 1;
     public speed:number = 50;
     public selfNode:cc.Node = null;
+    public targetNode:cc.Node = null;
     public ts = null;
+
+    public prev_lv = null;
 
 
     public counter:number = 0;
@@ -34,25 +37,28 @@ export default class energyBall extends cc.Component {
     }
     update(dt){
         if(this.type == 1){
+            this.degree+=this.speed;
+            this.degree%=361;
+            const angle = cc.misc.degreesToRadians(this.degree);
+            // 计算新的节点位置
+            const newPosition = cc.v3(
+                0 + 60 * Math.cos(angle),
+                0 + 60 * Math.sin(angle),
+                this.node.position.z
+            );
+            // 更新节点位置
+            this.node.setPosition(newPosition);
+            
+            
+        }else{
             this.counter+=1;
-            if(this.counter == this.speed){
+            if(this.counter >= 200 || !this.prev_lv){
+                console.log('update')
                 this.counter = 0;
-                this.degree+=1;
-                this.degree%=361;
-                console.log("rotate",this.degree)
-
-                const angle = cc.misc.degreesToRadians(this.degree);
-
-                // 计算新的节点位置
-                const newPosition = cc.v3(
-                    0 + 60 * Math.cos(angle),
-                    0 + 60 * Math.sin(angle),
-                    this.node.position.z
-                );
-
-                // 更新节点位置
-                this.node.setPosition(newPosition);
+                const direction = this.targetNode.getPosition().sub(this.node.getPosition()).normalize();
+                this.prev_lv = direction.mul(this.speed);
             }
+            this.node.getComponent(cc.RigidBody).linearVelocity = this.prev_lv;
             
         }
         
@@ -75,24 +81,11 @@ export default class energyBall extends cc.Component {
         }
         
     }
-    setProperty(attackNum: number,speed: number, selfNode:cc.Node,type: number){
+    setProperty(attackNum: number,speed: number, selfNode:cc.Node,type: number, targetNode:cc.Node = null){
         this.attackNum = attackNum + Math.floor((0.1 * Math.random() - 0.05) * 2 * attackNum);
         this.speed = speed;
         this.type = type;
         this.selfNode = selfNode;
+        this.targetNode = targetNode;
     }
-    mapValue(value: number, fromMin: number, fromMax: number, toMin: number, toMax: number): number {
-        // 将 value 限制在 fromMin 和 fromMax 之间
-        value = cc.misc.clampf(value, fromMin, fromMax);
-      
-        // 计算 value 在 from 范围内的比例
-        const fromRange = fromMax - fromMin;
-        const valueRatio = (value - fromMin) / fromRange;
-      
-        // 根据比例计算出对应的值在 to 范围内的位置
-        const toRange = toMax - toMin;
-        const mappedValue = toMin + (valueRatio * toRange);
-      
-        return mappedValue;
-      }
 }

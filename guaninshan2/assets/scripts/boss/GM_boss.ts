@@ -69,6 +69,7 @@ export default class GMBoss extends cc.Component {
     playerRole = null;
 
     bornPosparent = null;
+    volume = null;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -78,11 +79,12 @@ export default class GMBoss extends cc.Component {
         // console.log("123", cc.find("persistnode").getComponent("persistNode"))
         this.playerRole = cc.find("persistnode").getComponent("persistNode").playerRole;
         this.bornPosparent = cc.find("Canvas/Main Camera");
+        this.volume = cc.find("persistnode").getComponent("persistNode").volume;
         // cc.director.getPhysicsManager().debugDrawFlags = 1;
     }
 
     start() {
-        this.drawColliderboxes();
+        /* this.drawColliderboxes(); */
         this.setBornPos();
         cc.log("?????????????", this.playerRole)
     }
@@ -154,6 +156,7 @@ export default class GMBoss extends cc.Component {
     }
 
     playeffect(handstate) {
+        cc.audioEngine.setEffectsVolume(this.volume);
         if (handstate === "knife") {
             cc.audioEngine.playEffect(this.knifeSE, false);
         }
@@ -182,6 +185,7 @@ export default class GMBoss extends cc.Component {
     }
 
     playbgm(bgm) {
+        cc.audioEngine.setMusicVolume(this.volume);
         cc.audioEngine.playMusic(bgm, true);
     }
     stopbgm() {

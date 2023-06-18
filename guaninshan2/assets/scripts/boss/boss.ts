@@ -22,19 +22,22 @@ export default class boss extends cc.Component {
     public walkTime:number = 0;
     public speed:number = 50;
     public HP:number = 500;
+    public TargetNode:cc.Node = null;
+
+    public isReleasing:boolean = false;
 
     onLoad () {
         this.randWakl();
     }
 
     start () {
-        this.generateBall(1,1,this.node,1)
     }
 
     update (dt) {
         let randomAction = Math.random();
-        if(randomAction<0.01){
-            this.generateBall(1,1,this.node,1)
+        if(randomAction<0.01 && ! this.isReleasing){
+            /* this.generateAroundBall(1,3) */
+            this.generateChaseBall(1,300)
         }
         
         if (this.sp.x) {
@@ -51,16 +54,42 @@ export default class boss extends cc.Component {
         this.node.getComponent(cc.RigidBody).linearVelocity = this.lv;
 
     }
-    generateBall(attackNum: number,speed: number, selfNode:cc.Node,type: number){
-        console.log("generate")
-        if(type == 1){
-            const energyBall = cc.instantiate(this.energyBallDefendPrefab);
-            energyBall.getComponent('energy_ball').setProperty(attackNum,speed,selfNode,type)
-            this.node.insertChild(energyBall, 0);
-            energyBall.setPosition(new cc.Vec2(0,-60));
+    generateAroundBall(attackNum: number,speed: number){ 
+        //CD
+        this.isReleasing = true;
+        this.schedule(()=>{this.isReleasing = false;},0.1);
+        //
+        console.log("generate1")
 
-        }
-        
+        const energyBall = cc.instantiate(this.energyBallDefendPrefab);
+        energyBall.getComponent('energy_ball').setProperty(attackNum,speed,this.node,1)
+        this.node.insertChild(energyBall, 0);
+        energyBall.setPosition(new cc.Vec2(0,-60));
+    }
+    generateChaseBall(attackNum: number,speed: number){
+        //CD
+        this.isReleasing = true;
+        this.schedule(()=>{this.isReleasing = false;},0.1);
+        //
+        let playerList = cc.find("Canvas/Main Camera").children;
+        playerList = playerList.filter((child) => child.group == "player")
+        const randomIndex = Math.floor(Math.random() * playerList.length);
+        let targetplayer =  playerList[randomIndex];
+        if(!targetplayer) null;
+        this.isReleasing = true;
+        this.schedule(()=>{this.isReleasing = false;},0.1);
+        console.log("generate2")
+
+        const energyBall = cc.instantiate(this.energyBallPrefab);
+        energyBall.getComponent('energy_ball').setProperty(attackNum,speed,this.node,2,targetplayer)
+        energyBall.setPosition(this.node.getPosition());
+        this.node.parent.addChild(energyBall);
+    }
+    generateThunder(attackNum: number,position: cc.Vec2){
+        //CD
+        this.isReleasing = true;
+        this.schedule(()=>{this.isReleasing = false;},0.1);
+        //
     }
     randWakl(){
         
@@ -83,7 +112,6 @@ export default class boss extends cc.Component {
         }
 
         
-        console.log("randdddddddddddddddddddddddddddddddddddddddddddddddddd",this.walkTime,this.sp.x,this.sp.y)
         this.scheduleOnce(()=>{this.randWakl()},this.walkTime)
     }
     hurt(hurtNum: number) {
@@ -132,7 +160,7 @@ export default class boss extends cc.Component {
             // 设置血迹精灵的纹理
             bloodSprite.spriteFrame = spriteFrame;
             // 设置血迹精灵的颜色为红色
-            bloodSprite.node.color = cc.Color.RED;
+            bloodSprite.node.color = cc.Color.BLUE;
             // 设置血迹精灵的初始缩放
             bloodSprite.node.scale = Math.sqrt(hurtNum) * 0.1;
             // 设置血迹精灵节点的初始位置
