@@ -7,16 +7,16 @@
 
 const bornPosition = {
     selling: {
-        postion1: cc.v2(-387.88, 763.765),
-        postion2: cc.v2(-273.542, 763.765)
+        postion1: cc.v2(0, 0),
+        postion2: cc.v2(0, 0)
     },
     errmei: {
-        postion1: cc.v2(1138.627, 798.069),
-        postion2: cc.v2(1012.84, 798.069)
+        postion1: cc.v2(0, 0),
+        postion2: cc.v2(0, 0)
     },
     tanmen: {
-        postion1: cc.v2(473.996, -196.733),
-        postion2: cc.v2(335.345, -196.733)
+        postion1: cc.v2(0, 0),
+        postion2: cc.v2(0, 0)
     }
 }
 const roleName = {
@@ -61,6 +61,18 @@ export default class GMBoss extends cc.Component {
     stickSE: cc.AudioClip = null;
 
     @property(cc.Prefab)
+    Map1Prefab: cc.Prefab
+
+    @property(cc.Prefab)
+    Map2Prefab: cc.Prefab
+
+    @property(cc.Prefab)
+    IcePrefab: cc.Prefab
+
+    @property(cc.Prefab)
+    MudPrefab: cc.Prefab
+
+    @property(cc.Prefab)
     AIPrefab: cc.Prefab
 
     @property(cc.Prefab)
@@ -70,6 +82,13 @@ export default class GMBoss extends cc.Component {
 
     bornPosparent = null;
     volume = null;
+    currMapPos = null;
+
+    Mapgroup = null;
+
+    mapParent = null;
+
+    mapcounter = null;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -81,11 +100,15 @@ export default class GMBoss extends cc.Component {
         this.bornPosparent = cc.find("Canvas/Main Camera");
         this.volume = cc.find("persistnode").getComponent("persistNode").volume;
         // cc.director.getPhysicsManager().debugDrawFlags = 1;
+        this.mapParent = cc.find("Canvas/scene2");
+        this.currMapPos = cc.v2(0, 0);
+        this.mapcounter = 0;
     }
 
     start() {
         /* this.drawColliderboxes(); */
         this.setBornPos();
+        this.setMap();
         cc.log("?????????????", this.playerRole)
     }
 
@@ -224,10 +247,10 @@ export default class GMBoss extends cc.Component {
                         break;
                     case "errmei":
                         nameNode.color = cc.Color.WHITE;
-                    break;
+                        break;
                     case "tanmen":
                         nameNode.color = cc.Color.BLUE;
-                    break;
+                        break;
                     default:
                         break;
                 }
@@ -260,6 +283,168 @@ export default class GMBoss extends cc.Component {
             }
         }
 
+    }
+
+    setMap() {
+        let mapcenter = null;
+        console.log("start pos", this.bornPosparent.getPosition());
+
+        for (let i = 9; i >= 1; i -= 1) {
+            let Sample = Math.random();
+            if (i == 5) mapcenter = cc.instantiate(this.Map1Prefab);
+            else {
+                if (Sample < 0.25) mapcenter = cc.instantiate(this.Map1Prefab);
+                else if (Sample < 0.5) mapcenter = cc.instantiate(this.Map2Prefab);
+                else if (Sample < 0.75) mapcenter = cc.instantiate(this.IcePrefab);
+                else mapcenter = cc.instantiate(this.MudPrefab);
+            }
+            let xpos = 0, ypos = 0;
+            if (i == 1 || i == 4 || i == 7) xpos = -960;
+            else if (i == 2 || i == 5 || i == 8) xpos = 0;
+            else xpos = 960;
+
+            if (i <= 3) ypos = 640;
+            else if (i <= 6) ypos = 0;
+            else ypos = -640;
+            mapcenter.setPosition(cc.v2(xpos, ypos));
+            this.mapParent.insertChild(mapcenter, 0);
+            console.log("this is map", i, Sample);
+        }
+    }
+
+    update() {
+        let playerPos = this.bornPosparent.getPosition();
+        if (this.mapcounter < 2) { this.mapcounter += 1; return; }
+        else this.mapcounter = 0;
+
+        if (playerPos.x > this.currMapPos.x + 550) {
+            console.log("0", this.mapParent.children);
+            const sample1 = Math.random(), sample2 = Math.random(), sample3 = Math.random();
+            let map1, map2, map3
+            if (sample1 < 0.25) map1 = cc.instantiate(this.Map1Prefab);
+            else if (sample1 < 0.5) map1 = cc.instantiate(this.Map2Prefab);
+            else if (sample1 < 0.75) map1 = cc.instantiate(this.IcePrefab);
+            else map1 = cc.instantiate(this.MudPrefab);
+
+            if (sample2 < 0.25) map2 = cc.instantiate(this.Map1Prefab);
+            else if (sample2 < 0.5) map2 = cc.instantiate(this.Map2Prefab);
+            else if (sample2 < 0.75) map2 = cc.instantiate(this.IcePrefab);
+            else map2 = cc.instantiate(this.MudPrefab);
+
+            if (sample1 < 0.25) map3 = cc.instantiate(this.Map1Prefab);
+            else if (sample1 < 0.5) map3 = cc.instantiate(this.Map2Prefab);
+            else if (sample1 < 0.75) map3 = cc.instantiate(this.IcePrefab);
+            else map3 = cc.instantiate(this.MudPrefab);
+
+            map1.setPosition(cc.v2(1920, 640).add(this.currMapPos));
+            map2.setPosition(cc.v2(1920, 0).add(this.currMapPos));
+            map3.setPosition(cc.v2(1920, -640).add(this.currMapPos));
+            console.log("1", this.mapParent.children);
+            // add map
+            this.mapParent.insertChild(map1, 3);
+            this.mapParent.insertChild(map2, 7);
+            this.mapParent.insertChild(map3, 11);
+            // delete map
+            this.mapParent.children[8].destroy();
+            this.mapParent.children[4].destroy();
+            this.mapParent.children[0].destroy();
+
+            this.currMapPos = cc.v2(this.currMapPos.x + 960, this.currMapPos.y);
+        } else if (playerPos.x < this.currMapPos.x - 550) {
+            const sample1 = Math.random(), sample2 = Math.random(), sample3 = Math.random();
+            let map1, map2, map3
+            if (sample1 < 0.25) map1 = cc.instantiate(this.Map1Prefab);
+            else if (sample1 < 0.5) map1 = cc.instantiate(this.Map2Prefab);
+            else if (sample1 < 0.75) map1 = cc.instantiate(this.IcePrefab);
+            else map1 = cc.instantiate(this.MudPrefab);
+
+            if (sample2 < 0.25) map2 = cc.instantiate(this.Map1Prefab);
+            else if (sample2 < 0.5) map2 = cc.instantiate(this.Map2Prefab);
+            else if (sample2 < 0.75) map2 = cc.instantiate(this.IcePrefab);
+            else map2 = cc.instantiate(this.MudPrefab);
+
+            if (sample1 < 0.25) map3 = cc.instantiate(this.Map1Prefab);
+            else if (sample1 < 0.5) map3 = cc.instantiate(this.Map2Prefab);
+            else if (sample1 < 0.75) map3 = cc.instantiate(this.IcePrefab);
+
+            // add map
+            map1.setPosition(cc.v2(-1920, 640).add(this.currMapPos));
+            map2.setPosition(cc.v2(-1920, 0).add(this.currMapPos));
+            map3.setPosition(cc.v2(-1920, -640).add(this.currMapPos));
+
+            this.mapParent.insertChild(map1, 0);
+            this.mapParent.insertChild(map2, 4);
+            this.mapParent.insertChild(map3, 8);
+
+            //delete map
+            this.mapParent.children[11].destroy();
+            this.mapParent.children[7].destroy();
+            this.mapParent.children[3].destroy();
+
+            this.currMapPos = cc.v2(this.currMapPos.x - 960, this.currMapPos.y);
+        } else if (playerPos.y > this.currMapPos.y + 370) {
+            const sample1 = Math.random(), sample2 = Math.random(), sample3 = Math.random();
+            let map1, map2, map3
+            if (sample1 < 0.25) map1 = cc.instantiate(this.Map1Prefab);
+            else if (sample1 < 0.5) map1 = cc.instantiate(this.Map2Prefab);
+            else if (sample1 < 0.75) map1 = cc.instantiate(this.IcePrefab);
+            else map1 = cc.instantiate(this.MudPrefab);
+
+            if (sample2 < 0.25) map2 = cc.instantiate(this.Map1Prefab);
+            else if (sample2 < 0.5) map2 = cc.instantiate(this.Map2Prefab);
+            else if (sample2 < 0.75) map2 = cc.instantiate(this.IcePrefab);
+            else map2 = cc.instantiate(this.MudPrefab);
+
+            if (sample1 < 0.25) map3 = cc.instantiate(this.Map1Prefab);
+            else if (sample1 < 0.5) map3 = cc.instantiate(this.Map2Prefab);
+            else if (sample1 < 0.75) map3 = cc.instantiate(this.IcePrefab);
+
+            // add map
+            map1.setPosition(cc.v2(960, 1280).add(this.currMapPos));
+            map2.setPosition(cc.v2(0, 1280).add(this.currMapPos));
+            map3.setPosition(cc.v2(-960, 1280).add(this.currMapPos));
+
+            this.mapParent.insertChild(map1, 0);
+            this.mapParent.insertChild(map2, 0);
+            this.mapParent.insertChild(map3, 0);
+            // delete map
+            this.mapParent.children[11].destroy();
+            this.mapParent.children[10].destroy();
+            this.mapParent.children[9].destroy();
+
+            this.currMapPos = cc.v2(this.currMapPos.x, this.currMapPos.y + 640);
+        } else if (playerPos.y < this.currMapPos.y - 370) {
+            const sample1 = Math.random(), sample2 = Math.random(), sample3 = Math.random();
+            let map1, map2, map3
+            if (sample1 < 0.25) map1 = cc.instantiate(this.Map1Prefab);
+            else if (sample1 < 0.5) map1 = cc.instantiate(this.Map2Prefab);
+            else if (sample1 < 0.75) map1 = cc.instantiate(this.IcePrefab);
+            else map1 = cc.instantiate(this.MudPrefab);
+
+            if (sample2 < 0.25) map2 = cc.instantiate(this.Map1Prefab);
+            else if (sample2 < 0.5) map2 = cc.instantiate(this.Map2Prefab);
+            else if (sample2 < 0.75) map2 = cc.instantiate(this.IcePrefab);
+            else map2 = cc.instantiate(this.MudPrefab);
+
+            if (sample1 < 0.25) map3 = cc.instantiate(this.Map1Prefab);
+            else if (sample1 < 0.5) map3 = cc.instantiate(this.Map2Prefab);
+            else if (sample1 < 0.75) map3 = cc.instantiate(this.IcePrefab);
+
+            // add map
+            map1.setPosition(cc.v2(960, -1280).add(this.currMapPos));
+            map2.setPosition(cc.v2(0, -1280).add(this.currMapPos));
+            map3.setPosition(cc.v2(-960, -1280).add(this.currMapPos));
+
+            this.mapParent.insertChild(map3, 9);
+            this.mapParent.insertChild(map2, 10);
+            this.mapParent.insertChild(map1, 11);
+            // delete map
+            this.mapParent.children[2].destroy();
+            this.mapParent.children[1].destroy();
+            this.mapParent.children[0].destroy();
+
+            this.currMapPos = cc.v2(this.currMapPos.x, this.currMapPos.y - 640);
+        }
     }
 
 }
