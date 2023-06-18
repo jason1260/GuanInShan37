@@ -44,7 +44,7 @@ export default class Player extends cc.Component {
     public role: string = 'selling';
     public bulletNum: number = 1;
     public score: number = 0;
-    public CD: number = 100;
+    public CD: number = 0;
 
     public baseSpeed: number = 200;
     public lv: cc.Vec2 = null;
@@ -115,7 +115,7 @@ export default class Player extends cc.Component {
         //CD
 
         if(this.CD < 100)
-            this.CD += 1;
+            this.CD += 0.1;
         //update speed
         if (this.Handstate !== 'changing' && this.Handstate !== 'reloading')
             this.speed = this.baseSpeed - gameInfo.weaponWeight[this.Handstate];
@@ -341,7 +341,7 @@ export default class Player extends cc.Component {
 
     }
     hurt(hurtNum: number) {
-        if (this.isProtect) hurtNum *= 0.1;
+        if (this.isProtect) hurtNum /= 2;
         this.HP -= hurtNum;
         this.bleedAnim(hurtNum);
 
@@ -523,16 +523,17 @@ export default class Player extends cc.Component {
             return;
         }
         const healZone = cc.instantiate(this.healZonePrefab);
-        healZone.group = 'knife';
+        healZone.group = 'skill';
         cc.log("healzone create");
         let zoneCollider = healZone.getComponent(cc.CircleCollider);
         if (!zoneCollider) cc.log("Cannot find collider");
         zoneCollider.onCollisionStay = (other, self) => {
+            if (other.node.group !== 'player' && other.node.group !== 'boss') return;
             this.healTimer += 1;
             if (this.healTimer >= 5) {
-                let tmpTs = other.getComponent('player');
+                let tmpTs = other.getComponent('player') || other.getComponent('AIplayer');
                 // if (tmpTs) this.scheduleOnce(() => {tmpTs.hurt(-10);}, 0.2);
-                if (tmpTs && tmpTs.HP < 100 && tmpTs.role === 'errmei') tmpTs.heal(2);
+                if (tmpTs && tmpTs.HP < 100 && tmpTs.role === 'errmei') tmpTs.heal(Math.floor(gameInfo.roleHP['errmei'] * 0.05));
                 else if (!tmpTs) cc.log("Cannot find ts");
                 this.healTimer = 0;
             }
@@ -548,21 +549,24 @@ export default class Player extends cc.Component {
             return;
         }
         const poisonZone = cc.instantiate(this.poisonZonePrefab);
-        poisonZone.group = 'knife';
+        poisonZone.group = 'skill';
         cc.log("poisonzone create");
         let zoneCollider = poisonZone.getComponent(cc.CircleCollider);
         if (!zoneCollider) cc.log("Cannot find collider");
         zoneCollider.onCollisionStay = (other, self) => {
+            if (other.node.group !== 'player' && other.node.group !== 'boss') return;
+            cc.log(other.node.group);
             this.poisonTimer += 1;
             if (this.poisonTimer >= 5) {
-                let tmpTs = other.getComponent('player');
+                let tmpTs = other.getComponent('player') || other.getComponent('AIplayer') || other.getComponent('boss');
                 // if (tmpTs) this.scheduleOnce(() => {tmpTs.hurt(-10);}, 0.2);
-                if (tmpTs && tmpTs.role !== 'tanmen') tmpTs.hurt(2);
+                if (tmpTs && other.node.group === 'player' && tmpTs.role !== 'tanmen') tmpTs.hurt(Math.floor(tmpTs.HP * 0.05));
+                else if (tmpTs && other.node.group === 'boss') tmpTs.hurt(Math.floor(tmpTs.HP * 0.05));
                 else if (!tmpTs) cc.log("Cannot find ts");
                 this.poisonTimer = 0;
             }
         }
-        this.scheduleOnce(() => {poisonZone.destroy();}, 5);
+        this.scheduleOnce(() => {poisonZone.destroy();}, 3);
         poisonZone.position = this.node.position.add(this.node.parent.position);
         const nodeIndex = this.node.parent.getSiblingIndex();
         this.node.parent.parent.insertChild(poisonZone, nodeIndex);

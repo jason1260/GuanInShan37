@@ -73,7 +73,7 @@ export default class UI extends cc.Component {
 
     hpUpdate() {
         this.hpBar.progress = this.playerTs.HP / this.playerHpMax;
-        this.hpBarColor.color = cc.color((1 - Math.pow(this.hpBar.progress, 6)) * 255, this.hpBar.progress * 255, 0);
+        this.hpBarColor.color = cc.color(Math.min((1 - Math.pow(this.hpBar.progress, 6)) * 255, 255), Math.min(this.hpBar.progress * 255, 255), 0);
     }
 
     bulletUpdate() {
