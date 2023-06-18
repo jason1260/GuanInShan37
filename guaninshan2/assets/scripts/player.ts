@@ -61,6 +61,8 @@ export default class Player extends cc.Component {
     public iceCounter: number;
     public moving: boolean;
 
+    public healTimer: number = 0;
+
     onLoad() {
         // console.log("player onLoad")
         this.leftHand = this.node.getChildByName("leftHand");
@@ -367,6 +369,38 @@ export default class Player extends cc.Component {
         }, 0.02);
 
     }
+    heal(hurtNum: number) {
+        this.HP += hurtNum;
+
+        // 将节点颜色设置为白色
+        let originColor = cc.Color.WHITE;
+        this.node.color = cc.Color.RED;
+        
+        // 创建显示文字的节点
+        let textNode = new cc.Node();
+        textNode.addComponent(cc.Label);
+        let label = textNode.getComponent(cc.Label);
+        label.string = "+" + hurtNum.toString();
+        label.fontSize = 20;
+        label.node.color = cc.Color.GREEN;
+        textNode.setPosition(this.node.getPosition().add(cc.v2(0, 20))); // 设置文字节点位置
+        this.node.parent.addChild(textNode);
+        
+        // 淡入淡出效果并向右飘移
+        let moveAction = cc.moveBy(0.5, cc.v2(10, 10)); // 控制向右飘移的距离和时间
+        let fadeIn = cc.fadeIn(0.1);
+        let fadeOut = cc.fadeOut(0.1);
+        let delay = cc.delayTime(0.1);
+        let sequence = cc.sequence(fadeIn, delay, fadeOut, cc.removeSelf());
+        let spawn = cc.spawn(moveAction, sequence);
+        textNode.runAction(spawn);
+        
+        // 延迟0.05秒后恢复原样
+        this.scheduleOnce(() => {
+          this.node.color = originColor; // 恢复原来的颜色（假设原来的颜色为白色）
+        }, 0.02);
+
+    }
     playerDie() {
         cc.director.loadScene("Select");
     }
@@ -448,10 +482,10 @@ export default class Player extends cc.Component {
                     this.protectZone()
                     break;
                 case "tanmen":
-                    this.healZone()
+                    this.poisonZone()
                     break;
                 case "errmei":
-                    this.poisonZone()
+                    this.healZone()
                     break;
                 default:
                     break;
@@ -467,8 +501,23 @@ export default class Player extends cc.Component {
             return;
         }
         const healZone = cc.instantiate(this.healZonePrefab);
-        this.node.addChild(healZone);
+        healZone.group = 'healzone';
         cc.log("healzone create");
+        let zoneCollider = healZone.getComponent(cc.CircleCollider);
+        if (!zoneCollider) cc.log("Cannot find collider");
+        zoneCollider.onCollisionStay = (other, self) => {
+            this.healTimer += 1;
+            if (this.healTimer >= 5) {
+                let tmpTs = other.getComponent('player');
+                // if (tmpTs) this.scheduleOnce(() => {tmpTs.hurt(-10);}, 0.2);
+                if (tmpTs && tmpTs.HP < 100 && tmpTs.role === 'errmei') tmpTs.heal(1);
+                else if (!tmpTs) cc.log("Cannot find ts");
+                this.healTimer = 0;
+            }
+        }
+        healZone.position = this.node.position.add(this.node.parent.position);
+        const nodeIndex = this.node.parent.getSiblingIndex();
+        this.node.parent.parent.insertChild(healZone, nodeIndex);
     }
     poisonZone(){
         
