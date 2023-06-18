@@ -753,7 +753,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 195,
-      "height": 50.4
+      "height": 90.4
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -764,8 +764,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        330.053,
-        -264.237,
+        327.112,
+        -223.061,
         0,
         0,
         0,
@@ -804,8 +804,8 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_string": "點一下繼續...",
-    "_N$string": "點一下繼續...",
+    "_string": "\n点一下继续...",
+    "_N$string": "\n点一下继续...",
     "_fontSize": 30,
     "_lineHeight": 40,
     "_enableWrapText": true,

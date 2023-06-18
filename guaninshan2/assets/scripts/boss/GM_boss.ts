@@ -90,6 +90,8 @@ export default class GMBoss extends cc.Component {
 
     mapcounter = null;
 
+    playerList = null;
+
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
@@ -313,6 +315,21 @@ export default class GMBoss extends cc.Component {
     }
 
     update() {
+
+
+        this.playerList = cc.find("Canvas/Main Camera").children;
+        this.playerList = this.playerList.filter((child) => child.group == "boss");
+        let nonplayerList = this.playerList;
+        console.log(nonplayerList.length);
+        if(nonplayerList.length == 0){
+            this.win();
+        }else if(cc.find("Canvas/Main Camera/player").getComponent("player").HP <= 0){
+            this.lose();
+        }
+
+
+
+
         let playerPos = this.bornPosparent.getPosition();
         if (this.mapcounter < 2) { this.mapcounter += 1; return; }
         else this.mapcounter = 0;
@@ -445,6 +462,19 @@ export default class GMBoss extends cc.Component {
 
             this.currMapPos = cc.v2(this.currMapPos.x, this.currMapPos.y - 640);
         }
+    }
+    win(){
+        console.log("win");
+        cc.find("persistnode").getComponent("persistNode").win = true;
+        cc.delayTime(1);
+        cc.director.loadScene("Win");
+        
+    }
+    lose(){
+        console.log("lose");
+        cc.find("persistnode").getComponent("persistNode").win = false;
+        cc.delayTime(1);
+        cc.director.loadScene("Win");
     }
 
 }
