@@ -30,8 +30,8 @@ export default class boss extends cc.Component {
     public direction = null;
 
     flashCD:number = 10;
-    EnergyballCD:number = 3;
-    chaseBallCD:number = 5;
+    EnergyballCD:number = 1.5;
+    chaseBallCD:number = 4;
     lighteningCD:number = 2;
     turnBackCD:number = 6;
     walkingCD:number = 1;
