@@ -91,6 +91,7 @@ export default class GM extends cc.Component {
     start() {
         this.drawColliderboxes();
         this.setBornPos();
+        this.playbgm(this.bgm);
         cc.log("?????????????", this.playerRole);
     }
 

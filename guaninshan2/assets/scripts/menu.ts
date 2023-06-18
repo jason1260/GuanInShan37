@@ -11,10 +11,12 @@ export default class Start extends cc.Component {
     @property
     text: string = 'hello';
 
+
     onLoad () {
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
         this.node.on(cc.Node.EventType.TOUCH_END, () => {cc.director.loadScene("login");}, this);
+        
         // cc.find("persistnode").getComponent("persistNode").volume = 0.5;
     }
 
@@ -27,6 +29,10 @@ export default class Start extends cc.Component {
 
     update (dt) {
         
+    }
+
+    settingClick(){
+        cc.find("Canvas/setting").active = !cc.find("Canvas/setting").active;
     }
 
     startGame(){
