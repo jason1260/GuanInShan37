@@ -18,6 +18,10 @@ export default class persist extends cc.Component {
 
     volume = null;
 
+    score = 0;
+
+    win = 0;
+
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {

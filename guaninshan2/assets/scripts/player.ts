@@ -109,8 +109,8 @@ export default class Player extends cc.Component {
         // cc.log("protect", this.isProtect);
         this.namefix ()
         //die
-        if (this.HP < 0)
-            this.playerDie();
+        // if (this.HP < 0)
+        //     this.playerDie();
         //CD
 
         if(this.CD < 100)
