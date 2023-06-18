@@ -1353,7 +1353,9 @@
     "sniperPrefab": {
       "__uuid__": "c67acba9-0055-47a4-bae3-cca23937a4d0"
     },
-    "protectZonePrefab": null,
+    "protectZonePrefab": {
+      "__uuid__": "ecf4ee9e-baa3-4502-8d69-ae1a8be875e3"
+    },
     "healZonePrefab": {
       "__uuid__": "22938be8-7d6d-4c78-8e78-79b4605c63bf"
     },
