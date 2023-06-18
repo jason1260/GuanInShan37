@@ -232,6 +232,7 @@ export default class boss extends cc.Component {
 
     flash (dt) {
         const dest = this.getRandomInCircle_polar_better(this.EnergyballTrackRadius, this.angryflashRadius, this.attackingTarget);
+        
         this.node.setPosition(dest);
     }
 
@@ -239,6 +240,7 @@ export default class boss extends cc.Component {
         this.turnBackTimer += dt;
         if (this.turnBackTimer >= this.turnBackCD && this.isflashed) {
             this.turnBackTimer = 0;
+            
             this.node.setPosition(this.turnbackPos);
             this.isflashed = false;
         }

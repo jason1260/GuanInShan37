@@ -25,6 +25,8 @@ export default class Win extends cc.Component {
 
     username = null;
 
+    oncounter = 0;
+
     onLoad() {
         this.score = cc.find("persistnode").getComponent("persistNode").score;
         // this.playerRole = cc.find("persistnode").getComponent("persistNode").playerRole;
@@ -48,12 +50,25 @@ export default class Win extends cc.Component {
         this.move_node.active = true;
         this.move_node.opacity = 0;
         console.log(this.move_node);
-        this.node.on(cc.Node.EventType.TOUCH_END, () => {cc.director.loadScene("Selectstage");}, this);
+        
+
         // cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
     }
     start() {
         // this.Initfirebase();
         this.moving();
+        // this.node.on(cc.Node.EventType.TOUCH_START, function (event) {
+        //     cc.director.loadScene("Selectstage");
+        // }, this);
+
+    }
+    update(dt){
+        this.oncounter += 1;
+        if(this.oncounter > 200){
+            this.node.on(cc.Node.EventType.TOUCH_START, function (event) {
+                cc.director.loadScene("Selectstage");
+            }, this);
+        }
     }
 
     Initboard() {
