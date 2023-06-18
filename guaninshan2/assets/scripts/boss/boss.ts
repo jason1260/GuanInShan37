@@ -13,6 +13,8 @@ export default class boss extends cc.Component {
     energyBallPrefab: cc.Prefab = null;
     @property(cc.Prefab)
     energyBallDefendPrefab: cc.Prefab = null;
+    @property(cc.Prefab)
+    thunderAimPrefab: cc.Prefab = null;
 
     attackingTarget: cc.Node = null;
 
@@ -30,7 +32,7 @@ export default class boss extends cc.Component {
     flashCD:number = 10;
     EnergyballCD:number = 3;
     chaseBallCD:number = 5;
-    lighteningCD:number = 8;
+    lighteningCD:number = 1;
     turnBackCD:number = 6;
     walkingCD:number = 1;
 
@@ -276,10 +278,19 @@ export default class boss extends cc.Component {
     }
 
     generateThunder(attackNum: number,position: cc.Vec2){
+        console.log("generateThunder")
         //CD
         this.isReleasing = true;
         this.schedule(()=>{this.isReleasing = false;},0.1);
         //
+        const thunder = cc.instantiate(this.thunderAimPrefab);
+        thunder.getComponent('thunder').setProperty(attackNum,this.node,position)
+        thunder.setPosition(position.add(this.node.parent.getPosition()));
+        console.log(thunder.getPosition())
+
+        // index 1 =>在scene後面
+        this.node.parent.parent.insertChild(thunder,1);
+
     }
 
     hurt(hurtNum: number) {

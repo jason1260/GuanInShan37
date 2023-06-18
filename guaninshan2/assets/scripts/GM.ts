@@ -74,6 +74,8 @@ export default class GM extends cc.Component {
 
     bornPosparent = null;
 
+    playerList = null;
+
     volume = 1;
 
     // LIFE-CYCLE CALLBACKS:
@@ -94,7 +96,22 @@ export default class GM extends cc.Component {
         this.playbgm(this.bgm);
         cc.log("?????????????", this.playerRole);
     }
-
+    update(dt) {
+        this.playerList = cc.find("Canvas/Main Camera").children;
+        this.playerList = this.playerList.filter((child) => child.group == "player");
+        let nonplayerList = [];
+        for(let ele of this.playerList){ 
+            let ts = ele.getComponent('player') || ele.getComponent('AIplayer')
+            if(this.playerRole != ts.role)
+                nonplayerList.push(ele);
+        }
+        console.log(nonplayerList.length);
+        if(nonplayerList.length == 0){
+            this.win();
+        }else if(cc.find("Canvas/Main Camera/player").getComponent("player").HP <= 0){
+            this.lose();
+        }
+    }
     drawColliderboxes() {
         let tiledSize = this.tiledMap.getTileSize();
         let layers = ['blocks', 'lowBlks', 'secWall', 'secFloor', 'ice', 'mud'];
@@ -270,5 +287,17 @@ export default class GM extends cc.Component {
         }
 
     }
-
+    win(){
+        console.log("win");
+        cc.find("persistnode").getComponent("persistNode").win = true;
+        cc.delayTime(1);
+        cc.director.loadScene("Win");
+        
+    }
+    lose(){
+        console.log("lose");
+        cc.find("persistnode").getComponent("persistNode").win = false;
+        cc.delayTime(1);
+        cc.director.loadScene("Win");
+    }
 }

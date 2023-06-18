@@ -47,7 +47,7 @@ export default class thunder extends cc.Component {
         const bullet = cc.instantiate(this.bulletPrefab);
         bullet.opacity = 1;
 
-        bullet.getComponent('bullet').setProperty(this.attackNum,1,this.node)
+        bullet.getComponent('bullet').setProperty(this.attackNum,1,this.selfNode)
         /* console.log(bullet.getComponent('bullet').attackNum) */
 
         
