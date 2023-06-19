@@ -19,10 +19,10 @@ export default class Register extends cc.Component {
     }
 
     register = async () => {
-        let username = cc.find("Canvas/menu_bg/UserName").getComponent(cc.EditBox).string;
-        let email = cc.find("Canvas/menu_bg/Email").getComponent(cc.EditBox).string;
-        let password = cc.find("Canvas/menu_bg/Password").getComponent(cc.EditBox).string;
-        let repass = cc.find("Canvas/menu_bg/rePassword").getComponent(cc.EditBox).string;
+        let username = cc.find("Canvas/UserName").getComponent(cc.EditBox).string;
+        let email = cc.find("Canvas/Email").getComponent(cc.EditBox).string;
+        let password = cc.find("Canvas/Password").getComponent(cc.EditBox).string;
+        let repass = cc.find("Canvas/rePassword").getComponent(cc.EditBox).string;
         if (password !== repass) {
             alert("Please check password again!");
         } else {

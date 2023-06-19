@@ -19,8 +19,8 @@ export default class Login extends cc.Component {
     }
 
     login = async () => {
-        let email = cc.find("Canvas/menu_bg/Email").getComponent(cc.EditBox).string;
-        let password = cc.find("Canvas/menu_bg/Password").getComponent(cc.EditBox).string;
+        let email = cc.find("Canvas/Email").getComponent(cc.EditBox).string;
+        let password = cc.find("Canvas/Password").getComponent(cc.EditBox).string;
         // console.log(email, password);
         try {
             const reg = await firebase.auth().signInWithEmailAndPassword(email, password);
