@@ -288,16 +288,22 @@ export default class GMBoss extends cc.Component {
                 nameNode.name = "name";
                 let label = nameNode.getComponent(cc.Label);
                 label.string = roleName[roles[j]][pos[i]];
+                nameNode.color = cc.Color.WHITE;
                 label.fontSize = 12;
+        
+                nameNode.addComponent(cc.LabelOutline);
+                let outline = nameNode.getComponent(cc.LabelOutline);
+                outline.color = cc.Color.BLACK;
+                outline.width = 0.5;
                 switch (role) {
                     case "selling":
-                        nameNode.color = cc.Color.ORANGE;
+                        outline.color = cc.Color.ORANGE;
                         break;
                     case "errmei":
-                        nameNode.color = cc.Color.WHITE;
+                        outline.color = cc.Color.RED;
                         break;
                     case "tanmen":
-                        nameNode.color = cc.Color.BLUE;
+                        outline.color = cc.Color.BLUE;
                         break;
                     default:
                         break;

@@ -93,7 +93,7 @@ export default class PlayerBoss extends Player {
                         Node.destroy();
                     }
 
-                    graphicsNode.addChild(triangleNode);
+                    // graphicsNode.addChild(triangleNode);
                     graphicsNode.addChild(headIconNode);
                     graphicsNode.setPosition(cameraEdgePos);
                     graphics.circle(0, 0, 30);

@@ -239,23 +239,29 @@ export default class GM extends cc.Component {
         for (let j = 0; j <= 2; j++) {
             let role = roles[j];
             for (let i = 0; i <= 1; i++) {
-                // console.log("???")
                 let nameNode = new cc.Node();
                 nameNode.addComponent(cc.Label);
                 nameNode.name = "name";
                 let label = nameNode.getComponent(cc.Label);
                 label.string = roleName[roles[j]][pos[i]];
+                nameNode.color = cc.Color.WHITE;
                 label.fontSize = 12;
+        
+                nameNode.addComponent(cc.LabelOutline);
+                let outline = nameNode.getComponent(cc.LabelOutline);
+                outline.color = cc.Color.BLACK;
+                outline.width = 0.5;
+        
                 switch (role) {
                     case "selling":
-                        nameNode.color = cc.Color.ORANGE;
+                        outline.color = cc.Color.ORANGE;
                         break;
                     case "errmei":
-                        nameNode.color = cc.Color.WHITE;
-                    break;
+                        outline.color = cc.Color.RED;
+                        break;
                     case "tanmen":
-                        nameNode.color = cc.Color.BLUE;
-                    break;
+                        outline.color = cc.Color.BLUE;
+                        break;
                     default:
                         break;
                 }
