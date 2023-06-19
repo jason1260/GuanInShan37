@@ -53,7 +53,8 @@ export default class Selectstage extends cc.Component {
         
     }
     multiClick(){
-        cc.director.loadScene("mul");
+        cc.director.loadScene("Select");
+        cc.find("persistnode").getComponent("persistNode").selectStage = 5;
     }
     settingClick(){
         cc.find("Canvas/setting/board").active = !cc.find("Canvas/setting/board").active;

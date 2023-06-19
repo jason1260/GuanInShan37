@@ -74,6 +74,8 @@ export default class SelectRole extends cc.Component {
             cc.director.loadScene('IceAndFire');
         }else if(cc.find("persistnode").getComponent("persistNode").selectStage == 3){
             cc.director.loadScene('boss');
+        }else if(cc.find("persistnode").getComponent("persistNode").selectStage == 5){
+            cc.director.loadScene('waiting');
         }
         // cc.director.loadScene('test');
     }
