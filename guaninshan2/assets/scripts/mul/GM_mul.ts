@@ -60,23 +60,13 @@ export default class GMBoss extends cc.Component {
     @property(cc.AudioClip)
     stickSE: cc.AudioClip = null;
 
-    @property(cc.Prefab)
-    Map1Prefab: cc.Prefab
 
-    @property(cc.Prefab)
-    Map2Prefab: cc.Prefab
 
-    @property(cc.Prefab)
-    IcePrefab: cc.Prefab
+    @property(cc.Node)
+    playerA: cc.Node
 
-    @property(cc.Prefab)
-    MudPrefab: cc.Prefab
-
-    @property(cc.Prefab)
-    AIPrefab: cc.Prefab
-
-    @property(cc.Prefab)
-    playerPrefab: cc.Prefab
+    @property(cc.Node)
+    playerB: cc.Node
 
     playerRole = null;
 
@@ -127,7 +117,6 @@ export default class GMBoss extends cc.Component {
     start() {
         
         this.setBornPos();
-        this.setMap();
         cc.log("?????????????", this.playerRole)
     }
 
@@ -186,86 +175,75 @@ export default class GMBoss extends cc.Component {
         let setPlayer = false;
 
 
-        for (let j = 0; j <= 2; j++) {
-            let role = roles[j];
-            for (let i = 0; i <= 1; i++) {
-                // console.log("???")
-                let nameNode = new cc.Node();
-                nameNode.addComponent(cc.Label);
-                nameNode.name = "name";
-                let label = nameNode.getComponent(cc.Label);
-                label.string = roleName[roles[j]][pos[i]];
-                label.fontSize = 12;
-                switch (role) {
-                    case "selling":
-                        nameNode.color = cc.Color.ORANGE;
-                        break;
-                    case "errmei":
-                        nameNode.color = cc.Color.WHITE;
-                        break;
-                    case "tanmen":
-                        nameNode.color = cc.Color.BLUE;
-                        break;
-                    default:
-                        break;
-                }
-                // console.log("playerRole", playerRole);
-                // console.log("role", role);
-                // console.log("setPlayer", setPlayer);
-                if (playerRole == role && !setPlayer) {
-
-                    setPlayer = true;
-                    let player = cc.instantiate(this.playerPrefab);
-                    cc.log(player.name);
-                    let ts = player.getComponent('player') || player.getComponent('AIplayer')
-                    player.setPosition(bornPosition[roles[j]][pos[i]]);
-                    ts.setRole(role);
-                    label.string = "這我";
-                    nameNode.rotation = -90;
-                    nameNode.setPosition(cc.v2(50, 0));
-                    player.addChild(nameNode);
-                    this.bornPosparent.insertChild(player, 0);
-                    // console.log("player", player);
-                }
-                else {
-                    /* let AI = cc.instantiate(this.AIPrefab);
-                    let ts = AI.getComponent('player') || AI.getComponent('AIplayer')
-                    AI.setPosition(bornPosition[roles[j]][pos[i]]);
-                    ts.setRole(role);
-                    this.bornPosparent.insertChild(AI, 1); */
-                    // console.log("AI", AI);
-                }
-            }
+       
+        let nameNode = new cc.Node();
+        nameNode.addComponent(cc.Label);
+        nameNode.name = "name";
+        let label = nameNode.getComponent(cc.Label);
+        label.fontSize = 12;
+        switch (this.roomData.A.role) {
+            case "selling":
+                nameNode.color = cc.Color.ORANGE;
+                break;
+            case "errmei":
+                nameNode.color = cc.Color.WHITE;
+                break;
+            case "tanmen":
+                nameNode.color = cc.Color.BLUE;
+                break;
+            default:
+                break;
         }
+        // console.log("role", role);
+        // console.log("setPlayer", setPlayer);
+        
+        let player = this.playerA
+        cc.log(player.name);
+        let ts = player.getComponent('player') || player.getComponent('AIplayer')
+        ts.setRole(this.roomData.A.role);
+        label.string = "這我";
+        nameNode.rotation = -90;
+        nameNode.setPosition(cc.v2(50, 0));
+        player.addChild(nameNode);
+        
+
+        nameNode = new cc.Node();
+        nameNode.addComponent(cc.Label);
+        nameNode.name = "name";
+        label = nameNode.getComponent(cc.Label);
+        label.fontSize = 12;
+        switch (this.roomData.B.role) {
+            case "selling":
+                nameNode.color = cc.Color.ORANGE;
+                break;
+            case "errmei":
+                nameNode.color = cc.Color.WHITE;
+                break;
+            case "tanmen":
+                nameNode.color = cc.Color.BLUE;
+                break;
+            default:
+                break;
+        }
+        // console.log("role", role);
+        // console.log("setPlayer", setPlayer);
+        
+        player = this.playerB
+        cc.log(player.name);
+        ts = player.getComponent('player') || player.getComponent('AIplayer')
+        ts.setRole(this.roomData.B.role);
+        label.string = "這我";
+        nameNode.rotation = -90;
+        nameNode.setPosition(cc.v2(50, 0));
+        player.addChild(nameNode);
+
+                
+            
+        
 
     }
 
-    setMap() {
-        let mapcenter = null;
-        console.log("start pos", this.bornPosparent.getPosition());
-
-        for (let i = 9; i >= 1; i -= 1) {
-            let Sample = Math.random();
-            if (i == 5) mapcenter = cc.instantiate(this.Map1Prefab);
-            else {
-                if (Sample < 0.25) mapcenter = cc.instantiate(this.Map1Prefab);
-                else if (Sample < 0.5) mapcenter = cc.instantiate(this.Map2Prefab);
-                else if (Sample < 0.75) mapcenter = cc.instantiate(this.IcePrefab);
-                else mapcenter = cc.instantiate(this.MudPrefab);
-            }
-            let xpos = 0, ypos = 0;
-            if (i == 1 || i == 4 || i == 7) xpos = -960;
-            else if (i == 2 || i == 5 || i == 8) xpos = 0;
-            else xpos = 960;
-
-            if (i <= 3) ypos = 640;
-            else if (i <= 6) ypos = 0;
-            else ypos = -640;
-            mapcenter.setPosition(cc.v2(xpos, ypos));
-            this.mapParent.insertChild(mapcenter, 0);
-            console.log("this is map", i, Sample);
-        }
-    }
+    
 
     update() {
 
@@ -313,26 +291,6 @@ export default class GMBoss extends cc.Component {
         cc.delayTime(1);
         cc.director.loadScene("Win");
     }
-    randDrop() {
-        let weapon= ['gun', 'rifle', 'sniper','knife','stick'];
-        const randomIndex = Math.floor(Math.random() * weapon.length);
-        let weaponType = weapon[randomIndex];  
-
-        cc.resources.load(`Prefab/${weaponType}Drop`, cc.Prefab, (err, prefab) => {
-            if (err) {
-                console.log("沒辦法大便");
-                return;
-            }
-            let player =cc.find("Canvas/Main Camera/player")
-            const newNode = cc.instantiate(prefab);
-            newNode.position = player.getPosition().add(player.parent.getPosition());
-            const sample1 = Math.random(), sample2 = Math.random();
-            const radius = 200;
-            newNode.position = newNode.position.add(cc.v2((radius * sample1) -100, (radius * sample2) -100));
-            const nodeIndex = player.parent.getSiblingIndex();
-            this.node.parent.parent.insertChild(newNode, nodeIndex);
-        });
-
-    }
+    
 
 }

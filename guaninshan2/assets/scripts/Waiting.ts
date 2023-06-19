@@ -40,16 +40,16 @@ export default class Waiting extends cc.Component {
                     rotate:0,
                     Input:{},
                     die: false,
-                    x: -415.477,
-                    y: -119.177,
+                    x: -323.303,
+                    y: -93.88,
                     role : cc.find("persistnode").getComponent("persistNode").playerRole,
                     },
                     B: {
                     rotate:0,
                     Input:{},
                     die: false,
-                    x: -325.443,
-                    y: 226.569,
+                    x: -321.545,
+                    y: 149.546,
                     role : "null"
                     }
                 }
@@ -74,8 +74,8 @@ export default class Waiting extends cc.Component {
                     rotate:0,
                     Input:{},
                     die: false,
-                    x: -325.443,
-                    y: 226.569,
+                    x: -321.545,
+                    y: 149.546,
                     role : cc.find("persistnode").getComponent("persistNode").playerRole,
                     }
                 }).then(()=>{
