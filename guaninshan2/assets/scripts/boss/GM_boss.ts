@@ -5,6 +5,8 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+export var notstart: boolean;
+
 const bornPosition = {
     selling: {
         postion1: cc.v2(0, 0),
@@ -91,12 +93,14 @@ export default class GMBoss extends cc.Component {
     mapcounter = null;
 
     playerList = null;
+    bosscounter = null;
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
         cc.director.getPhysicsManager().enabled = true;
         cc.director.getCollisionManager().enabled = true;
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         // console.log("123", cc.find("persistnode").getComponent("persistNode"))
         this.playerRole = cc.find("persistnode").getComponent("persistNode").playerRole;
         this.bornPosparent = cc.find("Canvas/Main Camera");
@@ -106,13 +110,54 @@ export default class GMBoss extends cc.Component {
         this.currMapPos = cc.v2(0, 0);
         this.mapcounter = 0;
         this.playerName = cc.find("persistnode").getComponent("persistNode").name;;
+        this.bosscounter = 0;
+        notstart = true;
     }
 
     start() {
         /* this.drawColliderboxes(); */
+        notstart = true;
+        this.bosscounter = 0;
         this.setBornPos();
         this.setMap();
+        this.focusOnBoss();
         cc.log("?????????????", this.playerRole)
+    }
+
+    onKeyDown(e) {
+        if (e.keyCode == cc.macro.KEY.enter) {
+            this.bosscounter += 1;
+            if (this.bosscounter === 3) {
+
+                cc.tween(cc.find('Canvas/Main Camera'))
+                    .to(1, { position: cc.v3(0, 0, 0) })
+                    .start()
+
+                cc.tween(cc.find('Canvas/Main Camera').getComponent(cc.Camera))
+                    .to(1, { zoomRatio: 1 })
+                    .start()
+                notstart = false;
+                cc.find('Canvas/Main Camera/blue-boss1/bosschat').active = false;
+            }
+        }
+    }
+
+    onDestroy(): void {
+        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
+    }
+
+    focusOnBoss() {
+        console.log("start to focus on boss mother fuckerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+        const bosspos_world = cc.find('Canvas/Main Camera/blue-boss1').convertToWorldSpaceAR(cc.v3(0, 0, 0));
+        const bosspos = cc.find('Canvas/Main Camera').convertToNodeSpaceAR(bosspos_world);
+        notstart = true;
+        cc.tween(cc.find('Canvas/Main Camera'))
+            .to(1, { position: cc.v3(bosspos.x, bosspos.y - 20, bosspos.z) })
+            .start()
+
+        cc.tween(cc.find('Canvas/Main Camera').getComponent(cc.Camera))
+            .to(1, { zoomRatio: 3 })
+            .start()
     }
 
     drawColliderboxes() {
@@ -328,7 +373,7 @@ export default class GMBoss extends cc.Component {
             this.lose();
         }
 
-
+        if (notstart) return;
 
 
         let playerPos = this.bornPosparent.getPosition();

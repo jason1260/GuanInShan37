@@ -5,7 +5,8 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
+import { notstart } from "./GM_boss";
 
 @ccclass
 export default class boss extends cc.Component {
@@ -31,26 +32,26 @@ export default class boss extends cc.Component {
     camera: cc.Node = null;
     public direction = null;
 
-    flashCD:number = 10;
-    EnergyballCD:number = 2;
-    chaseBallCD:number = 5;
-    lighteningCD:number = 2;
-    turnBackCD:number = 6;
-    walkingCD:number = 1;
+    flashCD: number = 10;
+    EnergyballCD: number = 2;
+    chaseBallCD: number = 5;
+    lighteningCD: number = 2;
+    turnBackCD: number = 6;
+    walkingCD: number = 1;
 
-    Energyballsp:number = 3;
-    chaseballsp:number = 300;
-    lighteningsp:number = 100;
+    Energyballsp: number = 3;
+    chaseballsp: number = 300;
+    lighteningsp: number = 100;
 
-    chaseBallhurt:number = 6;
-    Energyballhurt:number = 6;
-    lighteninghurt:number = 6;
+    chaseBallhurt: number = 6;
+    Energyballhurt: number = 6;
+    lighteninghurt: number = 6;
 
-    angryflashRadius:number = 200;
-    safeRadius:number = 1000;
-    enemyDistance:number = 0;
+    angryflashRadius: number = 200;
+    safeRadius: number = 1000;
+    enemyDistance: number = 0;
 
-    EnergyballTrackRadius:number = 60;
+    EnergyballTrackRadius: number = 60;
 
     isflashed = false;
     canTurnback = true;
@@ -61,16 +62,16 @@ export default class boss extends cc.Component {
     angryBonus = 1.5;
     angryHpPercent = 0.3;
 
-    public walkTime:number = 0;
-    public speed:number = 300;
+    public walkTime: number = 0;
+    public speed: number = 300;
     walkRadius = 400;
 
-    public HP:number = 400;
-    totalHP:number = 0;
+    public HP: number = 400;
+    totalHP: number = 0;
 
     greedyflag = true;
 
-    public isReleasing:boolean = false;
+    public isReleasing: boolean = false;
 
     moveDirection = cc.v2(0, 0);
 
@@ -80,18 +81,19 @@ export default class boss extends cc.Component {
 
     isrealsingChaseBall = false;
 
-    onLoad () {
+    onLoad() {
         this.camera = cc.find("Canvas/Main Camera");
         this.totalHP = this.HP;
         this.angryColor = new cc.Color(240, 108, 108);
         this.anim = this.node.getComponent(cc.Animation);
     }
 
-    start () {
+    start() {
     }
 
-    update (dt) {
-        if (this.isDie){
+    update(dt) {
+        if (notstart) return;
+        if (this.isDie) {
             return;
         }
 
@@ -103,7 +105,7 @@ export default class boss extends cc.Component {
             return;
         }
 
-        if (!this.attackingTarget){
+        if (!this.attackingTarget) {
             this.attackingTarget = cc.find("Canvas/Main Camera/player");
             if (!this.attackingTarget) return;
         }
@@ -113,7 +115,7 @@ export default class boss extends cc.Component {
             console.log("angryyyyyyyyyyyy")
             this.angry();
         }
-        
+
         this.detectEnemy(this.attackingTarget, this.camera);
         this.walking(dt);
         this.attacking(dt);
@@ -122,7 +124,7 @@ export default class boss extends cc.Component {
     angry() {
         this.isAngry = true;
         this.EnergyballCD = Math.floor(this.EnergyballCD / this.angryBonus);
-        this.flashCD = Math.floor(this.flashCD / (this.angryBonus*3));
+        this.flashCD = Math.floor(this.flashCD / (this.angryBonus * 3));
         this.EnergyballCD = Math.floor(this.EnergyballCD / this.angryBonus);
         this.chaseBallCD = Math.floor(this.chaseBallCD / this.angryBonus);
         this.lighteningCD = Math.floor(this.lighteningCD / (this.angryBonus));
@@ -135,7 +137,7 @@ export default class boss extends cc.Component {
         this.lighteningsp = Math.floor(this.lighteningsp * this.angryBonus);
 
         this.canTurnback = false;
-    
+
         this.changeColor();
     }
 
@@ -143,16 +145,16 @@ export default class boss extends cc.Component {
         this.node.color = this.angryColor;
     }
 
-    detectEnemy (Target:cc.Node, camera) {
+    detectEnemy(Target: cc.Node, camera) {
         const playerPos = this.node.getPosition();
         const targetPos = Target.getPosition();
-    
+
         // 计算方向向量和距离
         this.direction = targetPos.sub(playerPos);
         this.enemyDistance = this.direction.mag();
     }
 
-    walking (dt) {
+    walking(dt) {
         if (this.isrealsingChaseBall) {
             this.node.getComponent(cc.RigidBody).linearVelocity = cc.v2(0, 0);
             return;
@@ -199,9 +201,9 @@ export default class boss extends cc.Component {
         // 更新节点位置
         if (greedyflag)
             this.node.getComponent(cc.RigidBody).linearVelocity = this.moveDirection.mul(this.speed);
-        else 
-            this.node.getComponent(cc.RigidBody).linearVelocity = this.moveDirection.mul(this.speed*-1);
-        
+        else
+            this.node.getComponent(cc.RigidBody).linearVelocity = this.moveDirection.mul(this.speed * -1);
+
     }
 
     attacking(dt) {
@@ -227,71 +229,71 @@ export default class boss extends cc.Component {
             this.chaseBallTimer = 0;
             this.isrealsingChaseBall = true;
             this.generateChaseBall(this.chaseBallhurt, this.chaseballsp)
-            this.scheduleOnce(()=>{this.isrealsingChaseBall = false;}, 0.7);
+            this.scheduleOnce(() => { this.isrealsingChaseBall = false; }, 0.7);
         }
 
         if (this.lighteningTimer >= this.lighteningCD) {
             this.lighteningTimer = 0;
-            let radius = (this.isAngry) ? 80*Math.sqrt(this.HP) :  5*Math.sqrt(this.HP);
-            let thunderPos =  this.getRandomInCircle_polar_better(0, radius, this.attackingTarget)
+            let radius = (this.isAngry) ? 80 * Math.sqrt(this.HP) : 5 * Math.sqrt(this.HP);
+            let thunderPos = this.getRandomInCircle_polar_better(0, radius, this.attackingTarget)
             this.generateThunder(this.lighteninghurt, thunderPos)
         }
 
-        if (this.canTurnback && this.isflashed){
+        if (this.canTurnback && this.isflashed) {
             this.turnback(dt);
         }
 
     }
 
-    flash (dt) {
+    flash(dt) {
         const dest = this.getRandomInCircle_polar_better(this.EnergyballTrackRadius, this.angryflashRadius, this.attackingTarget);
         this.anim.playAdditive('boss-flash');
-        this.scheduleOnce(()=>{this.node.setPosition(dest);},0.65);
+        this.scheduleOnce(() => { this.node.setPosition(dest); }, 0.65);
         // this.node.setPosition(dest);
     }
 
-    turnback (dt) {
+    turnback(dt) {
         this.turnBackTimer += dt;
         if (this.turnBackTimer >= this.turnBackCD && this.isflashed) {
             this.turnBackTimer = 0;
             this.anim.playAdditive('boss-flash');
-            this.scheduleOnce(()=>{this.node.setPosition(this.turnbackPos);},0.65);
+            this.scheduleOnce(() => { this.node.setPosition(this.turnbackPos); }, 0.65);
             // this.node.setPosition(this.turnbackPos);
             this.isflashed = false;
         }
     }
 
-    generateAroundBall(attackNum: number,speed: number){ 
+    generateAroundBall(attackNum: number, speed: number) {
         //CD
         this.isReleasing = true;
-        this.schedule(()=>{this.isReleasing = false;},0.1);
+        this.schedule(() => { this.isReleasing = false; }, 0.1);
         //
         console.log("generate1")
 
         const energyBall = cc.instantiate(this.energyBallDefendPrefab);
-        energyBall.getComponent('energy_ball').setProperty(attackNum,speed,this.node,1)
+        energyBall.getComponent('energy_ball').setProperty(attackNum, speed, this.node, 1)
         this.node.insertChild(energyBall, 0);
-        energyBall.setPosition(new cc.Vec2(-42,42));
+        energyBall.setPosition(new cc.Vec2(-42, 42));
         // this.anim.playAdditive('boss-around');
     }
 
-    generateChaseBall(attackNum: number,speed: number){
+    generateChaseBall(attackNum: number, speed: number) {
         //CD
         this.isReleasing = true;
-        this.schedule(()=>{this.isReleasing = false;},0.3);
+        this.schedule(() => { this.isReleasing = false; }, 0.3);
         //
         let playerList = cc.find("Canvas/Main Camera").children;
         playerList = playerList.filter((child) => child.group == "player")
         const randomIndex = Math.floor(Math.random() * playerList.length);
-        let targetplayer =  playerList[randomIndex];
-        if(!targetplayer) null;
+        let targetplayer = playerList[randomIndex];
+        if (!targetplayer) null;
         // this.isReleasing = true;
         // this.schedule(()=>{this.isReleasing = false;},0.1);
         // console.log("generate2")
 
         const energyBall = cc.instantiate(this.energyBallPrefab);
-        energyBall.getComponent('energy_ball').setProperty(attackNum,speed,this.node,2,targetplayer);
-        
+        energyBall.getComponent('energy_ball').setProperty(attackNum, speed, this.node, 2, targetplayer);
+
         this.anim.playAdditive('boss-attack');
         var offset = cc.v2(-50, 55);
         var newPosition = this.node.getPosition().add(offset);
@@ -300,19 +302,19 @@ export default class boss extends cc.Component {
         this.node.parent.addChild(energyBall);
     }
 
-    generateThunder(attackNum: number,position: cc.Vec2){
+    generateThunder(attackNum: number, position: cc.Vec2) {
         console.log("generateThunder")
         //CD
         this.isReleasing = true;
-        this.schedule(()=>{this.isReleasing = false;},0.1);
+        this.schedule(() => { this.isReleasing = false; }, 0.1);
         //
         const thunder = cc.instantiate(this.thunderAimPrefab);
-        thunder.getComponent('thunder').setProperty(attackNum,this.node,position)
+        thunder.getComponent('thunder').setProperty(attackNum, this.node, position)
         thunder.setPosition(position.add(this.node.parent.getPosition()));
         console.log(thunder.getPosition())
 
         // index 1 =>在scene後面
-        this.node.parent.parent.insertChild(thunder,1);
+        this.node.parent.parent.insertChild(thunder, 1);
 
     }
 
@@ -331,7 +333,7 @@ export default class boss extends cc.Component {
         // 将节点颜色设置为白色
         let originColor = (this.isAngry) ? this.angryColor : cc.Color.WHITE;
         this.node.color = cc.Color.RED;
-        
+
         // 创建显示文字的节点
         let textNode = new cc.Node();
         textNode.addComponent(cc.Label);
@@ -341,7 +343,7 @@ export default class boss extends cc.Component {
         label.node.color = cc.Color.RED;
         textNode.setPosition(this.node.getPosition().add(cc.v2(0, 20))); // 设置文字节点位置
         this.node.parent.addChild(textNode);
-        
+
         // 淡入淡出效果并向右飘移
         let moveAction = cc.moveBy(0.5, cc.v2(10, 10)); // 控制向右飘移的距离和时间
         let fadeIn = cc.fadeIn(0.1);
@@ -350,10 +352,10 @@ export default class boss extends cc.Component {
         let sequence = cc.sequence(fadeIn, delay, fadeOut, cc.removeSelf());
         let spawn = cc.spawn(moveAction, sequence);
         textNode.runAction(spawn);
-        
+
         // 延迟0.05秒后恢复原样
         this.scheduleOnce(() => {
-          this.node.color = originColor; // 恢复原来的颜色（假设原来的颜色为白色）
+            this.node.color = originColor; // 恢复原来的颜色（假设原来的颜色为白色）
         }, 0.02);
 
     }
@@ -382,7 +384,7 @@ export default class boss extends cc.Component {
             const nodeIndex = this.node.parent.getSiblingIndex();
             this.node.parent.parent.insertChild(bloodNode, nodeIndex);
             // this.node.parent.parent.addChild(bloodNode);
-        
+
             // 创建血迹淡出动画
             let fadeOut = cc.fadeOut(1);
             // 创建动画完成后的回调函数，用于销毁血迹精灵节点
@@ -396,7 +398,7 @@ export default class boss extends cc.Component {
         });
     }
 
-    getRandomInCircle_polar_better(radius2, radius1, Target:cc.Node) {
+    getRandomInCircle_polar_better(radius2, radius1, Target: cc.Node) {
         let l = radius1 - radius2;
         let length = radius2 + Math.sqrt(Math.random()) * l;
         let angle = Math.random() * 2 * Math.PI;

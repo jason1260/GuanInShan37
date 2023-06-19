@@ -6,8 +6,9 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import Player from "../player";
+import { notstart } from "./GM_boss";
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 const Input = {}
 import gameInfo = require("../gameInfo");
 @ccclass
@@ -17,7 +18,7 @@ export default class PlayerBoss extends Player {
 
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad () {
+    onLoad() {
         // console.log("player onLoad")
         this.leftHand = this.node.getChildByName("leftHand");
         cc.resources.load(`role/${this.role}`, cc.SpriteFrame, (err, spriteFrame) => {
@@ -35,7 +36,7 @@ export default class PlayerBoss extends Player {
 
 
 
-        for (var member in Input)  Input[member] = 0;
+        for (var member in Input) Input[member] = 0;
         this.score = 0;
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
@@ -47,11 +48,12 @@ export default class PlayerBoss extends Player {
         this.GM = cc.find("Canvas/GM").getComponent('GM_boss');
     }
 
-    start () {
+    start() {
 
     }
 
-    update (dt) {
+    update(dt) {
+        if (notstart) return;
         super.update(dt);
         this.bossPos = cc.find("Canvas/Main Camera/blue-boss1").getPosition();
         this.showbossPosNotice();

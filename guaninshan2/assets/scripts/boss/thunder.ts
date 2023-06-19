@@ -5,7 +5,8 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
+import { notstart } from "./GM_boss";
 
 @ccclass
 export default class thunder extends cc.Component {
@@ -17,59 +18,61 @@ export default class thunder extends cc.Component {
     bulletPrefab: cc.Prefab = null;
 
     public attackNum: number = 0;
-    public selfNode:cc.Node = null;
-    public target:cc.Vec2 = null;
-    public camera =null;
+    public selfNode: cc.Node = null;
+    public target: cc.Vec2 = null;
+    public camera = null;
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad () {
+    onLoad() {
     }
 
-    start () {
+    start() {
         const duration = 1; // 动画持续时间，单位为秒
         // 创建一个渐变动作，将节点的 opacity 从 0 渐变到 1
         const fadeInAction = cc.tween().to(duration, { opacity: 255 });
         // 执行渐变动作
         cc.tween(this.node).then(fadeInAction).start();
-        this.scheduleOnce(()=>{this.createThunder()},0.6)
-        this.scheduleOnce(()=>{this.createBullet()},1)
-        this.scheduleOnce(()=>{this.node.destroy()},1.2)
+        this.scheduleOnce(() => { this.createThunder() }, 0.6)
+        this.scheduleOnce(() => { this.createBullet() }, 1)
+        this.scheduleOnce(() => { this.node.destroy() }, 1.2)
     }
 
-    update (dt) {}
+    update(dt) {
+        if (notstart) return;
+    }
 
-    setProperty(attackNum: number, selfNode:cc.Node, aim:cc.Vec2 = null){
+    setProperty(attackNum: number, selfNode: cc.Node, aim: cc.Vec2 = null) {
         this.attackNum = attackNum + Math.floor((0.1 * Math.random() - 0.05) * 2 * attackNum);
         this.selfNode = selfNode;
         this.target = aim;
     }
-    createBullet(){
+    createBullet() {
         const bullet = cc.instantiate(this.bulletPrefab);
         bullet.opacity = 1;
 
-        bullet.getComponent('bullet').setProperty(this.attackNum,1,this.selfNode)
+        bullet.getComponent('bullet').setProperty(this.attackNum, 1, this.selfNode)
         /* console.log(bullet.getComponent('bullet').attackNum) */
 
-        
-        bullet.setPosition(cc.v2(0,0));
 
-        bullet.scale=2;
+        bullet.setPosition(cc.v2(0, 0));
 
-        
+        bullet.scale = 2;
+
+
 
         bullet.getComponent(cc.Collider).enabled = false;
         this.node.addChild(bullet)
     }
-    createThunder(){
+    createThunder() {
         const thunder = cc.instantiate(this.thunderPrefab);
 
         /* console.log(bullet.getComponent('bullet').attackNum) */
 
-        
-        thunder.setPosition(cc.v2(0,0));
+
+        thunder.setPosition(cc.v2(0, 0));
 
 
-      
+
         this.node.addChild(thunder)
     }
 }

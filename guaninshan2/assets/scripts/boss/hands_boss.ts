@@ -6,8 +6,9 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import hands from "../hands";
+import { notstart } from "./GM_boss";
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 export var knife_valid;
 
 @ccclass
@@ -19,9 +20,9 @@ export default class handsBoss extends hands {
     @property
     text: string = 'hello';
 
-    onLoad () {
+    onLoad() {
         this.GM = cc.find("Canvas/GM").getComponent('GM_boss');
-        
+
 
         this.leftHand = this.node.getChildByName("leftHand");
         this.rightHand = this.node.getChildByName("rightHand");
@@ -35,11 +36,12 @@ export default class handsBoss extends hands {
         knife_valid = false;
     }
 
-    start () {
+    start() {
 
     }
 
-    update (dt) {
+    update(dt) {
+        if (notstart) return;
         super.update(dt);
     }
 }

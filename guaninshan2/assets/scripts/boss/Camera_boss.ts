@@ -1,4 +1,5 @@
 const { ccclass, property } = cc._decorator;
+import { notstart } from "./GM_boss";
 
 @ccclass
 export default class Camera_bass extends cc.Component {
@@ -11,6 +12,7 @@ export default class Camera_bass extends cc.Component {
 
     }
     update(dt) {
+        if (notstart) return;
         if (!this.target) {
             this.target = cc.find("Canvas/Main Camera/player")
             if (!this.target) return
