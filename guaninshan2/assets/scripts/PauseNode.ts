@@ -41,6 +41,11 @@ export default class NewClass extends cc.Component {
         }
     }
 
+    onDestroy() {
+        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
+        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+    }
+
     ContinueClick() {
         this.PauseMenu.active = false;
         cc.game.canvas.style.cursor = 'none';

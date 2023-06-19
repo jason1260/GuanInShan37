@@ -87,7 +87,7 @@ export default class GMBoss extends cc.Component {
     Mapgroup = null;
 
     mapParent = null;
-
+    playerName = null;
     mapcounter = null;
 
     playerList = null;
@@ -105,6 +105,7 @@ export default class GMBoss extends cc.Component {
         this.mapParent = cc.find("Canvas/scene2");
         this.currMapPos = cc.v2(0, 0);
         this.mapcounter = 0;
+        this.playerName = cc.find("persistnode").getComponent("persistNode").name;;
     }
 
     start() {
@@ -267,7 +268,7 @@ export default class GMBoss extends cc.Component {
                     let ts = player.getComponent('player') || player.getComponent('AIplayer')
                     player.setPosition(bornPosition[roles[j]][pos[i]]);
                     ts.setRole(role);
-                    label.string = "這我";
+                    label.string = this.playerName;
                     nameNode.rotation = -90;
                     nameNode.setPosition(cc.v2(50, 0));
                     player.addChild(nameNode);
@@ -321,9 +322,9 @@ export default class GMBoss extends cc.Component {
         this.playerList = this.playerList.filter((child) => child.group == "boss");
         let nonplayerList = this.playerList;
         console.log(nonplayerList.length);
-        if(nonplayerList.length == 0){
+        if (nonplayerList.length == 0) {
             this.win();
-        }else if(cc.find("Canvas/Main Camera/player").getComponent("player").HP <= 0){
+        } else if (cc.find("Canvas/Main Camera/player").getComponent("player").HP <= 0) {
             this.lose();
         }
 
@@ -467,35 +468,35 @@ export default class GMBoss extends cc.Component {
             this.randDrop();
         }
     }
-    win(){
+    win() {
         console.log("win");
         cc.find("persistnode").getComponent("persistNode").win = true;
         cc.delayTime(1);
         cc.director.loadScene("Win");
-        
+
     }
-    lose(){
+    lose() {
         console.log("lose");
         cc.find("persistnode").getComponent("persistNode").win = false;
         cc.delayTime(1);
         cc.director.loadScene("Win");
     }
     randDrop() {
-        let weapon= ['gun', 'rifle', 'sniper','knife','stick'];
+        let weapon = ['gun', 'rifle', 'sniper', 'knife', 'stick'];
         const randomIndex = Math.floor(Math.random() * weapon.length);
-        let weaponType = weapon[randomIndex];  
+        let weaponType = weapon[randomIndex];
 
         cc.resources.load(`Prefab/${weaponType}Drop`, cc.Prefab, (err, prefab) => {
             if (err) {
                 console.log("沒辦法大便");
                 return;
             }
-            let player =cc.find("Canvas/Main Camera/player")
+            let player = cc.find("Canvas/Main Camera/player")
             const newNode = cc.instantiate(prefab);
             newNode.position = player.getPosition().add(player.parent.getPosition());
             const sample1 = Math.random(), sample2 = Math.random();
             const radius = 200;
-            newNode.position = newNode.position.add(cc.v2((radius * sample1) -100, (radius * sample2) -100));
+            newNode.position = newNode.position.add(cc.v2((radius * sample1) - 100, (radius * sample2) - 100));
             const nodeIndex = player.parent.getSiblingIndex();
             this.node.parent.parent.insertChild(newNode, nodeIndex);
         });
