@@ -27,7 +27,7 @@ export default class energyBall extends cc.Component {
     public degree: number = 135;
     public available: boolean = false;
     onLoad() {
-        this.scheduleOnce(() => { this.available = true }, 0.5)
+        this.scheduleOnce(() => { this.available = true }, 0.35)
         const duration = 0.5; // 动画持续时间，单位为秒
         // 创建一个渐变动作，将节点的 opacity 从 0 渐变到 1
         this.node.opacity = 0;

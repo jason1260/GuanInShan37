@@ -127,7 +127,7 @@ export default class GMBoss extends cc.Component {
     onKeyDown(e) {
         if (e.keyCode == cc.macro.KEY.enter) {
             this.bosscounter += 1;
-            if (this.bosscounter === 3) {
+            if (this.bosscounter === 11) {
 
                 cc.tween(cc.find('Canvas/Main Camera'))
                     .to(1, { position: cc.v3(0, 0, 0) })
@@ -362,6 +362,28 @@ export default class GMBoss extends cc.Component {
 
     update() {
 
+        if (this.bosscounter == 1) {
+            cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "你们这些观音山上的老顽固";
+        } else if (this.bosscounter == 2) {
+            cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "因为我从未来带来的一些武器\n就自相残杀";
+        } else if (this.bosscounter == 3) {
+            cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "你们曾经自夸是正义和和平的\n守护者";
+        } else if (this.bosscounter == 4) {
+            cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "但看看现在的结局！";
+        } else if (this.bosscounter == 5) {
+            cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "你们只是一群软弱无能的凡人";
+        } else if (this.bosscounter == 6) {
+            cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "无法抵挡我的力量。";
+            } else if (this.bosscounter == 7) {
+            cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "你们可以试着反抗";
+        } 
+        else if (this.bosscounter == 8) {   
+            cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "但结果只会更加惨痛。";
+            } else if (this.bosscounter == 9) {
+            cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "我是统治者，是未来的主宰者";
+                } else if (this.bosscounter == 10) {
+            cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "而你们注定成为我脚下的踏垫!";
+        }
 
         this.playerList = cc.find("Canvas/Main Camera").children;
         this.playerList = this.playerList.filter((child) => child.group == "boss");
