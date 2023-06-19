@@ -72,6 +72,8 @@ export default class GM extends cc.Component {
 
     playerRole = null;
 
+    playerName = null;
+
     bornPosparent = null;
 
     playerList = null;
@@ -87,6 +89,7 @@ export default class GM extends cc.Component {
         this.playerRole = cc.find("persistnode").getComponent("persistNode").playerRole;
         this.bornPosparent = cc.find("Canvas/Main Camera");
         this.volume = cc.find("persistnode").getComponent("persistNode").volume;
+        this.playerName = cc.find("persistnode").getComponent("persistNode").name;;
         // cc.director.getPhysicsManager().debugDrawFlags = 1;
     }
 
@@ -264,7 +267,7 @@ export default class GM extends cc.Component {
                     let ts = player.getComponent('player') || player.getComponent('AIplayer')
                     player.setPosition(bornPosition[roles[j]][pos[i]]);
                     ts.setRole(role);
-                    label.string = "這我";
+                    label.string = this.playerName;
                     nameNode.rotation = -90;
                     nameNode.setPosition(cc.v2(50, 0));
                     player.addChild(nameNode);
