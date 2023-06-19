@@ -30,8 +30,8 @@ export default class boss extends cc.Component {
     public direction = null;
 
     flashCD:number = 10;
-    EnergyballCD:number = 1.5;
-    chaseBallCD:number = 4;
+    EnergyballCD:number = 2;
+    chaseBallCD:number = 5;
     lighteningCD:number = 2;
     turnBackCD:number = 6;
     walkingCD:number = 1;
@@ -120,7 +120,7 @@ export default class boss extends cc.Component {
         this.flashCD = Math.floor(this.flashCD / (this.angryBonus*3));
         this.EnergyballCD = Math.floor(this.EnergyballCD / this.angryBonus);
         this.chaseBallCD = Math.floor(this.chaseBallCD / this.angryBonus);
-        this.lighteningCD = Math.floor(this.lighteningCD / (this.angryBonus*1.5));
+        this.lighteningCD = Math.floor(this.lighteningCD / (this.angryBonus));
         this.turnBackCD = Math.floor(this.turnBackCD / this.angryBonus);
         this.chaseBallhurt = Math.floor(this.chaseBallhurt * this.angryBonus);
         this.Energyballhurt = Math.floor(this.Energyballhurt * this.angryBonus);
@@ -300,6 +300,14 @@ export default class boss extends cc.Component {
     hurt(hurtNum: number) {
         this.HP -= hurtNum;
         this.bleedAnim(hurtNum);
+
+        // 将节点颜色设置为白色
+        if (this.HP <= this.totalHP * this.angryHpPercent && !this.isAngryFlag) {
+            this.isAngryFlag = true;
+            console.log("angryyyyyyyyyyyy")
+            this.angry();
+        }
+
 
         // 将节点颜色设置为白色
         let originColor = (this.isAngry) ? this.angryColor : cc.Color.WHITE;

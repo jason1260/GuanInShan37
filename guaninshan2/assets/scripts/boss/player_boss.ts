@@ -60,63 +60,79 @@ export default class PlayerBoss extends Player {
     showbossPosNotice() {
         const playerPos = this.node.getPosition();
         const bossDir = this.bossPos.sub(playerPos).normalize();
-    
-        let cameraEdgeDis = bossDir.mul(200);
-        let cameraEdgePos = cameraEdgeDis.add(playerPos);
-    
+
+        const cameraEdgeDis = bossDir.mul(200);
+        const cameraEdgePos = cameraEdgeDis.add(playerPos);
+
         const distanceToCameraEdge = cc.Vec2.distance(playerPos, this.bossPos);
-        const threshold = 500; // 调整此阈值以控制头像出现的距离阈值
-        // console.log(distanceToCameraEdge)
+        const threshold = 500; // Adjust this threshold to control the distance threshold at which the boss icon appears
+
         if (distanceToCameraEdge >= threshold) {
-            // 在连线上显示 Boss 头像
             let graphicsNode = cc.find("Canvas/Main Camera/graphicsNode");
             if (!graphicsNode) {
                 let headIconNode = new cc.Node();
                 let graphicsNode = new cc.Node();
                 let graphics = graphicsNode.addComponent(cc.Graphics);
                 let headIconSprite = headIconNode.addComponent(cc.Sprite);
+                let triangleNode = new cc.Node(); // Create a new node for the triangle
+                let triangleGraphics = triangleNode.addComponent(cc.Graphics); // Add a Graphics component to the triangle node
                 headIconNode.name = "headIcon";
                 graphicsNode.name = "graphicsNode";
+
                 cc.resources.load("blue-boss-idle", cc.SpriteFrame, (err, spriteFrame) => {
                     if (err) {
-                        console.error("加载 Boss 头像预制资源失败：", err);
+                        console.error("Failed to load boss icon resource:", err);
                         return;
                     }
                     headIconSprite.spriteFrame = spriteFrame;
 
-
                     let Node = cc.find("Canvas/Main Camera/graphicsNode");
                     if (Node) {
-                        // headIcon.removeFromParent();
                         Node.destroy();
-                    
                     }
+
+                    graphicsNode.addChild(triangleNode);
                     graphicsNode.addChild(headIconNode);
                     graphicsNode.setPosition(cameraEdgePos);
                     graphics.circle(0, 0, 30);
                     graphics.fillColor = cc.Color.WHITE;
                     graphics.fill();
-                    
-                    // 绘制绿色边框
+
+                    // Draw the red border
                     graphics.circle(0, 0, 28);
                     graphics.lineWidth = 5;
                     graphics.strokeColor = cc.Color.RED;
                     graphics.stroke();
-                    
-                    
+
+                    // Calculate the position of the triangle
+                    const triangleSize = 5;
+                    const trianglePos = bossDir.mul(45 + triangleSize);
+                    let triangleRotation = Math.atan2(bossDir.y, bossDir.x);
+                    triangleGraphics.moveTo(-triangleSize, 0);
+                    triangleGraphics.lineTo(triangleSize, 0);
+                    triangleGraphics.lineTo(0, triangleSize);
+                    triangleGraphics.close();
+                    triangleGraphics.fillColor = cc.Color.RED;
+                    triangleGraphics.strokeColor = cc.Color.RED;
+                    triangleGraphics.stroke();
+                    triangleGraphics.fill();
+                    triangleNode.setPosition(trianglePos);
+                    triangleNode.angle = cc.misc.radiansToDegrees(triangleRotation);
+                    triangleNode.name = "triangleNode"
+
                     cc.find("Canvas/Main Camera").addChild(graphicsNode);
                 });
-            } 
-            
-            else {
+            } else {
                 graphicsNode.setPosition(cameraEdgePos);
+                const triangleNode = graphicsNode.getChildByName("triangleNode");
+                if (triangleNode) {
+                    const triangleRotation = Math.atan2(bossDir.y, bossDir.x);
+                    triangleNode.angle = cc.misc.radiansToDegrees(triangleRotation);
+                }
             }
-        } 
-        else {
-            // 隐藏 Boss 头像
+        } else {
             const graphicsNode = cc.find("Canvas/Main Camera/graphicsNode");
             if (graphicsNode) {
-                // headIcon.removeFromParent();
                 graphicsNode.destroy();
             }
         }

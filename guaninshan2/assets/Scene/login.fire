@@ -2286,7 +2286,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "persistNode",
+    "_name": "persistnode",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1

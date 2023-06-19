@@ -103,40 +103,43 @@ export default class AIPlayer extends Player {
         //reload
         if (this.bulletNum <= 0 && this.Handstate !== 'changing' && this.Handstate !== 'reloading')
             this.reload()
-        // cc.log(this.attackingTarget)
-        // console.log()
+
         this.astar.setHandState(this.Handstate);
-        /* 窮追猛打 
-        if(!this.attackingTarget){
-            this.setPlayerList();
-            this.findEnemy();
-            this.attackingTarget = this.attackingList[this.attackingList.length-1];
-        }
-        if(this.attackingTarget && this.attackingTarget.name == ''){
-            this.setPlayerList();
-            this.findEnemy();
-            this.attackingTarget = this.attackingList[this.attackingList.length-1];
-        } */
+
+        this.findNearstEnemy();
         this.setPlayerList();
         this.findEnemy();
-        this.findNearstEnemy();
-        /* this.attackingTarget = this.attackingList[this.attackingList.length-1]; */
-        if (!this.nearstTarget) return
-        this.attackingTarget = this.nearstTarget;
-        // cc.log(this.attackingList)
+        // this.findNearstEnemy();
 
-        if (this.attackingList.length == 0) {
-            this.findNearstEnemy();
-            this.astar.setTarget(this.nearstTarget);
-            this.astar.update();
-            // cc.log("nearstTarget", this.nearstTarget)
-            this.aiming(this.nearstTarget.getPosition());
+        // if (!this.nearstTarget) return
+        // this.attackingTarget = this.nearstTarget;
+        if(this.attackingList.length > 0){
+            if (this.attackingList[0].target){
+                this.attackingTarget = this.attackingList[0].target;
+                this.astar.setTarget(this.attackingTarget);
+                this.astar.update();
+                this.aiming(this.attackingTarget.getPosition()); //滑鼠移到目標並rotate
+            }
+        }
+
+        if ((!this.attackingTarget) || (this.attackingTarget && this.attackingTarget.name == '') || (this.attackingList.length == 0)) {
+            if(this.nearstTarget){
+                this.astar.setTarget(this.nearstTarget);
+                this.astar.update();
+                // cc.log("nearstTarget", this.nearstTarget)
+                this.aiming(this.nearstTarget.getPosition());
+            }
             // this.findEnemyDest(this.nearstTarget); //找最近敵人
         }
+
         else {
-            this.astar.setTarget(this.attackingTarget);
-            this.astar.update();
-            this.aiming(this.attackingTarget.getPosition()); //滑鼠移到目標並rotate
+            this.findEnemy();
+            if (this.attackingList.length > 0 && this.attackingList[0].target){
+                this.attackingTarget = this.attackingList[0].target;
+                this.astar.setTarget(this.attackingTarget);
+                this.astar.update();
+                this.aiming(this.attackingTarget.getPosition()); //滑鼠移到目標並rotate
+            }
             // this.findEnemyDest(this.attackingTarget);
         }
 
@@ -189,44 +192,45 @@ export default class AIPlayer extends Player {
         //使用pathing_Map檢測有敵人可否攻擊
         // 將看到的敵人都加入attacking
         let startplace = this.node.convertToWorldSpaceAR(new cc.Vec2(0, 0));
-
+    
         let playerMapPos = [Math.floor(startplace.x / 48), Math.floor(startplace.y / 48)];
-        this.attackingList = []
+        this.attackingList = [];
+    
         this.playerList.forEach(target => {
-            if (target == this.node) return;
+            if (target.name == '')
+                return;
+            let ts = target.getComponent('player') || target.getComponent('AIplayer')
+            if (target == this.node || ts.role == this.role) return;
             let endplace = target.convertToWorldSpaceAR(new cc.Vec2(0, 0));
             let targetMapPos = [Math.floor(endplace.x / 48), Math.floor(endplace.y / 48)];
-
+    
             let [startX, startY] = playerMapPos;
             let [endX, endY] = targetMapPos;
             let dx = endX - startX;
             let dy = endY - startY;
             let distance = Math.sqrt(dx * dx + dy * dy);
             let findTarget = true;
-
-            // cc.log(this.sight, distance)
-            // cc.log(startX, startY, endX, endY)
-            // cc.log(startX, dx, distance, Math.round(startX + (dx * 2) / distance))
+    
             if (this.sight > distance) {
                 let path = [];
                 for (let i = 1; i < distance; i++) {
                     const x = Math.round(startX + (dx * i) / distance);
                     const y = Math.round(startY + (dy * i) / distance);
-                    // cc.log(x, y)
                     if (pathing_Map[x][24 - y] == 1) {
                         findTarget = false;
                     }
-                    path.push([x, y])
+                    path.push([x, y]);
                 }
-
-                // cc.log(startX, startY, endX, endY, path)
-
+    
                 let existed = false;
-
+    
                 if (!existed && findTarget)
-                    this.attackingList.push(target);
+                    this.attackingList.push({ target, distance }); // Include distance in the attackingList
+    
             }
         });
+        // Sort attackingList based on distance in ascending order
+        this.attackingList.sort((a, b) => a.distance - b.distance);
     }
     reload() {
         this.tmpWeapon = this.Handstate;
@@ -243,11 +247,14 @@ export default class AIPlayer extends Player {
         //從playerlist開始找
         let nearstEnemy = null;
         let nearstDistance = 1000000;
-        // cc.log(this.playerList)
+        let filtered = []
         this.playerList.forEach(playerNode => {
             // cc.log("player", playerNode)
+            if (playerNode.name == '')
+                return;
             let ts = playerNode.getComponent('player') || playerNode.getComponent('AIplayer')
             if (playerNode != this.node && this.role != ts.role) {
+                filtered.push(playerNode)
                 let distance = cc.Vec2.distance(this.node.getPosition(), playerNode.getPosition());
                 if (nearstDistance > distance) {
                     nearstDistance = distance;
@@ -255,7 +262,12 @@ export default class AIPlayer extends Player {
                 }
             }
         });
-        this.nearstTarget = nearstEnemy;
+        let random1 = Math.random();
+
+        if (random1 >= 0.6)
+            this.nearstTarget = nearstEnemy;
+        else 
+            this.nearstTarget = filtered[Math.floor(Math.random()*filtered.length)];
     }
 
     aiming(targetPos) {
