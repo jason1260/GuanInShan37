@@ -31,6 +31,8 @@ export default class Selectstage extends cc.Component {
     boss: cc.Node = null;
     @property(cc.Node)
     chain: cc.Node = null;
+    @property(cc.AudioClip)
+    backgroundmusic: cc.AudioClip = null;
 
     animation: cc.Animation = null;
 
@@ -51,7 +53,7 @@ export default class Selectstage extends cc.Component {
         this.stage2.node.on(cc.Node.EventType.MOUSE_LEAVE, () => { this.stage1hover(this.stage2_out, 1) }, this)
         this.stage3.node.on(cc.Node.EventType.MOUSE_LEAVE, () => { this.stage1hover(this.stage3_out, 1) }, this)
         this.setting.node.on("click", this.settingClick, this);
-        this.volume = cc.find("persistnode").getComponent("persistNode").volume;
+        // this.volume = cc.find("persistnode").getComponent("persistNode").volume;
         this.chain.active = false;
         this.player_score = cc.find("persistnode").getComponent("persistNode").score;
 
@@ -59,6 +61,13 @@ export default class Selectstage extends cc.Component {
         cc.find("Canvas/setting/board/volume").on("slide", this.volumeChange, this);
         cc.find("Canvas/setting/board").active = false;
         cc.find("persistnode").getComponent("persistNode").OneScore = 0;
+
+        cc.find("Canvas/setting/board/volume").getComponent(cc.Slider).progress = cc.find("persistnode").getComponent("persistNode").volume;
+
+        cc.audioEngine.stopMusic();
+        cc.find("Canvas/setting/board/volume_num").getComponent(cc.Label).string = (cc.find("persistnode").getComponent("persistNode").volume * 100).toFixed(0);
+        cc.audioEngine.setMusicVolume(cc.find("persistnode").getComponent("persistNode").volume);
+        cc.audioEngine.playMusic(this.backgroundmusic, true);
     }
 
     stage1hover(target: cc.Node, type: number) {
@@ -72,6 +81,7 @@ export default class Selectstage extends cc.Component {
         console.log(cc.find("persistnode").getComponent("persistNode").volume);
         cc.find("Canvas/setting/board/volume_num").getComponent(cc.Label).string = (cc.find("persistnode").getComponent("persistNode").volume * 100).toFixed(0);
         // cc.audioEngine.setVolume(cc.find("persistnode").getComponent("persistNode").volume);
+        cc.audioEngine.setMusicVolume(cc.find("persistnode").getComponent("persistNode").volume);
     }
 
     start() {

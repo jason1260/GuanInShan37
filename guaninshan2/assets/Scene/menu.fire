@@ -885,6 +885,9 @@
     "_enabled": true,
     "label": null,
     "text": "hello",
+    "bgm": {
+      "__uuid__": "a4758b0d-86c4-479d-b1ba-61fb63b318bc"
+    },
     "_id": "01+GIcLfBKzKLAbzyCtPgl"
   },
   {

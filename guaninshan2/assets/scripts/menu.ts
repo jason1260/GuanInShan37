@@ -10,6 +10,9 @@ export default class Start extends cc.Component {
 
     @property
     text: string = 'hello';
+    @property(cc.AudioClip)
+    bgm: cc.AudioClip = null;
+
 
 
     onLoad () {
@@ -25,7 +28,10 @@ export default class Start extends cc.Component {
         // this.startGame();
         let action = cc.repeatForever(cc.sequence(cc.fadeOut(1), cc.fadeIn(1)));
         cc.find("Canvas/menu_bg/Press").runAction(action);
-    }
+        
+        // cc.audioEngine.setMusicVolume(cc.find("persistnode").getComponent("persistNode").volume);
+        cc.audioEngine.playMusic(this.bgm, true);
+    }   
 
     update (dt) {
         

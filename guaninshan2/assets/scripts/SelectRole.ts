@@ -35,6 +35,9 @@ export default class SelectRole extends cc.Component {
     @property(cc.Button)
     startBtn: cc.Button;
 
+    @property(cc.AudioClip)
+    bgmusic: cc.AudioClip;
+
     public currentRole: string;
     public currentParticle: cc.ParticleSystem;
     public snode: cc.Node;
@@ -62,6 +65,10 @@ export default class SelectRole extends cc.Component {
         this.eparticle.emissionRate = 0;
         this.tparticle.emissionRate = 0;
         console.log(this.currentRole);
+
+        cc.audioEngine.stopMusic();
+        cc.audioEngine.setMusicVolume(cc.find("persistnode").getComponent("persistNode").volume);
+        cc.audioEngine.playMusic(this.bgmusic, true);
     }
 
     startgame() {

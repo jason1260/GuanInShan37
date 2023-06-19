@@ -1884,7 +1884,7 @@
         "__id__": 44
       }
     ],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 55
@@ -1913,8 +1913,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -381.234,
-        241.715,
+        -378.3,
+        238.781,
         0,
         0,
         0,
@@ -2878,6 +2878,9 @@
     },
     "chain": {
       "__id__": 28
+    },
+    "backgroundmusic": {
+      "__uuid__": "a4758b0d-86c4-479d-b1ba-61fb63b318bc"
     },
     "_id": "8fbPWyVDRMt4XUkdg/ZVkV"
   }
