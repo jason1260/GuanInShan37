@@ -32,7 +32,7 @@ export default class boss extends cc.Component {
     public direction = null;
 
     flashCD:number = 10;
-    EnergyballCD:number = 3;
+    EnergyballCD:number = 2;
     chaseBallCD:number = 5;
     lighteningCD:number = 2;
     turnBackCD:number = 6;
@@ -77,6 +77,8 @@ export default class boss extends cc.Component {
     isDie = false;
 
     angryColor = null;
+
+    isrealsingChaseBall = false;
 
     onLoad () {
         this.camera = cc.find("Canvas/Main Camera");
@@ -151,6 +153,10 @@ export default class boss extends cc.Component {
     }
 
     walking (dt) {
+        if (this.isrealsingChaseBall) {
+            this.node.getComponent(cc.RigidBody).linearVelocity = cc.v2(0, 0);
+            return;
+        }
         if (this.enemyDistance < this.angryflashRadius) {
             if (this.isflashed)
                 this.greedyflag = true;
@@ -219,7 +225,9 @@ export default class boss extends cc.Component {
 
         if (this.chaseBallTimer >= this.chaseBallCD) {
             this.chaseBallTimer = 0;
+            this.isrealsingChaseBall = true;
             this.generateChaseBall(this.chaseBallhurt, this.chaseballsp)
+            this.scheduleOnce(()=>{this.isrealsingChaseBall = false;}, 0.7);
         }
 
         if (this.lighteningTimer >= this.lighteningCD) {
@@ -263,26 +271,32 @@ export default class boss extends cc.Component {
         const energyBall = cc.instantiate(this.energyBallDefendPrefab);
         energyBall.getComponent('energy_ball').setProperty(attackNum,speed,this.node,1)
         this.node.insertChild(energyBall, 0);
-        energyBall.setPosition(new cc.Vec2(0,-60));
+        energyBall.setPosition(new cc.Vec2(-42,42));
+        // this.anim.playAdditive('boss-around');
     }
 
     generateChaseBall(attackNum: number,speed: number){
         //CD
         this.isReleasing = true;
-        this.schedule(()=>{this.isReleasing = false;},0.1);
+        this.schedule(()=>{this.isReleasing = false;},0.3);
         //
         let playerList = cc.find("Canvas/Main Camera").children;
         playerList = playerList.filter((child) => child.group == "player")
         const randomIndex = Math.floor(Math.random() * playerList.length);
         let targetplayer =  playerList[randomIndex];
         if(!targetplayer) null;
-        this.isReleasing = true;
-        this.schedule(()=>{this.isReleasing = false;},0.1);
-        console.log("generate2")
+        // this.isReleasing = true;
+        // this.schedule(()=>{this.isReleasing = false;},0.1);
+        // console.log("generate2")
 
         const energyBall = cc.instantiate(this.energyBallPrefab);
-        energyBall.getComponent('energy_ball').setProperty(attackNum,speed,this.node,2,targetplayer)
-        energyBall.setPosition(this.node.getPosition());
+        energyBall.getComponent('energy_ball').setProperty(attackNum,speed,this.node,2,targetplayer);
+        
+        this.anim.playAdditive('boss-attack');
+        var offset = cc.v2(-50, 55);
+        var newPosition = this.node.getPosition().add(offset);
+
+        energyBall.setPosition(newPosition);
         this.node.parent.addChild(energyBall);
     }
 

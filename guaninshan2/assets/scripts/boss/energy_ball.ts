@@ -23,19 +23,20 @@ export default class energyBall extends cc.Component {
 
 
     public counter:number = 0;
-    public degree:number = 270;
+    public degree:number = 135;
+    public available:boolean = false;
     onLoad () {
-        if(this.type == 1){
-            /* const rotateAction = cc.repeatForever(
-                cc.rotateBy(1, this.speed).easing(cc.easeSineInOut())
-              );
-              
-            // 执行动作
-            this.node.runAction(rotateAction); */
-            
-        }
+        this.scheduleOnce(()=>{this.available = true},0.5)
+        const duration = 0.5; // 动画持续时间，单位为秒
+        // 创建一个渐变动作，将节点的 opacity 从 0 渐变到 1
+        this.node.opacity = 0;
+        const fadeInAction = cc.tween().to(duration, { opacity: 255 });
+        // 执行渐变动作
+        cc.tween(this.node).then(fadeInAction).start();
+
     }
     update(dt){
+        if(!this.available) return;
         if(this.type == 1){
             this.degree+=this.speed;
             this.degree%=361;
