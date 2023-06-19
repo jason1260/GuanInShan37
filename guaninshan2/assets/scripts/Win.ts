@@ -26,12 +26,17 @@ export default class Win extends cc.Component {
     username = null;
 
     oncounter = 0;
+    
+    available = false;
+    
+    showScore = 0;
 
     onLoad() {
         this.score = cc.find("persistnode").getComponent("persistNode").score;
         // this.playerRole = cc.find("persistnode").getComponent("persistNode").playerRole;
         cc.find("Canvas/Board").opacity = 0;
         cc.find("Canvas/My").opacity = 0;
+        cc.find("Canvas/tap").opacity = 0;
         if(cc.find("persistnode").getComponent("persistNode").win == 1){
             cc.find("Canvas/Win").getComponent(cc.Label).string = "称霸武林";
         }else{
@@ -55,6 +60,7 @@ export default class Win extends cc.Component {
         // cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
     }
     start() {
+        this.schedule(()=>{this.available = true;},1.5)
         // this.Initfirebase();
         this.moving();
         // this.node.on(cc.Node.EventType.TOUCH_START, function (event) {
@@ -63,12 +69,18 @@ export default class Win extends cc.Component {
 
     }
     update(dt){
-        this.oncounter += 1;
-        if(this.oncounter > 200){
+        if(this.available){
             this.node.on(cc.Node.EventType.TOUCH_START, function (event) {
                 cc.director.loadScene("Selectstage");
             }, this);
         }
+        if(this.available && this.showScore < this.score){
+            
+            this.showScore+=1;
+        }
+        cc.find("Canvas/My/score").getComponent(cc.Label).string = this.showScore.toString();
+        this.oncounter+=1;
+        if(this.showScore == this.score) cc.find("Canvas/tap").opacity = 255;
     }
 
     Initboard() {
@@ -87,24 +99,27 @@ export default class Win extends cc.Component {
                 cc.find("Canvas/Board/" + String(i + 1) + "/score").getComponent(cc.Label).string = score[i];
             }
             cc.find("Canvas/My/user").getComponent(cc.Label).string = this.username;
-            cc.find("Canvas/My/score").getComponent(cc.Label).string = this.score.toString();
+            
         });
     }
     Initfirebase() {
         // add score value to firebase
-        var score = 0;
+        //var score = 0;
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 console.log(user);
                 firebase.database().ref('users/' + user.uid).once('value').then((snapshot) => {
                     this.username = snapshot.val().username;
-                    score = snapshot.val().score;
-                    console.log(score);
-                    if(this.score > score){
-                        firebase.database().ref('users/' + user.uid).update({
-                            score: this.score,
-                        });
-                    }
+                    this.score += snapshot.val().score;
+                    if(cc.find("persistnode").getComponent("persistNode").win == 1){
+                        this.score += 50;
+                    }else{
+                        this.score -= 10;
+                    }    
+                    firebase.database().ref('users/' + user.uid).update({
+                        score: this.score,
+                    });
+                 
                     this.Initboard();
                 });
             }
@@ -129,6 +144,7 @@ export default class Win extends cc.Component {
             .delay(1.4)
             .to(1, { opacity: 255 })
             .start();
+
     }
     // update (dt) {}
 }

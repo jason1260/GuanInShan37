@@ -65,7 +65,7 @@ const gameInfo = {
     },
     roleSpeed: {
         selling: 180,
-        tanmen: 220,
+        tanmen: 250,
         errmei: 200
     },
     roleChangeWeaponRadius: {

@@ -50,7 +50,7 @@ export default class SelectRole extends cc.Component {
         this.tangmen.node.on(cc.Node.EventType.TOUCH_END, this.changeTangmen, this);
         this.errmei.node.on(cc.Node.EventType.TOUCH_END, this.changeErrmei, this);
         this.startBtn.node.on(cc.Node.EventType.TOUCH_END, this.startgame, this);
-        this.back.node.on(cc.Node.EventType.TOUCH_END,()=>{cc.director.loadScene("Selectstage")},this);
+        this.back.node.on(cc.Node.EventType.TOUCH_END, () => { cc.director.loadScene("Selectstage") }, this);
         this.currentRole = "selling";
         this.snode = cc.find("Canvas/selling");
         this.tnode = cc.find("Canvas/tanmen");
@@ -66,18 +66,22 @@ export default class SelectRole extends cc.Component {
 
     startgame() {
         cc.find("persistnode").getComponent("persistNode").playerRole = this.currentRole;
-        console.log("Stage:",cc.find("persistnode").getComponent("persistNode").selectStage);
-        if(cc.find("persistnode").getComponent("persistNode").selectStage == 1){
-            cc.director.loadScene('test');
-        }
-        else if(cc.find("persistnode").getComponent("persistNode").selectStage == 2){
-            cc.director.loadScene('IceAndFire');
-        }else if(cc.find("persistnode").getComponent("persistNode").selectStage == 3){
-            cc.director.loadScene('boss');
-        }else if(cc.find("persistnode").getComponent("persistNode").selectStage == 5){
+        console.log("Stage:", cc.find("persistnode").getComponent("persistNode").selectStage);
+        // if(cc.find("persistnode").getComponent("persistNode").selectStage == 1){
+        //     cc.director.loadScene('test');
+        // }
+        // else if(cc.find("persistnode").getComponent("persistNode").selectStage == 2){
+        //     cc.director.loadScene('IceAndFire');
+        // }else if(cc.find("persistnode").getComponent("persistNode").selectStage == 3){
+        //     cc.director.loadScene('boss');
+        // }else if(cc.find("persistnode").getComponent("persistNode").selectStage == 5){
+        //     cc.director.loadScene('waiting');
+        // }
+        if (cc.find("persistnode").getComponent("persistNode").selectStage == 5) {
             cc.director.loadScene('waiting');
+        } else {
+            cc.director.loadScene('load');
         }
-        // cc.director.loadScene('test');
     }
 
     changeSelling() {
@@ -87,43 +91,43 @@ export default class SelectRole extends cc.Component {
                 .to(0.5, { scale: 2 })
                 .start();
             cc.tween(this.tangmen_intro)
-                .to(0.5, { position: cc.v3(173, -666, 0) ,opacity:0})
+                .to(0.5, { position: cc.v3(173, -666, 0), opacity: 0 })
                 .start();
             cc.tween(cc.find("Canvas/tangmen/intro"))
-                .to(0.5, { opacity:0 })
+                .to(0.5, { opacity: 0 })
                 .start();
             cc.tween(cc.find("Canvas/tangmen/name"))
-                .to(0.5, { opacity:0 })
+                .to(0.5, { opacity: 0 })
                 .start();
         } else if (this.currentRole == "errmei") {
             cc.tween(this.enode)
                 .to(0.5, { scale: 2 })
                 .start();
             cc.tween(this.errmei_intro)
-                .to(0.5, { position: cc.v3(800, 2, 0) ,opacity:0})
+                .to(0.5, { position: cc.v3(800, 2, 0), opacity: 0 })
                 .start();
             cc.tween(cc.find("Canvas/errrr/intro"))
-                .to(0.5, { opacity:0 })
+                .to(0.5, { opacity: 0 })
                 .start();
             cc.tween(cc.find("Canvas/errrr/name"))
-                .to(0.5, { opacity:0 })
+                .to(0.5, { opacity: 0 })
                 .start();
         }
         cc.tween(this.snode)
             .to(0.5, { scale: 3 })
             .start();
         cc.tween(this.selling_intro)
-            .to(0.5, { position: cc.v3(163, -3, 0),opacity:255 })
+            .to(0.5, { position: cc.v3(163, -3, 0), opacity: 255 })
             .start();
         cc.tween(cc.find("Canvas/shaolin/name"))
             .delay(0.5)
-            .to(0.5, { opacity:255 })
+            .to(0.5, { opacity: 255 })
             .start();
         cc.tween(cc.find("Canvas/shaolin/intro"))
             .delay(1)
-            .to(0.5, { opacity:255 })
+            .to(0.5, { opacity: 255 })
             .start();
-        
+
         this.currentParticle.emissionRate = 0;
         this.sparticle.emissionRate = this.emissionRate;
         this.currentParticle = this.sparticle;
@@ -138,13 +142,13 @@ export default class SelectRole extends cc.Component {
                 .to(0.5, { scale: 2 })
                 .start();
             cc.tween(this.selling_intro)
-                .to(0.5, { position: cc.v3(163, 600, 0) ,opacity:0})
+                .to(0.5, { position: cc.v3(163, 600, 0), opacity: 0 })
                 .start();
             cc.tween(cc.find("Canvas/shaolin/intro"))
-                .to(0.5, { opacity:0 })
+                .to(0.5, { opacity: 0 })
                 .start();
             cc.tween(cc.find("Canvas/shaolin/name"))
-                .to(0.5, { opacity:0 })
+                .to(0.5, { opacity: 0 })
                 .start();
 
         } else if (this.currentRole == "errmei") {
@@ -152,28 +156,28 @@ export default class SelectRole extends cc.Component {
                 .to(0.5, { scale: 2 })
                 .start();
             cc.tween(this.errmei_intro)
-                .to(0.5, { position: cc.v3(800, 2, 0),opacity:0 })
+                .to(0.5, { position: cc.v3(800, 2, 0), opacity: 0 })
                 .start();
             cc.tween(cc.find("Canvas/errrr/intro"))
-                .to(0.5, { opacity:0 })
+                .to(0.5, { opacity: 0 })
                 .start();
             cc.tween(cc.find("Canvas/errrr/name"))
-                .to(0.5, { opacity:0 })
+                .to(0.5, { opacity: 0 })
                 .start();
         }
         cc.tween(this.tnode)
             .to(0.5, { scale: 3 })
             .start();
         cc.tween(this.tangmen_intro)
-            .to(0.5, { position: cc.v3(220, 35, 0),opacity:255 })
+            .to(0.5, { position: cc.v3(220, 35, 0), opacity: 255 })
             .start();
         cc.tween(cc.find("Canvas/tangmen/name"))
             .delay(0.5)
-            .to(0.5, { opacity:255 })
+            .to(0.5, { opacity: 255 })
             .start();
         cc.tween(cc.find("Canvas/tangmen/intro"))
             .delay(1)
-            .to(0.5, { opacity:255 })
+            .to(0.5, { opacity: 255 })
             .start();
 
         this.currentParticle.emissionRate = 0;
@@ -190,13 +194,13 @@ export default class SelectRole extends cc.Component {
                 .to(0.5, { scale: 2 })
                 .start();
             cc.tween(this.selling_intro)
-                .to(0.5, { position: cc.v3(163, 600, 0) ,opacity:0})
+                .to(0.5, { position: cc.v3(163, 600, 0), opacity: 0 })
                 .start();
             cc.tween(cc.find("Canvas/shaolin/intro"))
-                .to(0.5, { opacity:0 })
+                .to(0.5, { opacity: 0 })
                 .start();
             cc.tween(cc.find("Canvas/shaolin/name"))
-                .to(0.5, { opacity:0 })
+                .to(0.5, { opacity: 0 })
                 .start();
 
         } else if (this.currentRole == "tanmen") {
@@ -204,30 +208,30 @@ export default class SelectRole extends cc.Component {
                 .to(0.5, { scale: 2 })
                 .start();
             cc.tween(this.tangmen_intro)
-                .to(0.5, { position: cc.v3(173, -666, 0) ,opacity:0})
+                .to(0.5, { position: cc.v3(173, -666, 0), opacity: 0 })
                 .start();
             cc.tween(cc.find("Canvas/tangmen/intro"))
-                .to(0.5, { opacity:0 })
+                .to(0.5, { opacity: 0 })
                 .start();
             cc.tween(cc.find("Canvas/tangmen/name"))
-                .to(0.5, { opacity:0 })
+                .to(0.5, { opacity: 0 })
                 .start();
         }
         cc.tween(this.enode)
             .to(0.5, { scale: 3 })
             .start();
         cc.tween(this.errmei_intro)
-            .to(0.5, { position: cc.v3(160, -1, 0) ,opacity:255})
+            .to(0.5, { position: cc.v3(160, -1, 0), opacity: 255 })
             .start();
         cc.tween(cc.find("Canvas/errrr/name"))
             .delay(0.5)
-            .to(0.5, { opacity:255 })
+            .to(0.5, { opacity: 255 })
             .start();
         cc.tween(cc.find("Canvas/errrr/intro"))
             .delay(1)
-            .to(0.5, { opacity:255 })
+            .to(0.5, { opacity: 255 })
             .start();
-        
+
         this.currentParticle.emissionRate = 0;
         this.eparticle.emissionRate = this.emissionRate;
         this.currentParticle = this.eparticle;

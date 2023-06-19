@@ -100,6 +100,7 @@ export default class GMBoss extends cc.Component {
 
     playerList = null;
     bosscounter = null;
+    isDrop=0;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -574,6 +575,9 @@ export default class GMBoss extends cc.Component {
         this.scheduleOnce(() => {cc.director.loadScene("Win")}, 2);
     }
     randDrop() {
+        this.isDrop+=1;
+        if(this.isDrop %6 != 5) return
+        this.isDrop = 0;
         let weapon = ['gun', 'rifle', 'sniper', 'knife', 'stick'];
         const randomIndex = Math.floor(Math.random() * weapon.length);
         let weaponType = weapon[randomIndex];
@@ -587,10 +591,10 @@ export default class GMBoss extends cc.Component {
             const newNode = cc.instantiate(prefab);
             newNode.position = player.getPosition().add(player.parent.getPosition());
             const sample1 = Math.random(), sample2 = Math.random();
-            const radius = 200;
-            newNode.position = newNode.position.add(cc.v2((radius * sample1) - 100, (radius * sample2) - 100));
+            const radius = 1000;
+            newNode.position = newNode.position.add(cc.v2((radius * sample1) - 500, (radius * sample2) - 500));
             const nodeIndex = player.parent.getSiblingIndex();
-            this.node.parent.parent.insertChild(newNode, nodeIndex);
+            player.parent.parent.insertChild(newNode, nodeIndex);
         });
 
     }
