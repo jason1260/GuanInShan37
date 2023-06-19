@@ -1384,8 +1384,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 55,
-      "height": 27.72
+      "width": 550,
+      "height": 277.2
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1403,8 +1403,8 @@
         0,
         0,
         1,
-        0.3,
-        0.3,
+        0.03,
+        0.03,
         1
       ]
     },
@@ -1438,8 +1438,8 @@
     "_dstBlendFactor": 771,
     "_string": "轰...",
     "_N$string": "轰...",
-    "_fontSize": 22,
-    "_lineHeight": 22,
+    "_fontSize": 220,
+    "_lineHeight": 220,
     "_enableWrapText": true,
     "_N$file": {
       "__uuid__": "97580588-c204-4b2f-b2fe-a53a2ada2755"

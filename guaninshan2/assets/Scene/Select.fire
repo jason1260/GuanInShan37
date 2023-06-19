@@ -2549,7 +2549,7 @@
         1,
         0.3,
         0.3,
-        1
+        0
       ]
     },
     "_eulerAngles": {
@@ -2644,8 +2644,8 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_string": "开战",
-    "_N$string": "开战",
+    "_string": "参战",
+    "_N$string": "参战",
     "_fontSize": 25,
     "_lineHeight": 40,
     "_enableWrapText": false,
@@ -2931,7 +2931,7 @@
         1,
         0.3,
         0.3,
-        1
+        0
       ]
     },
     "_eulerAngles": {

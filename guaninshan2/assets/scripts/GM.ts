@@ -8,32 +8,39 @@
 const bornPosition = {
     selling: {
         postion1: cc.v2(-387.88, 763.765),
-        postion2: cc.v2(-273.542, 763.765)
+        postion2: cc.v2(-273.542, 763.765),
+        postion3: cc.v2(-487.88, 763.765)
     },
     errmei: {
-        postion1: cc.v2(1138.627, 798.069),
-        postion2: cc.v2(1012.84, 798.069)
+        postion1: cc.v2(938.627, 798.069),
+        postion2: cc.v2(812.84, 798.069),
+        postion3: cc.v2(1012.84, 798.069)
     },
     tanmen: {
         postion1: cc.v2(473.996, -196.733),
-        postion2: cc.v2(335.345, -196.733)
+        postion2: cc.v2(335.345, -196.733),
+        postion3: cc.v2(273.542, -196.733)
     }
 }
 
 const roleName = {
     selling: {
         postion1: "妙覺",
-        postion2: "法喜充滿"
+        postion2: "法喜充滿",
+        postion3: "六祖慧能",
     },
     errmei: {
         postion1: "靜虛",
-        postion2: "靜玄"
+        postion2: "靜玄",
+        postion3: "靜空",
     },
     tanmen: {
-        postion1: "唐世政",
-        postion2: "唐唐阿宏"
+        postion1: "唐解",
+        postion2: "唐地",
+        postion3: "唐歌",
     }
 }
+
 
 const { ccclass, property } = cc._decorator;
 
@@ -227,18 +234,15 @@ export default class GM extends cc.Component {
 
         const playerRole = this.playerRole;
         let roles = ["selling", "errmei", "tanmen"];
-        let pos = ["postion1", "postion2"];
+        let pos = ["postion1", "postion2", "postion3"];
 
         // cc.log()
 
         let setPlayer = false;
 
-        let nameColor = cc.Color.BLUE;
-
-
         for (let j = 0; j <= 2; j++) {
             let role = roles[j];
-            for (let i = 0; i <= 1; i++) {
+            for (let i = 0; i <= 2; i++) {
                 let nameNode = new cc.Node();
                 nameNode.addComponent(cc.Label);
                 nameNode.name = "name";

@@ -10,29 +10,35 @@ export var notstart: boolean;
 const bornPosition = {
     selling: {
         postion1: cc.v2(0, 0),
-        postion2: cc.v2(0, 0)
+        postion2: cc.v2(0, 0),
+        postion3: cc.v2(0, 0)
     },
     errmei: {
         postion1: cc.v2(0, 0),
-        postion2: cc.v2(0, 0)
+        postion2: cc.v2(0, 0),
+        postion3: cc.v2(0, 0)
     },
     tanmen: {
         postion1: cc.v2(0, 0),
-        postion2: cc.v2(0, 0)
+        postion2: cc.v2(0, 0),
+        postion3: cc.v2(0, 0)
     }
 }
 const roleName = {
     selling: {
         postion1: "妙覺",
-        postion2: "法喜充滿"
+        postion2: "法喜充滿",
+        postion3: "六祖慧能",
     },
     errmei: {
         postion1: "靜虛",
-        postion2: "靜玄"
+        postion2: "靜玄",
+        postion3: "靜空",
     },
     tanmen: {
-        postion1: "唐世政",
-        postion2: "唐唐阿宏"
+        postion1: "唐解",
+        postion2: "唐地",
+        postion3: "唐歌",
     }
 }
 const { ccclass, property } = cc._decorator;
@@ -279,7 +285,7 @@ export default class GMBoss extends cc.Component {
 
         const playerRole = this.playerRole;
         let roles = ["selling", "errmei", "tanmen"];
-        let pos = ["postion1", "postion2"];
+        let pos = ["postion1", "postion2", "postion3"];
 
         // cc.log()
 
@@ -288,7 +294,7 @@ export default class GMBoss extends cc.Component {
 
         for (let j = 0; j <= 2; j++) {
             let role = roles[j];
-            for (let i = 0; i <= 1; i++) {
+            for (let i = 0; i <= 2; i++) {
                 // console.log("???")
                 let nameNode = new cc.Node();
                 nameNode.addComponent(cc.Label);
@@ -345,7 +351,6 @@ export default class GMBoss extends cc.Component {
         }
 
     }
-
     setMap() {
         let mapcenter = null;
         console.log("start pos", this.bornPosparent.getPosition());
@@ -398,17 +403,19 @@ export default class GMBoss extends cc.Component {
             cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "而你们注定成为我脚下的踏垫!";
         }
 
+        if (notstart) return;
+
         this.playerList = cc.find("Canvas/Main Camera").children;
         this.playerList = this.playerList.filter((child) => child.group == "boss");
         let nonplayerList = this.playerList;
         console.log(nonplayerList.length);
         if (nonplayerList.length == 0) {
             this.win();
+            notstart = true;
         } else if (cc.find("Canvas/Main Camera/player").getComponent("player").HP <= 0) {
             this.lose();
+            notstart = true;
         }
-
-        if (notstart) return;
 
 
         let playerPos = this.bornPosparent.getPosition();
@@ -553,7 +560,7 @@ export default class GMBoss extends cc.Component {
         const wn = cc.instantiate(this.winNode);
         cc.log(wn)
         wn.scale = 0;
-        cc.find("Canvas/Main Camera").insertChild(wn, 1);
+        cc.find("Canvas/Main Camera").addChild(wn);
         cc.tween(wn)
             .to(1, { scale: 1, opacity:255 })
             .start();
@@ -566,7 +573,7 @@ export default class GMBoss extends cc.Component {
         const ln = cc.instantiate(this.loseNode);
         cc.log(ln)
         ln.scale = 0;
-        cc.find("Canvas/Main Camera").insertChild(ln, 1);
+        cc.find("Canvas/Main Camera").addChild(ln);
         cc.tween(ln)
             .to(1, { scale: 1, opacity: 255 })
             .start();

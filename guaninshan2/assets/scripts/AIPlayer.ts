@@ -70,6 +70,10 @@ export default class AIPlayer extends Player {
 
     }
 
+    getName(target:cc.Node){
+        return target.getChildByName("name").getComponent(cc.Label).string
+    }
+
     update(dt) {
         // console.log(this.bulletNum)
         //update speed
@@ -108,31 +112,35 @@ export default class AIPlayer extends Player {
 
         this.astar.setHandState(this.Handstate);
 
-        if (!this.nearingTarget || (this.nearingTarget && this.nearingTarget.name == ''))
+        this.setPlayerList();
+
+        if (!this.nearingTarget || (this.nearingTarget && this.nearingTarget.name == '') || this.attackingList.length == 0 || !this.attackingTarget || (this.attackingTarget && this.attackingTarget.name == ''))
             this.findRandomEnemy();
 
-        this.setPlayerList();
         this.findEnemy();
         this.findNearstEnemy();
 
-        if ((this.attackingList.length == 0)) {
+        if (this.attackingList.length == 0) {
             if(this.nearingTarget){
                 this.astar.setTarget(this.nearingTarget);
                 this.astar.update();
                 // cc.log("nearstTarget", this.nearstTarget)
+                this.namefix ()
                 this.aiming(this.nearingTarget.getPosition());
+                this.namefix ()
             }
             // this.findEnemyDest(this.nearstTarget); //找最近敵人
         }
 
         else {
-            if (this.attackingList.length > 0 && this.attackingList[0].target){
-                if ((!this.attackingTarget || (this.attackingTarget && this.attackingTarget.name == "")))
-                    this.attackingTarget = this.attackingList[0].target;
-                this.astar.setTarget(this.attackingTarget);
-                this.astar.update();
-                this.aiming(this.attackingTarget.getPosition()); //滑鼠移到目標並rotate
+            if ((!this.attackingTarget || (this.attackingTarget && this.attackingTarget.name == "")) || cc.Vec2.distance(this.node.getPosition(), this.attackingTarget.getPosition()) > this.sight*90){
+                this.attackingTarget = this.attackingList[0].target;
             }
+            this.astar.setTarget(this.attackingTarget);
+            this.astar.update();
+            this.namefix ()
+            this.aiming(this.attackingTarget.getPosition()); //滑鼠移到目標並rotate
+            this.namefix ()
             // this.findEnemyDest(this.attackingTarget);
         }
 
@@ -187,10 +195,21 @@ export default class AIPlayer extends Player {
         let startplace = this.node.convertToWorldSpaceAR(new cc.Vec2(0, 0));
     
         let playerMapPos = [Math.floor(startplace.x / 48), Math.floor(startplace.y / 48)];
-        this.attackingList = this.attackingList.filter((element) => element.name == "")
+
+        this.attackingList = this.attackingList.filter((element) => element.target.name !== '')
+
         this.playerList.forEach(target => {
-            if (target.name == '' || (this.attackingList.length > 0 && this.attackingList.includes(target)))
+            let List = []
+            this.attackingList.forEach(element => {
+                List.push(element.target)
+            });
+
+            if (target.name == '' || (List.length > 0 && List.includes(target))){
+                // if (this.role == "errmei")
+                //     console.log("this.attackingList.includes(target)",List.includes(target))
                 return;
+            }
+            
             let ts = target.getComponent('player') || target.getComponent('AIplayer')
             if (target == this.node || ts.role == this.role) return;
             let endplace = target.convertToWorldSpaceAR(new cc.Vec2(0, 0));
@@ -273,7 +292,7 @@ export default class AIPlayer extends Player {
         });
         let random1 = Math.random();
 
-        if (random1 >= 0.6)
+        if (random1 >= 0.9)
             this.nearingTarget = nearstEnemy;
         else 
             this.nearingTarget = filtered[Math.floor(Math.random()*filtered.length)];
@@ -290,6 +309,7 @@ export default class AIPlayer extends Player {
         this.dirAngle = degree;
         this.node.angle = degree;
     }
+    
     changeWeapon() {
         this.deleteWeapon();
         this.tmpWeapon = this.nextWeapon;
