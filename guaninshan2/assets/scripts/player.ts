@@ -60,6 +60,7 @@ export default class Player extends cc.Component {
     public poisonTimer: number = 0;
     public protectTimer: number = 0;
     public isProtect: boolean = false;
+    public isPicking: boolean = false;
 
     onLoad() {
         // console.log("player onLoad")
@@ -212,7 +213,9 @@ export default class Player extends cc.Component {
         if (otherCollider.node.group != 'drops') return
         if (this.Handstate == 'changing' || this.Handstate == 'reloading')
             return;
-        if (this.Input[cc.macro.KEY.space]) {
+        if (this.Input[cc.macro.KEY.space] && !this.isPicking) {
+            this.isPicking = true;
+            this.schedule(()=>{this.isPicking = false},0.3);
             this.generateDrops(this.Handstate)
             this.deleteWeapon();
             otherCollider.node.destroy();
