@@ -22,6 +22,10 @@ export default class persist extends cc.Component {
 
     win = 0;
 
+    room = null;
+    mulRole = null;
+    name = null;
+
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {

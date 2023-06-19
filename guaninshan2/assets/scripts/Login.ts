@@ -29,6 +29,7 @@ export default class Login extends cc.Component {
             await path.once("value").then((snapshot) => {
                 const data = snapshot.val();
                 alert("Welcome " + data.username);
+                cc.find("persistnode").getComponent("persistNode").name = data.username;
                 this.scheduleOnce(() => { cc.director.loadScene("Selectstage"); }, 1);
             }).catch((error) => {
                 console.error("Error fetching data: ", error.message);

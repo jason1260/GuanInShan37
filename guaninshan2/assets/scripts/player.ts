@@ -6,15 +6,10 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 import gameInfo = require("./gameInfo");
 const { ccclass, property } = cc._decorator;
-const Input = {}
 
 @ccclass
 export default class Player extends cc.Component {
-
-
-
-
-
+    public Input = {}
     leftHand: cc.Node = null;
     @property(cc.Prefab)
     gunPrefab: cc.Prefab = null;
@@ -84,7 +79,7 @@ export default class Player extends cc.Component {
 
 
 
-        for (var member in Input) delete Input[member];
+        for (var member in this.Input)  this.Input[member] = 0;
         this.score = 0;
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
@@ -123,29 +118,29 @@ export default class Player extends cc.Component {
         let scaleX = Math.abs(this.node.scaleX);
         this.lv = this.node.getComponent(cc.RigidBody).linearVelocity;
         //change weapon
-        if (Input[cc.macro.KEY.q]) {
+        if (this.Input[cc.macro.KEY.q]) {
             if (this.Handstate !== 'changing' && this.Handstate !== 'reloading') {
                 this.changeWeapon();
             }
         }
         //skill
-        if (Input[cc.macro.KEY.g] && this.CD >= 100) {
+        if (this.Input[cc.macro.KEY.g] && this.CD >= 100) {
             if (this.Handstate !== 'changing' && this.Handstate !== 'reloading') {
                 this.release();
             }
         }
         //reload
-        if (Input[cc.macro.KEY.r]) {
+        if (this.Input[cc.macro.KEY.r]) {
             if (gameInfo.rangedWeapon.includes(this.Handstate))
                 this.reload();
 
         }
         //move
-        if (Input[cc.macro.KEY.a]) {
+        if (this.Input[cc.macro.KEY.a]) {
             this.moving = true;
             if (this.onIce) this.sp.x = -2;
             else this.sp.x = -1;
-        } else if (Input[cc.macro.KEY.d]) {
+        } else if (this.Input[cc.macro.KEY.d]) {
             this.moving = true;
             if (this.onIce) this.sp.x = 2;
             else this.sp.x = 1;
@@ -154,11 +149,11 @@ export default class Player extends cc.Component {
             if (this.onIce) this.sp.x += (this.sp.x > 0) ? -0.02 : 0.02;
             else this.sp.x = 0;
         }
-        if (Input[cc.macro.KEY.w]) {
+        if (this.Input[cc.macro.KEY.w]) {
             this.moving = true;
             if (this.onIce) this.sp.y = 2;
             else this.sp.y = 1;
-        } else if (Input[cc.macro.KEY.s]) {
+        } else if (this.Input[cc.macro.KEY.s]) {
             this.moving = true;
             if (this.onIce) this.sp.y = -2;
             else this.sp.y = -1;
@@ -217,7 +212,7 @@ export default class Player extends cc.Component {
         if (otherCollider.node.group != 'drops') return
         if (this.Handstate == 'changing' || this.Handstate == 'reloading')
             return;
-        if (Input[cc.macro.KEY.space]) {
+        if (this.Input[cc.macro.KEY.space]) {
             this.generateDrops(this.Handstate)
             this.deleteWeapon();
             otherCollider.node.destroy();
@@ -244,11 +239,11 @@ export default class Player extends cc.Component {
 
     onKeyDown(e) {
 
-        Input[e.keyCode] = 1;
+        this.Input[e.keyCode] = 1;
     }
 
     onKeyUp(e) {
-        Input[e.keyCode] = 0;
+        this.Input[e.keyCode] = 0;
     }
 
     setAni(anime) {

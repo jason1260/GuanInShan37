@@ -6,6 +6,7 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 const { ccclass, property } = cc._decorator;
+import { notstart } from "./boss/GM_boss";
 
 @ccclass
 export default class NewClass extends cc.Component {
@@ -26,6 +27,7 @@ export default class NewClass extends cc.Component {
 
     onKeyDown(event: cc.Event.EventKeyboard) {
         if (event.keyCode == cc.macro.KEY.p) {
+            if (notstart) this.PauseMenu.scale = 0.3;
             console.log("p pressed");
             this.PauseMenu.active = true;
             cc.game.canvas.style.cursor = 'default';
@@ -39,6 +41,11 @@ export default class NewClass extends cc.Component {
             this.PauseMenu.active = true;
             cc.director.pause();
         }
+    }
+
+    onDestroy() {
+        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
+        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
     }
 
     ContinueClick() {

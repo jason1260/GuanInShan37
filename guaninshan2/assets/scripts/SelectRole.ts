@@ -19,6 +19,10 @@ export default class SelectRole extends cc.Component {
     @property(cc.Button)
     errmei: cc.Button;
 
+    @property(cc.Button)
+    back: cc.Button;
+
+
     @property(cc.Node)
     selling_intro: cc.Node;
 
@@ -46,6 +50,7 @@ export default class SelectRole extends cc.Component {
         this.tangmen.node.on(cc.Node.EventType.TOUCH_END, this.changeTangmen, this);
         this.errmei.node.on(cc.Node.EventType.TOUCH_END, this.changeErrmei, this);
         this.startBtn.node.on(cc.Node.EventType.TOUCH_END, this.startgame, this);
+        this.back.node.on(cc.Node.EventType.TOUCH_END,()=>{cc.director.loadScene("Selectstage")},this);
         this.currentRole = "selling";
         this.snode = cc.find("Canvas/selling");
         this.tnode = cc.find("Canvas/tanmen");
@@ -69,6 +74,8 @@ export default class SelectRole extends cc.Component {
             cc.director.loadScene('IceAndFire');
         }else if(cc.find("persistnode").getComponent("persistNode").selectStage == 3){
             cc.director.loadScene('boss');
+        }else if(cc.find("persistnode").getComponent("persistNode").selectStage == 5){
+            cc.director.loadScene('waiting');
         }
         // cc.director.loadScene('test');
     }

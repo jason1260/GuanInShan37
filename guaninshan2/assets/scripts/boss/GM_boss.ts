@@ -5,6 +5,8 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+export var notstart: boolean;
+
 const bornPosition = {
     selling: {
         postion1: cc.v2(0, 0),
@@ -78,6 +80,12 @@ export default class GMBoss extends cc.Component {
     @property(cc.Prefab)
     playerPrefab: cc.Prefab
 
+    @property(cc.Prefab)
+    winNode: cc.Prefab
+
+    @property(cc.Prefab)
+    loseNode: cc.Prefab
+
     playerRole = null;
 
     bornPosparent = null;
@@ -87,16 +95,18 @@ export default class GMBoss extends cc.Component {
     Mapgroup = null;
 
     mapParent = null;
-
+    playerName = null;
     mapcounter = null;
 
     playerList = null;
+    bosscounter = null;
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
         cc.director.getPhysicsManager().enabled = true;
         cc.director.getCollisionManager().enabled = true;
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         // console.log("123", cc.find("persistnode").getComponent("persistNode"))
         this.playerRole = cc.find("persistnode").getComponent("persistNode").playerRole;
         this.bornPosparent = cc.find("Canvas/Main Camera");
@@ -105,13 +115,55 @@ export default class GMBoss extends cc.Component {
         this.mapParent = cc.find("Canvas/scene2");
         this.currMapPos = cc.v2(0, 0);
         this.mapcounter = 0;
+        this.playerName = cc.find("persistnode").getComponent("persistNode").name;;
+        this.bosscounter = 0;
+        notstart = true;
     }
 
     start() {
         /* this.drawColliderboxes(); */
+        notstart = true;
+        this.bosscounter = 0;
         this.setBornPos();
         this.setMap();
+        this.focusOnBoss();
         cc.log("?????????????", this.playerRole)
+    }
+
+    onKeyDown(e) {
+        if (e.keyCode == cc.macro.KEY.enter) {
+            this.bosscounter += 1;
+            if (this.bosscounter === 11) {
+
+                cc.tween(cc.find('Canvas/Main Camera'))
+                    .to(1, { position: cc.v3(0, 0, 0) })
+                    .start()
+
+                cc.tween(cc.find('Canvas/Main Camera').getComponent(cc.Camera))
+                    .to(1, { zoomRatio: 1 })
+                    .start()
+                notstart = false;
+                cc.find('Canvas/Main Camera/blue-boss1/bosschat').active = false;
+            }
+        }
+    }
+
+    onDestroy(): void {
+        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
+    }
+
+    focusOnBoss() {
+        console.log("start to focus on boss mother fuckerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+        const bosspos_world = cc.find('Canvas/Main Camera/blue-boss1').convertToWorldSpaceAR(cc.v3(0, 0, 0));
+        const bosspos = cc.find('Canvas/Main Camera').convertToNodeSpaceAR(bosspos_world);
+        notstart = true;
+        cc.tween(cc.find('Canvas/Main Camera'))
+            .to(1, { position: cc.v3(bosspos.x, bosspos.y - 20, bosspos.z) })
+            .start()
+
+        cc.tween(cc.find('Canvas/Main Camera').getComponent(cc.Camera))
+            .to(1, { zoomRatio: 3 })
+            .start()
     }
 
     drawColliderboxes() {
@@ -242,16 +294,22 @@ export default class GMBoss extends cc.Component {
                 nameNode.name = "name";
                 let label = nameNode.getComponent(cc.Label);
                 label.string = roleName[roles[j]][pos[i]];
+                nameNode.color = cc.Color.WHITE;
                 label.fontSize = 12;
+        
+                nameNode.addComponent(cc.LabelOutline);
+                let outline = nameNode.getComponent(cc.LabelOutline);
+                outline.color = cc.Color.BLACK;
+                outline.width = 0.5;
                 switch (role) {
                     case "selling":
-                        nameNode.color = cc.Color.ORANGE;
+                        outline.color = cc.Color.ORANGE;
                         break;
                     case "errmei":
-                        nameNode.color = cc.Color.WHITE;
+                        outline.color = cc.Color.RED;
                         break;
                     case "tanmen":
-                        nameNode.color = cc.Color.BLUE;
+                        outline.color = cc.Color.BLUE;
                         break;
                     default:
                         break;
@@ -267,7 +325,7 @@ export default class GMBoss extends cc.Component {
                     let ts = player.getComponent('player') || player.getComponent('AIplayer')
                     player.setPosition(bornPosition[roles[j]][pos[i]]);
                     ts.setRole(role);
-                    label.string = "這我";
+                    label.string = this.playerName;
                     nameNode.rotation = -90;
                     nameNode.setPosition(cc.v2(50, 0));
                     player.addChild(nameNode);
@@ -316,18 +374,40 @@ export default class GMBoss extends cc.Component {
 
     update() {
 
+        if (this.bosscounter == 1) {
+            cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "你们这些观音山上的老顽固";
+        } else if (this.bosscounter == 2) {
+            cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "因为我从未来带来的一些武器\n就自相残杀";
+        } else if (this.bosscounter == 3) {
+            cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "你们曾经自夸是正义和和平的\n守护者";
+        } else if (this.bosscounter == 4) {
+            cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "但看看现在的结局！";
+        } else if (this.bosscounter == 5) {
+            cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "你们只是一群软弱无能的凡人";
+        } else if (this.bosscounter == 6) {
+            cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "无法抵挡我的力量。";
+            } else if (this.bosscounter == 7) {
+            cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "你们可以试着反抗";
+        } 
+        else if (this.bosscounter == 8) {   
+            cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "但结果只会更加惨痛。";
+            } else if (this.bosscounter == 9) {
+            cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "我是统治者，是未来的主宰者";
+                } else if (this.bosscounter == 10) {
+            cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "而你们注定成为我脚下的踏垫!";
+        }
 
         this.playerList = cc.find("Canvas/Main Camera").children;
         this.playerList = this.playerList.filter((child) => child.group == "boss");
         let nonplayerList = this.playerList;
         console.log(nonplayerList.length);
-        if(nonplayerList.length == 0){
+        if (nonplayerList.length == 0) {
             this.win();
-        }else if(cc.find("Canvas/Main Camera/player").getComponent("player").HP <= 0){
+        } else if (cc.find("Canvas/Main Camera/player").getComponent("player").HP <= 0) {
             this.lose();
         }
 
-
+        if (notstart) return;
 
 
         let playerPos = this.bornPosparent.getPosition();
@@ -367,6 +447,7 @@ export default class GMBoss extends cc.Component {
             this.mapParent.children[0].destroy();
 
             this.currMapPos = cc.v2(this.currMapPos.x + 960, this.currMapPos.y);
+            this.randDrop();
         } else if (playerPos.x < this.currMapPos.x - 550) {
             const sample1 = Math.random(), sample2 = Math.random(), sample3 = Math.random();
             let map1, map2, map3
@@ -399,6 +480,7 @@ export default class GMBoss extends cc.Component {
             this.mapParent.children[3].destroy();
 
             this.currMapPos = cc.v2(this.currMapPos.x - 960, this.currMapPos.y);
+            this.randDrop();
         } else if (playerPos.y > this.currMapPos.y + 370) {
             const sample1 = Math.random(), sample2 = Math.random(), sample3 = Math.random();
             let map1, map2, map3
@@ -430,6 +512,7 @@ export default class GMBoss extends cc.Component {
             this.mapParent.children[9].destroy();
 
             this.currMapPos = cc.v2(this.currMapPos.x, this.currMapPos.y + 640);
+            this.randDrop();
         } else if (playerPos.y < this.currMapPos.y - 370) {
             const sample1 = Math.random(), sample2 = Math.random(), sample3 = Math.random();
             let map1, map2, map3
@@ -461,20 +544,55 @@ export default class GMBoss extends cc.Component {
             this.mapParent.children[0].destroy();
 
             this.currMapPos = cc.v2(this.currMapPos.x, this.currMapPos.y - 640);
+            this.randDrop();
         }
     }
-    win(){
+    win() {
         console.log("win");
+        const wn = cc.instantiate(this.winNode);
+        cc.log(wn)
+        wn.scale = 0;
+        cc.find("Canvas/Main Camera").insertChild(wn, 1);
+        cc.tween(wn)
+            .to(1, { scale: 1, opacity:255 })
+            .start();
         cc.find("persistnode").getComponent("persistNode").win = true;
         cc.delayTime(1);
-        cc.director.loadScene("Win");
-        
+        this.scheduleOnce(() => {cc.director.loadScene("Win")}, 2);    
     }
-    lose(){
+    lose() {
         console.log("lose");
+        const ln = cc.instantiate(this.loseNode);
+        cc.log(ln)
+        ln.scale = 0;
+        cc.find("Canvas/Main Camera").insertChild(ln, 1);
+        cc.tween(ln)
+            .to(1, { scale: 1, opacity: 255 })
+            .start();
         cc.find("persistnode").getComponent("persistNode").win = false;
         cc.delayTime(1);
-        cc.director.loadScene("Win");
+        this.scheduleOnce(() => {cc.director.loadScene("Win")}, 2);
+    }
+    randDrop() {
+        let weapon = ['gun', 'rifle', 'sniper', 'knife', 'stick'];
+        const randomIndex = Math.floor(Math.random() * weapon.length);
+        let weaponType = weapon[randomIndex];
+
+        cc.resources.load(`Prefab/${weaponType}Drop`, cc.Prefab, (err, prefab) => {
+            if (err) {
+                console.log("沒辦法大便");
+                return;
+            }
+            let player = cc.find("Canvas/Main Camera/player")
+            const newNode = cc.instantiate(prefab);
+            newNode.position = player.getPosition().add(player.parent.getPosition());
+            const sample1 = Math.random(), sample2 = Math.random();
+            const radius = 200;
+            newNode.position = newNode.position.add(cc.v2((radius * sample1) - 100, (radius * sample2) - 100));
+            const nodeIndex = player.parent.getSiblingIndex();
+            this.node.parent.parent.insertChild(newNode, nodeIndex);
+        });
+
     }
 
 }

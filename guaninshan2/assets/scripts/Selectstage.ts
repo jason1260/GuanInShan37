@@ -21,6 +21,8 @@ export default class Selectstage extends cc.Component {
     stage3: cc.Button = null;
     @property(cc.Button)
     setting: cc.Button = null;
+    @property(cc.Button)
+    multi: cc.Button = null;
     
     volume = 0.5;
 
@@ -31,6 +33,7 @@ export default class Selectstage extends cc.Component {
         this.stage2.node.on('click', this.Tostage2, this);
         this.stage3.node.on('click', this.Tostage3, this);
         this.setting.node.on("click", this.settingClick, this);
+        this.multi.node.on("click", this.multiClick, this);
         this.volume = cc.find("persistnode").getComponent("persistNode").volume;
         cc.find("persistnode").getComponent("persistNode").score = 0;
 
@@ -49,7 +52,10 @@ export default class Selectstage extends cc.Component {
     start () {
         
     }
-
+    multiClick(){
+        cc.director.loadScene("Select");
+        cc.find("persistnode").getComponent("persistNode").selectStage = 5;
+    }
     settingClick(){
         cc.find("Canvas/setting/board").active = !cc.find("Canvas/setting/board").active;
     }
