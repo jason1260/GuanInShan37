@@ -18,15 +18,16 @@ export default class UI extends cc.Component {
     @property(cc.Label)
     bulletLabel: cc.Label = null;
 
-    @property(cc.Label)
-    scoreLabel: cc.Label = null;
-
     private playerTs = null;
     private playerHpMax: number = 0;
+    private bossBar: cc.ProgressBar = null;
+    private bossTs = null;
 
     onLoad() {
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+        this.bossBar = cc.find("Canvas/Main Camera/UI/bossBar").getComponent(cc.ProgressBar);
+        this.bossTs = cc.find("Canvas/Main Camera/blue-boss1").getComponent("boss");
     }
 
     start() {
@@ -49,11 +50,10 @@ export default class UI extends cc.Component {
             this.skillBar.progress = this.playerTs.CD / 100;
             this.skillBarColor.color = cc.color(255, 255, 255);
             this.hpBarColor.color = cc.color((1 - Math.pow(this.hpBar.progress, 6)) * 255, this.hpBar.progress * 255, 0);
-            this.scoreLabel.string = this.playerTs.score;
         }
         this.hpUpdate();
-        this.scoreUpdate();
         this.bulletUpdate();
+        if (this.bossBar && this.bossTs) this.bossUpdate();
         this.skillUpdate();
     }
 
@@ -80,12 +80,15 @@ export default class UI extends cc.Component {
         this.bulletLabel.string = this.playerTs.bulletNum;
     }
 
-    scoreUpdate() {
-        this.scoreLabel.string = this.playerTs.score;
-    }
-
     skillUpdate () {
         this.skillBar.progress = this.playerTs.CD / 100;
         this.skillBarColor.color = cc.color(255, 255, 255-this.skillBar.progress*255);
+    }
+
+    bossUpdate() {
+        this.bossBar.progress = this.bossTs.HP / this.bossTs.totalHP;
+        let bossBarColor = this.bossBar.barSprite;
+        bossBarColor.node.color = cc.color(Math.min((1 - Math.pow(this.bossBar.progress, 6)) * 255, 255), Math.min(this.bossBar.progress * 255, 255), 0);
+        cc.log("lalal", bossBarColor);
     }
 }

@@ -69,18 +69,19 @@ export default class Win extends cc.Component {
 
     }
     update(dt){
-        if(this.available){
+        console.log(this.showScore)
+        if(this.available && this.showScore < this.score){
+            
+            this.showScore+=Math.floor(this.score/200);
+        }
+        cc.find("Canvas/My/score").getComponent(cc.Label).string = (this.showScore>this.score)?this.score.toString():this.showScore.toString();
+        this.oncounter+=1;
+        if(this.available && this.showScore >= this.score){
+            cc.find("Canvas/tap").opacity = 255; 
             this.node.on(cc.Node.EventType.TOUCH_START, function (event) {
                 cc.director.loadScene("Selectstage");
             }, this);
-        }
-        if(this.available && this.showScore < this.score){
-            
-            this.showScore+=1;
-        }
-        cc.find("Canvas/My/score").getComponent(cc.Label).string = this.showScore.toString();
-        this.oncounter+=1;
-        if(this.showScore == this.score) cc.find("Canvas/tap").opacity = 255;
+        } 
     }
 
     Initboard() {

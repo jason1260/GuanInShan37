@@ -465,7 +465,7 @@ export default class Player extends cc.Component {
     }
 
     release(){
-        //zoom in
+        /* //zoom in
         const tmp_cam = cc.find('Canvas/Main Camera');
         cc.tween(tmp_cam.getComponent(cc.Camera))
             .to(0.3, { zoomRatio: 5 })
@@ -481,7 +481,7 @@ export default class Player extends cc.Component {
             .to(0.3, { position: cc.v3(curr_local.x, curr_local.y, 0) })
             .to(0.3, { position: cc.v3(origin_local.x, origin_local.y, 0) })
             .start()
-        //===========//
+        //===========// */
         this.CD = 0;
         this.deleteWeapon();
         this.GM.playeffect('changing');

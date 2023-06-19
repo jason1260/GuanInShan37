@@ -19,8 +19,8 @@ export default class Login extends cc.Component {
     }
 
     login = async () => {
-        let email = cc.find("Canvas/menu_bg/Email").getComponent(cc.EditBox).string;
-        let password = cc.find("Canvas/menu_bg/Password").getComponent(cc.EditBox).string;
+        let email = cc.find("Canvas/Email").getComponent(cc.EditBox).string;
+        let password = cc.find("Canvas/Password").getComponent(cc.EditBox).string;
         // console.log(email, password);
         try {
             const reg = await firebase.auth().signInWithEmailAndPassword(email, password);
@@ -30,6 +30,7 @@ export default class Login extends cc.Component {
                 const data = snapshot.val();
                 alert("Welcome " + data.username);
                 cc.find("persistnode").getComponent("persistNode").name = data.username;
+                cc.find("persistnode").getComponent('persistNode').score = data.score;
                 this.scheduleOnce(() => { cc.director.loadScene("Selectstage"); }, 1);
             }).catch((error) => {
                 console.error("Error fetching data: ", error.message);

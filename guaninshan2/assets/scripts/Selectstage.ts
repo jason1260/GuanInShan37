@@ -27,8 +27,14 @@ export default class Selectstage extends cc.Component {
     stage3_out: cc.Node = null;
     @property(cc.Button)
     setting: cc.Button = null;
-    @property(cc.Button)
-    multi: cc.Button = null;
+    @property(cc.Node)
+    boss: cc.Node = null;
+    @property(cc.Node)
+    chain: cc.Node = null;
+
+    animation: cc.Animation = null;
+
+    player_score = 0;
 
     volume = 0.5;
 
@@ -45,9 +51,9 @@ export default class Selectstage extends cc.Component {
         this.stage2.node.on(cc.Node.EventType.MOUSE_LEAVE, () => { this.stage1hover(this.stage2_out, 1) }, this)
         this.stage3.node.on(cc.Node.EventType.MOUSE_LEAVE, () => { this.stage1hover(this.stage3_out, 1) }, this)
         this.setting.node.on("click", this.settingClick, this);
-        this.multi.node.on("click", this.multiClick, this);
         this.volume = cc.find("persistnode").getComponent("persistNode").volume;
-        cc.find("persistnode").getComponent("persistNode").score = 0;
+        this.chain.active = false;
+        this.player_score = cc.find("persistnode").getComponent("persistNode").score;
 
         // cc.find("Canvas/setting/board/volume").getComponent(cc.Slider).progress = cc.find("persistnode").getComponent("persistNode").volume;
         cc.find("Canvas/setting/board/volume").on("slide", this.volumeChange, this);
@@ -55,6 +61,7 @@ export default class Selectstage extends cc.Component {
     }
 
     stage1hover(target: cc.Node, type: number) {
+        if (this.player_score < 100 && target === this.stage3_out) return;
         if (type == 0) target.scale = 1.1;
         else target.scale = 1;
     }
@@ -67,11 +74,12 @@ export default class Selectstage extends cc.Component {
     }
 
     start() {
-
-    }
-    multiClick() {
-        cc.director.loadScene("Select");
-        cc.find("persistnode").getComponent("persistNode").selectStage = 5;
+        console.log("check player score", this.player_score);
+        if (this.player_score < 100) {
+            this.boss.active = false;
+            this.stage3_out.color = cc.color(98, 70, 70);
+            this.chain.active = true;
+        }
     }
     settingClick() {
         cc.find("Canvas/setting/board").active = !cc.find("Canvas/setting/board").active;
@@ -86,6 +94,7 @@ export default class Selectstage extends cc.Component {
         cc.find("persistnode").getComponent("persistNode").selectStage = 2;
     }
     Tostage3() {
+        if (this.player_score < 100) return;
         cc.director.loadScene("Select");
         cc.find("persistnode").getComponent("persistNode").selectStage = 3;
     }
