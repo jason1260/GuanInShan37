@@ -1511,7 +1511,9 @@
     "stickSE": {
       "__uuid__": "1916d22a-d1ba-427b-b123-6bd9be16ee92"
     },
-    "bgm": null,
+    "bgm": {
+      "__uuid__": "a4758b0d-86c4-479d-b1ba-61fb63b318bc"
+    },
     "AIPrefab": {
       "__uuid__": "bd64caaf-acbe-4276-8436-3ff5de935b6f"
     },

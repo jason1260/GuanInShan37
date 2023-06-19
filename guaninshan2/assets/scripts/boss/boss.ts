@@ -18,6 +18,8 @@ export default class boss extends cc.Component {
 
     attackingTarget: cc.Node = null;
 
+    anim: cc.Animation = null;
+
     walkingTimer = 0;
     flashTimer = 0;
     EnergyballTimer = 0;
@@ -80,6 +82,7 @@ export default class boss extends cc.Component {
         this.camera = cc.find("Canvas/Main Camera");
         this.totalHP = this.HP;
         this.angryColor = new cc.Color(240, 108, 108);
+        this.anim = this.node.getComponent(cc.Animation);
     }
 
     start () {
@@ -234,16 +237,18 @@ export default class boss extends cc.Component {
 
     flash (dt) {
         const dest = this.getRandomInCircle_polar_better(this.EnergyballTrackRadius, this.angryflashRadius, this.attackingTarget);
-        
-        this.node.setPosition(dest);
+        this.anim.playAdditive('boss-flash');
+        this.scheduleOnce(()=>{this.node.setPosition(dest);},0.65);
+        // this.node.setPosition(dest);
     }
 
     turnback (dt) {
         this.turnBackTimer += dt;
         if (this.turnBackTimer >= this.turnBackCD && this.isflashed) {
             this.turnBackTimer = 0;
-            
-            this.node.setPosition(this.turnbackPos);
+            this.anim.playAdditive('boss-flash');
+            this.scheduleOnce(()=>{this.node.setPosition(this.turnbackPos);},0.65);
+            // this.node.setPosition(this.turnbackPos);
             this.isflashed = false;
         }
     }
