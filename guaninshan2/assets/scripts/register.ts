@@ -10,12 +10,27 @@ export default class Register extends cc.Component {
     @property(cc.Button)
     toLogin: cc.Button = null;
 
+    @property(cc.Node)
+    registerLabel: cc.Node = null;
+
+    @property(cc.Node)
+    loginLabel: cc.Node = null;
+
     private playerTs = null;
 
     start() {
         // init logic
         this.registerBtn.node.on(cc.Node.EventType.TOUCH_END, this.register, this);
+        this.registerBtn.node.on(cc.Node.EventType.MOUSE_ENTER, () => { this.btnhover(this.registerLabel, 0) }, this)
+        this.registerBtn.node.on(cc.Node.EventType.MOUSE_LEAVE, () => { this.btnhover(this.registerLabel, 1) }, this)
+        this.toLogin.node.on(cc.Node.EventType.MOUSE_ENTER, () => { this.btnhover(this.loginLabel, 0) }, this)
+        this.toLogin.node.on(cc.Node.EventType.MOUSE_LEAVE, () => { this.btnhover(this.loginLabel, 1) }, this)
         this.toLogin.node.on(cc.Node.EventType.TOUCH_END, () => { cc.director.loadScene("login"); }, this);
+    }
+
+    btnhover(node: cc.Node, type: number) {
+        if (type === 0) node.color = cc.Color.GRAY;
+        else node.color = cc.Color.WHITE;
     }
 
     register = async () => {

@@ -2540,6 +2540,12 @@
     "toRegister": {
       "__id__": 60
     },
+    "loginLabel": {
+      "__id__": 18
+    },
+    "registerLabel": {
+      "__id__": 55
+    },
     "_id": "cf6Fyf80NKNbdHDJ2R7CQg"
   },
   {

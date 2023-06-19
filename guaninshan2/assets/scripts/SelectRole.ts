@@ -38,6 +38,12 @@ export default class SelectRole extends cc.Component {
     @property(cc.AudioClip)
     bgmusic: cc.AudioClip;
 
+    @property(cc.Node)
+    startlabel: cc.Node;
+
+    @property(cc.Node)
+    backlabel: cc.Node;
+
     public currentRole: string;
     public currentParticle: cc.ParticleSystem;
     public snode: cc.Node;
@@ -53,6 +59,10 @@ export default class SelectRole extends cc.Component {
         this.tangmen.node.on(cc.Node.EventType.TOUCH_END, this.changeTangmen, this);
         this.errmei.node.on(cc.Node.EventType.TOUCH_END, this.changeErrmei, this);
         this.startBtn.node.on(cc.Node.EventType.TOUCH_END, this.startgame, this);
+        this.startBtn.node.on(cc.Node.EventType.MOUSE_ENTER, () => { this.btnhover(this.startlabel, 0) }, this)
+        this.startBtn.node.on(cc.Node.EventType.MOUSE_LEAVE, () => { this.btnhover(this.startlabel, 1) }, this)
+        this.back.node.on(cc.Node.EventType.MOUSE_ENTER, () => { this.btnhover(this.backlabel, 0) }, this)
+        this.back.node.on(cc.Node.EventType.MOUSE_LEAVE, () => { this.btnhover(this.backlabel, 1) }, this)
         this.back.node.on(cc.Node.EventType.TOUCH_END, () => { cc.director.loadScene("Selectstage") }, this);
         this.currentRole = "selling";
         this.snode = cc.find("Canvas/selling");
@@ -69,6 +79,11 @@ export default class SelectRole extends cc.Component {
         cc.audioEngine.stopMusic();
         cc.audioEngine.setMusicVolume(cc.find("persistnode").getComponent("persistNode").volume);
         cc.audioEngine.playMusic(this.bgmusic, true);
+    }
+
+    btnhover(target: cc.Node, type: number) {
+        if (type === 0) target.color = cc.Color.GRAY;
+        else target.color = cc.Color.WHITE;
     }
 
     startgame() {
@@ -176,7 +191,7 @@ export default class SelectRole extends cc.Component {
             .to(0.5, { scale: 3 })
             .start();
         cc.tween(this.tangmen_intro)
-            .to(0.5, { position: cc.v3(220, 35, 0), opacity: 255 })
+            .to(0.5, { position: cc.v3(200, 35, 0), opacity: 255 })
             .start();
         cc.tween(cc.find("Canvas/tangmen/name"))
             .delay(0.5)

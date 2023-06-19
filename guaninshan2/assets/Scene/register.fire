@@ -3545,6 +3545,12 @@
     "toLogin": {
       "__id__": 32
     },
+    "registerLabel": {
+      "__id__": 18
+    },
+    "loginLabel": {
+      "__id__": 27
+    },
     "_id": "43PttzXi1HEpJ9ffMIw5dG"
   },
   {

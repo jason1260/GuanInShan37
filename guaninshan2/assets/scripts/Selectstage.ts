@@ -33,6 +33,10 @@ export default class Selectstage extends cc.Component {
     chain: cc.Node = null;
     @property(cc.AudioClip)
     backgroundmusic: cc.AudioClip = null;
+    @property(cc.Button)
+    logoutBtn: cc.Button = null;
+    @property(cc.Node)
+    logoutlabel: cc.Node = null;
 
     animation: cc.Animation = null;
 
@@ -46,12 +50,15 @@ export default class Selectstage extends cc.Component {
         this.stage1.node.on('click', this.Tostage1, this);
         this.stage2.node.on('click', this.Tostage2, this);
         this.stage3.node.on('click', this.Tostage3, this);
+        this.logoutBtn.node.on('click', this.logout, this);
         this.stage1.node.on(cc.Node.EventType.MOUSE_ENTER, () => { this.stage1hover(this.stage1_out, 0) }, this)
         this.stage2.node.on(cc.Node.EventType.MOUSE_ENTER, () => { this.stage1hover(this.stage2_out, 0) }, this)
         this.stage3.node.on(cc.Node.EventType.MOUSE_ENTER, () => { this.stage1hover(this.stage3_out, 0) }, this)
         this.stage1.node.on(cc.Node.EventType.MOUSE_LEAVE, () => { this.stage1hover(this.stage1_out, 1) }, this)
         this.stage2.node.on(cc.Node.EventType.MOUSE_LEAVE, () => { this.stage1hover(this.stage2_out, 1) }, this)
         this.stage3.node.on(cc.Node.EventType.MOUSE_LEAVE, () => { this.stage1hover(this.stage3_out, 1) }, this)
+        this.logoutBtn.node.on(cc.Node.EventType.MOUSE_ENTER, () => { this.btnhover(this.logoutlabel, 0) }, this)
+        this.logoutBtn.node.on(cc.Node.EventType.MOUSE_LEAVE, () => { this.btnhover(this.logoutlabel, 1) }, this)
         this.setting.node.on("click", this.settingClick, this);
         // this.volume = cc.find("persistnode").getComponent("persistNode").volume;
         this.chain.active = false;
@@ -68,6 +75,22 @@ export default class Selectstage extends cc.Component {
         cc.find("Canvas/setting/board/volume_num").getComponent(cc.Label).string = (cc.find("persistnode").getComponent("persistNode").volume * 100).toFixed(0);
         cc.audioEngine.setMusicVolume(cc.find("persistnode").getComponent("persistNode").volume);
         cc.audioEngine.playMusic(this.backgroundmusic, true);
+    }
+
+    btnhover(target: cc.Node, type: number) {
+        if (type == 0) target.color = cc.Color.GRAY;
+        else target.color = cc.Color.WHITE;
+    }
+
+    logout() {
+        firebase.auth().signOut().then(function () {
+            // Sign-out successful.
+            console.log("sign out");
+            cc.director.loadScene("menu");
+        }).catch(function (error) {
+            // An error happened.
+            console.log("sign out error");
+        }
     }
 
     stage1hover(target: cc.Node, type: number) {
