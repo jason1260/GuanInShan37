@@ -84,7 +84,7 @@ export default class Player extends cc.Component {
 
 
 
-        for (var member in Input) delete Input[member];
+        for (var member in Input)  Input[member] = 0;
         this.score = 0;
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
