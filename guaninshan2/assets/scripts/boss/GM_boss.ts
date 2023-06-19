@@ -106,7 +106,8 @@ export default class GMBoss extends cc.Component {
 
     playerList = null;
     bosscounter = null;
-    isDrop=0;
+    isfinished = null;
+    isDrop = 0;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -124,12 +125,14 @@ export default class GMBoss extends cc.Component {
         this.mapcounter = 0;
         this.playerName = cc.find("persistnode").getComponent("persistNode").name;;
         this.bosscounter = 0;
+        this.isfinished = false;
         notstart = true;
     }
 
     start() {
         /* this.drawColliderboxes(); */
         notstart = true;
+        this.isfinished = false;
         this.bosscounter = 0;
         this.setBornPos();
         this.setMap();
@@ -303,7 +306,7 @@ export default class GMBoss extends cc.Component {
                 label.string = roleName[roles[j]][pos[i]];
                 nameNode.color = cc.Color.WHITE;
                 label.fontSize = 12;
-        
+
                 nameNode.addComponent(cc.LabelOutline);
                 let outline = nameNode.getComponent(cc.LabelOutline);
                 outline.color = cc.Color.BLACK;
@@ -392,14 +395,14 @@ export default class GMBoss extends cc.Component {
             cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "你们只是一群软弱无能的凡人";
         } else if (this.bosscounter == 6) {
             cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "无法抵挡我的力量。";
-            } else if (this.bosscounter == 7) {
+        } else if (this.bosscounter == 7) {
             cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "你们可以试着反抗";
-        } 
-        else if (this.bosscounter == 8) {   
+        }
+        else if (this.bosscounter == 8) {
             cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "但结果只会更加惨痛。";
-            } else if (this.bosscounter == 9) {
+        } else if (this.bosscounter == 9) {
             cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "我是统治者，是未来的主宰者";
-                } else if (this.bosscounter == 10) {
+        } else if (this.bosscounter == 10) {
             cc.find('Canvas/Main Camera/blue-boss1/bosschat/New Label').getComponent(cc.Label).string = "而你们注定成为我脚下的踏垫!";
         }
 
@@ -410,11 +413,11 @@ export default class GMBoss extends cc.Component {
         let nonplayerList = this.playerList;
         console.log(nonplayerList.length);
         if (nonplayerList.length == 0) {
-            this.win();
-            notstart = true;
+            if (!this.isfinished)
+                this.win();
         } else if (cc.find("Canvas/Main Camera/player").getComponent("player").HP <= 0) {
-            this.lose();
-            notstart = true;
+            if (!this.isfinished)
+                this.lose();
         }
 
 
@@ -556,20 +559,20 @@ export default class GMBoss extends cc.Component {
         }
     }
     win() {
-        console.log("win");
+        this.isfinished = true;
         const wn = cc.instantiate(this.winNode);
         cc.log(wn)
         wn.scale = 0;
         cc.find("Canvas/Main Camera").addChild(wn);
         cc.tween(wn)
-            .to(1, { scale: 1, opacity:255 })
+            .to(1, { scale: 1, opacity: 255 })
             .start();
         cc.find("persistnode").getComponent("persistNode").win = true;
         cc.delayTime(1);
-        this.scheduleOnce(() => {cc.director.loadScene("Win")}, 2);    
+        this.scheduleOnce(() => { cc.director.loadScene("Win") }, 2);
     }
     lose() {
-        console.log("lose");
+        this.isfinished = true;
         const ln = cc.instantiate(this.loseNode);
         cc.log(ln)
         ln.scale = 0;
@@ -579,11 +582,11 @@ export default class GMBoss extends cc.Component {
             .start();
         cc.find("persistnode").getComponent("persistNode").win = false;
         cc.delayTime(1);
-        this.scheduleOnce(() => {cc.director.loadScene("Win")}, 2);
+        this.scheduleOnce(() => { cc.director.loadScene("Win") }, 2);
     }
     randDrop() {
-        this.isDrop+=1;
-        if(this.isDrop %6 != 5) return
+        this.isDrop += 1;
+        if (this.isDrop % 6 != 5) return
         this.isDrop = 0;
         let weapon = ['gun', 'rifle', 'sniper', 'knife', 'stick'];
         const randomIndex = Math.floor(Math.random() * weapon.length);

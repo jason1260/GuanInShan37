@@ -341,7 +341,7 @@
         1,
         0.3,
         0.3,
-        1
+        0
       ]
     },
     "_eulerAngles": {
@@ -723,7 +723,7 @@
         1,
         0.3,
         0.3,
-        1
+        0
       ]
     },
     "_eulerAngles": {
@@ -987,7 +987,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "UseerName",
+    "_name": "UserName",
     "_objFlags": 0,
     "_parent": {
       "__id__": 3
