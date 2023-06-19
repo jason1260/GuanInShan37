@@ -35,9 +35,9 @@ export default class Bullet extends cc.Component {
                 if (!isdie) { this.node.destroy(); return; }
                 if (this.selfNode.getComponent('player').role !== other.node.getComponent('player').role) {
                     console.log("殺人拉")
-                    this.persist.score += 10;
+                    this.persist.OneScore += 10;
                 } else {
-                    this.persist.score -= 20;
+                    this.persist.OneScore -= 20;
                 }
             }
         }

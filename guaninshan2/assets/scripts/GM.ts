@@ -9,7 +9,7 @@ const bornPosition = {
     selling: {
         postion1: cc.v2(-387.88, 763.765),
         postion2: cc.v2(-273.542, 763.765),
-        postion3: cc.v2(-487.88, 763.765)
+        postion3: cc.v2(-200.88, 763.765)
     },
     errmei: {
         postion1: cc.v2(938.627, 798.069),

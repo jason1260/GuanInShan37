@@ -58,6 +58,7 @@ export default class Selectstage extends cc.Component {
         // cc.find("Canvas/setting/board/volume").getComponent(cc.Slider).progress = cc.find("persistnode").getComponent("persistNode").volume;
         cc.find("Canvas/setting/board/volume").on("slide", this.volumeChange, this);
         cc.find("Canvas/setting/board").active = false;
+        cc.find("persistnode").getComponent("persistNode").OneScore = 0;
     }
 
     stage1hover(target: cc.Node, type: number) {

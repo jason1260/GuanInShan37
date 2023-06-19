@@ -32,7 +32,8 @@ export default class Win extends cc.Component {
     showScore = 0;
 
     onLoad() {
-        this.score = cc.find("persistnode").getComponent("persistNode").score;
+        this.score = cc.find("persistnode").getComponent("persistNode").OneScore;
+        console.log("onscore",this.score)
         // this.playerRole = cc.find("persistnode").getComponent("persistNode").playerRole;
         cc.find("Canvas/Board").opacity = 0;
         cc.find("Canvas/My").opacity = 0;
@@ -56,7 +57,7 @@ export default class Win extends cc.Component {
         this.move_node.opacity = 0;
         console.log(this.move_node);
         
-
+        this.Initfirebase();    
         // cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
     }
     start() {
@@ -69,13 +70,12 @@ export default class Win extends cc.Component {
 
     }
     update(dt){
-        console.log(this.showScore)
+        console.log(this.score)
         if(this.available && this.showScore < this.score){
             
-            this.showScore+=Math.floor(this.score/200);
+            this.showScore+=Math.ceil(this.score/200);
         }
         cc.find("Canvas/My/score").getComponent(cc.Label).string = (this.showScore>this.score)?this.score.toString():this.showScore.toString();
-        this.oncounter+=1;
         if(this.available && this.showScore >= this.score){
             cc.find("Canvas/tap").opacity = 255; 
             this.node.on(cc.Node.EventType.TOUCH_START, function (event) {
@@ -117,10 +117,12 @@ export default class Win extends cc.Component {
                     }else{
                         this.score -= 10;
                     }    
+
+                    if(this.score < 0) this.score = 0;
                     firebase.database().ref('users/' + user.uid).update({
                         score: this.score,
                     });
-                 
+                    cc.find("persistnode").getComponent("persistNode").score = this.score;
                     this.Initboard();
                 });
             }
@@ -134,7 +136,7 @@ export default class Win extends cc.Component {
         cc.tween(this.move_node)
             .to(1, { position: cc.v2(-224, 0), opacity: 255 , easing:'sineOut'})
             .call(() => {
-                this.Initfirebase();              
+                          
             })
             .start();
         cc.tween(cc.find("Canvas/Board"))

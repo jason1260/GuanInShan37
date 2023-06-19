@@ -19,6 +19,7 @@ export default class persist extends cc.Component {
     volume = null;
 
     score = 0;
+    OneScore = 0;
 
     win = 0;
 
@@ -32,6 +33,7 @@ export default class persist extends cc.Component {
     onLoad() {
         this.selectTs = cc.find("Canvas").getComponent("Selectstage");
         this.volume = 0.5;
+        this.OneScore = 0;
         cc.game.addPersistRootNode(this.node);
 
     }
