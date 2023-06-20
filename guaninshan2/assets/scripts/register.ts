@@ -56,6 +56,7 @@ export default class Register extends cc.Component {
                     });
                     // console.log("setUserComplete");
                     cc.find("persistnode").getComponent("persistNode").name = username;
+                    cc.find('persistnode').getComponent('persistNode').score = 0;
                     cc.director.loadScene("Selectstage");
                 } catch (er) {
                     console.log(er.message);

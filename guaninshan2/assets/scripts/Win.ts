@@ -26,23 +26,25 @@ export default class Win extends cc.Component {
     username = null;
 
     oncounter = 0;
-    
+
     available = false;
-    
+
     showScore = 0;
+
+    writefinished = false;
 
     onLoad() {
         this.score = cc.find("persistnode").getComponent("persistNode").OneScore;
-        console.log("onscore",this.score)
+        console.log("onscore", this.score)
         // this.playerRole = cc.find("persistnode").getComponent("persistNode").playerRole;
         cc.find("Canvas/Board").opacity = 0;
         cc.find("Canvas/My").opacity = 0;
         cc.find("Canvas/tap").opacity = 0;
-        if(cc.find("persistnode").getComponent("persistNode").win == 1){
+        if (cc.find("persistnode").getComponent("persistNode").win == 1) {
             cc.find("Canvas/Win").getComponent(cc.Label).string = "称霸武林";
-        }else{
+        } else {
             cc.find("Canvas/Win").getComponent(cc.Label).string = "无力回天";
-        }    
+        }
         this.playerRole = cc.find("persistnode").getComponent("persistNode").playerRole;
         if (this.playerRole == "selling") {
             this.move_node = cc.find("Canvas/selling");
@@ -56,12 +58,13 @@ export default class Win extends cc.Component {
         this.move_node.active = true;
         this.move_node.opacity = 0;
         console.log(this.move_node);
-        
-        this.Initfirebase();    
+        this.writefinished = false;
+        this.Initfirebase();
+
         // cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
     }
     start() {
-        this.schedule(()=>{this.available = true;},1.5)
+        this.schedule(() => { this.available = true; }, 1.5)
         // this.Initfirebase();
         this.moving();
         // this.node.on(cc.Node.EventType.TOUCH_START, function (event) {
@@ -69,19 +72,19 @@ export default class Win extends cc.Component {
         // }, this);
 
     }
-    update(dt){
+    update(dt) {
         console.log(this.score)
-        if(this.available && this.showScore < this.score){
-            
-            this.showScore+=Math.ceil(this.score/200);
+        if (this.available && this.showScore < this.score) {
+
+            this.showScore += Math.ceil(this.score / 200);
         }
-        cc.find("Canvas/My/score").getComponent(cc.Label).string = (this.showScore>this.score)?this.score.toString():this.showScore.toString();
-        if(this.available && this.showScore >= this.score){
-            cc.find("Canvas/tap").opacity = 255; 
+        cc.find("Canvas/My/score").getComponent(cc.Label).string = (this.showScore > this.score) ? this.score.toString() : this.showScore.toString();
+        if (this.available && this.showScore >= this.score && this.writefinished) {
+            cc.find("Canvas/tap").opacity = 255;
             this.node.on(cc.Node.EventType.TOUCH_START, function (event) {
                 cc.director.loadScene("Selectstage");
             }, this);
-        } 
+        }
     }
 
     Initboard() {
@@ -100,43 +103,44 @@ export default class Win extends cc.Component {
                 cc.find("Canvas/Board/" + String(i + 1) + "/score").getComponent(cc.Label).string = score[i];
             }
             cc.find("Canvas/My/user").getComponent(cc.Label).string = this.username;
-            
+
         });
     }
-    Initfirebase() {
+    async Initfirebase() {
         // add score value to firebase
         //var score = 0;
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                console.log(user);
-                firebase.database().ref('users/' + user.uid).once('value').then((snapshot) => {
-                    this.username = snapshot.val().username;
-                    this.score += snapshot.val().score;
-                    if(cc.find("persistnode").getComponent("persistNode").win == 1){
-                        this.score += 50;
-                    }else{
-                        this.score -= 10;
-                    }    
+        const user = firebase.auth().currentUser;
+        if (user) {
+            console.log(user);
+            firebase.database().ref('users/' + user.uid).once('value').then((snapshot) => {
+                this.username = snapshot.val().username;
+                this.score += snapshot.val().score;
+                if (cc.find("persistnode").getComponent("persistNode").win == 1) {
+                    this.score += 50;
+                } else {
+                    this.score -= 10;
+                }
 
-                    if(this.score < 0) this.score = 0;
-                    firebase.database().ref('users/' + user.uid).update({
-                        score: this.score,
-                    });
-                    cc.find("persistnode").getComponent("persistNode").score = this.score;
-                    this.Initboard();
+                if (this.score < 0) this.score = 0;
+                firebase.database().ref('users/' + user.uid).update({
+                    score: this.score,
                 });
-            }
-            else{
-                console.log("no user");
-            }
-        });
+                cc.find("persistnode").getComponent("persistNode").score = this.score;
+                this.Initboard();
+            });
+        }
+        else {
+            console.log("no user");
+        }
+
+        this.writefinished = true;
     }
     moving() {
         // this.move_node.opacity = 0;
         cc.tween(this.move_node)
-            .to(1, { position: cc.v2(-224, 0), opacity: 255 , easing:'sineOut'})
+            .to(1, { position: cc.v2(-224, 0), opacity: 255, easing: 'sineOut' })
             .call(() => {
-                          
+
             })
             .start();
         cc.tween(cc.find("Canvas/Board"))

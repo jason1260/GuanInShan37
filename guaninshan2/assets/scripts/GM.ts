@@ -87,6 +87,8 @@ export default class GM extends cc.Component {
 
     volume = 1;
 
+    finishflag = false;
+
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
@@ -97,10 +99,12 @@ export default class GM extends cc.Component {
         this.bornPosparent = cc.find("Canvas/Main Camera");
         this.volume = cc.find("persistnode").getComponent("persistNode").volume;
         this.playerName = cc.find("persistnode").getComponent("persistNode").name;;
+        this.finishflag = false;
         // cc.director.getPhysicsManager().debugDrawFlags = 1;
     }
 
     start() {
+        this.finishflag = false;
         this.drawColliderboxes();
         this.setBornPos();
         // this.playbgm(this.bgm);
@@ -110,16 +114,18 @@ export default class GM extends cc.Component {
         this.playerList = cc.find("Canvas/Main Camera").children;
         this.playerList = this.playerList.filter((child) => child.group == "player");
         let nonplayerList = [];
-        for(let ele of this.playerList){ 
+        for (let ele of this.playerList) {
             let ts = ele.getComponent('player') || ele.getComponent('AIplayer')
-            if(this.playerRole != ts.role)
+            if (this.playerRole != ts.role)
                 nonplayerList.push(ele);
         }
         console.log(nonplayerList.length);
-        if(nonplayerList.length == 0){
-            this.win();
-        }else if(cc.find("Canvas/Main Camera/player").getComponent("player").HP <= 0){
-            this.lose();
+        if (nonplayerList.length == 0) {
+            if (!this.finishflag)
+                this.win();
+        } else if (cc.find("Canvas/Main Camera/player").getComponent("player").HP <= 0) {
+            if (!this.finishflag)
+                this.lose();
         }
     }
     drawColliderboxes() {
@@ -250,12 +256,12 @@ export default class GM extends cc.Component {
                 label.string = roleName[roles[j]][pos[i]];
                 nameNode.color = cc.Color.WHITE;
                 label.fontSize = 12;
-        
+
                 nameNode.addComponent(cc.LabelOutline);
                 let outline = nameNode.getComponent(cc.LabelOutline);
                 outline.color = cc.Color.BLACK;
                 outline.width = 0.5;
-        
+
                 switch (role) {
                     case "selling":
                         outline.color = cc.Color.ORANGE;
@@ -300,14 +306,16 @@ export default class GM extends cc.Component {
         }
 
     }
-    win(){
+    win() {
+        this.finishflag = true;
         console.log("win");
         cc.find("persistnode").getComponent("persistNode").win = true;
         cc.delayTime(1);
         cc.director.loadScene("Win");
-        
+
     }
-    lose(){
+    lose() {
+        this.finishflag = true;
         console.log("lose");
         cc.find("persistnode").getComponent("persistNode").win = false;
         cc.delayTime(1);

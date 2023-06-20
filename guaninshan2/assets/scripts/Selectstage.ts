@@ -86,11 +86,13 @@ export default class Selectstage extends cc.Component {
         firebase.auth().signOut().then(function () {
             // Sign-out successful.
             console.log("sign out");
+            cc.find('persistnode').getComponent('persistNode').score = 0;
+            cc.find('persistnode').getComponent('persistNode').volume = 0.5;
             cc.director.loadScene("menu");
         }).catch(function (error) {
             // An error happened.
             console.log("sign out error");
-        }
+        })
     }
 
     stage1hover(target: cc.Node, type: number) {
