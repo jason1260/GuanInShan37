@@ -76,7 +76,7 @@ export default class Win extends cc.Component {
         console.log(this.score)
         if (this.available && this.showScore < this.score) {
 
-            this.showScore += Math.ceil(this.score / 200);
+            this.showScore += Math.ceil(this.score / 100);
         }
         cc.find("Canvas/My/score").getComponent(cc.Label).string = (this.showScore > this.score) ? this.score.toString() : this.showScore.toString();
         if (this.available && this.showScore >= this.score && this.writefinished) {
